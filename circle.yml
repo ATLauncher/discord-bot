@@ -1,0 +1,40 @@
+machine:
+  node:
+    version: 4.5.0
+
+dependencies:
+  pre:
+    - npm install -g npm@3
+    - npm prune
+    - npm install
+  override:
+    - npm run build
+  cache_directories:
+    - "node_modules"
+
+test:
+  override:
+     - npm run lint
+     - npm run test:clean
+     - npm run test
+
+deployment:
+  beta:
+    branch: develop
+    commands:
+      - npm publish --tag next
+  release:
+    branch: master
+    commands:
+      - npm publish
+
+general:
+  branches:
+    only:
+      - /greenkeeper-.*
+      - /feature\/.*
+      - /release\/.*
+      - /hotfix\/.*
+      - initial-code
+      - master
+      - develop

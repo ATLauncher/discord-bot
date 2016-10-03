@@ -1,0 +1,31 @@
+{
+    "parser": "babel-eslint",
+    "parserOptions": {
+        "ecmaVersion": 7,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "experimentalObjectRestSpread": true
+        }
+    },
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "extends": [
+        "eslint:recommended"
+    ],
+    "rules": {
+        "no-console": "off",
+        "no-trailing-spaces": "error",
+        "no-multiple-empty-lines": "error",
+        "consistent-return": "error",
+        "comma-dangle": [
+            "error",
+            "never"
+        ],
+        "no-use-before-define": [
+            "error",
+            "nofunc"
+        ]
+    }
+}
