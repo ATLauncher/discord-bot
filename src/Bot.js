@@ -1,6 +1,7 @@
 import Discord from 'discord.js';
 
 import CommandBus from './CommandBus';
+import WatcherBus from './WatcherBus';
 
 import config from '../config';
 
@@ -10,6 +11,7 @@ class Bot {
 
         this.setupBot();
         this.setupCommandBus();
+        this.setupWatcherBus();
     }
 
     /**
@@ -21,11 +23,23 @@ class Bot {
         });
     }
 
+    reloadCommandBus() {
+        delete this.commandBus;
+        this.setupCommandBus();
+    }
+
     /**
      * Sets up the command bus.
      */
     setupCommandBus() {
         this.commandBus = new CommandBus(this.bot);
+    }
+
+    /**
+     * Sets up the watcher bus.
+     */
+    setupWatcherBus() {
+        this.watcherBus = new WatcherBus(this.bot);
     }
 
     /**
