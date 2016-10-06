@@ -2,7 +2,7 @@
   "name": "@atlauncher/discord-bot",
   "version": "0.1.0",
   "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
-  "main": "index.js",
+  "main": "dist",
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -D -d dist --presets es2015,stage-0",
@@ -10,10 +10,9 @@
     "prestart": "npm run -s build",
     "lint": "eslint src config",
     "lint:watch": "esw src config --watch",
-    "getOAuthUrl": "babel-node getOAuthUrl.js --presets es2015,stage-0",
+    "oauth": "babel-node getOAuthUrl.js --presets es2015,stage-0",
     "test": "cross-env NODE_ENV=test mocha --opts ./mocha.opts",
-    "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch",
-    "test:clean": "rimraf ./db/test.sqlite3 && cross-env NODE_ENV=test npm run migrate && cross-env NODE_ENV=test npm run seed"
+    "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch"
   },
   "repository": {
     "type": "git",
@@ -31,22 +30,23 @@
   },
   "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
   "dependencies": {
-    "cross-env": "~3.1.1",
     "date-fns": "~1.3.0",
-    "discord.js": "^9.3.0",
-    "nedb": "^1.8.0"
+    "discord.js": "~9.3.0",
+    "nedb": "~1.8.0"
   },
   "devDependencies": {
     "babel-cli": "~6.16.0",
     "babel-core": "~6.17.0",
     "babel-eslint": "~7.0.0",
     "babel-plugin-transform-class-properties": "~6.16.0",
+    "babel-plugin-transform-regenerator": "~6.16.1",
     "babel-polyfill": "~6.16.0",
     "babel-preset-es2015": "~6.16.0",
     "babel-preset-stage-0": "~6.16.0",
     "babel-register": "~6.16.0",
     "chai": "~3.5.0",
     "chai-as-promised": "~6.0.0",
+      "cross-env": "~3.1.1",
     "eslint": "~3.7.1",
     "eslint-config-airbnb": "~12.0.0",
     "eslint-watch": "~2.1.14",

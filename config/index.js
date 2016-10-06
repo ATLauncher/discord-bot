@@ -1,5 +1,6 @@
 const config = require('./config.json');
+const secret = require('./secret.json');
 
-module.exports = {
-    ...config
-};
+const joinedConfig = Object.assign({}, config, secret);
+
+module.exports = joinedConfig;

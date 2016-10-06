@@ -27,16 +27,39 @@ class WatcherBus {
         });
 
         // remove any non active commands
-        loadedWatchers = loadedWatchers.filter((watcher) => ( watcher.enabled ));
+        loadedWatchers = loadedWatchers.filter((watcher) => (watcher.enabled));
+
+        // sort by priority
+        loadedWatchers.sort((a, b) => {
+            if (a.priority < b.priority) {
+                return -1;
+            }
+
+            if (a.priority > b.priority) {
+                return 1;
+            }
+
+            return 0;
+        });
 
         // group the commands by method
         loadedWatchers.forEach((watcher) => {
-            if (!this.watchers.hasOwnProperty(watcher.method)) {
-                this.watchers[watcher.method] = [];
+            let watcherMethods = [watcher.method];
+
+            if (Array.isArray(watcher.method)) {
+                watcherMethods = watcher.method;
             }
 
-            this.watchers[watcher.method].push(watcher);
+            watcherMethods.forEach((watcherMethod) => {
+                if (!this.watchers.hasOwnProperty(watcherMethod)) {
+                    this.watchers[watcherMethod] = [];
+                }
+
+                this.watchers[watcherMethod].push(watcher);
+            });
         });
+
+        console.log(this.watchers);
     }
 
     /**
@@ -44,9 +67,13 @@ class WatcherBus {
      */
     setupWatcherListeners() {
         Object.keys(this.watchers).forEach((method) => {
-            this.bot.on(method, (message) => {
+            this.bot.on(method, (...args) => {
                 this.watchers[method].forEach((watcher) => {
-                    return watcher.action(message);
+                    if (Array.isArray(watcher.method)) {
+                        return watcher.action(method, ...args);
+                    }
+
+                    return watcher.action(...args);
                 });
             });
         });

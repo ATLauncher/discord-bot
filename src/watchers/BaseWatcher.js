@@ -4,6 +4,13 @@ class BaseWatcher {
     }
 
     /**
+     * The priority of this watcher. The lower the number the first it will be to run.
+     *
+     * @type {number}
+     */
+    priority = 0;
+
+    /**
      * If this watcher is enabled or not.
      *
      * @type {boolean}
