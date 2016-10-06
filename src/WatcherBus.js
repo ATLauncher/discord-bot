@@ -58,8 +58,6 @@ class WatcherBus {
                 this.watchers[watcherMethod].push(watcher);
             });
         });
-
-        console.log(this.watchers);
     }
 
     /**

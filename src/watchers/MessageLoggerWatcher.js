@@ -1,7 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
 import database from '../../db';
-import * as config from '../../config';
 
 class MessageLoggerWatcher extends BaseWatcher {
     constructor(bot) {

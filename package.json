@@ -7,7 +7,6 @@
     "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"babel-node src --presets es2015,stage-0\"",
     "build": "babel src -D -d dist --presets es2015,stage-0",
     "start": "node dist",
-    "prestart": "npm run -s build",
     "lint": "eslint src config",
     "lint:watch": "esw src config --watch",
     "oauth": "babel-node getOAuthUrl.js --presets es2015,stage-0",

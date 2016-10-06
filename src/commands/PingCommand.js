@@ -1,4 +1,3 @@
-import { Message } from 'discord.js';
 import BaseCommand from './BaseCommand';
 
 /**

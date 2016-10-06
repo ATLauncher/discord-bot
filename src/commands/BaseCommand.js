@@ -25,7 +25,7 @@ class BaseCommand {
             return false; // don't respond to bot users
         }
 
-        return this.pattern && message.content.match(this.pattern);
+        return this.pattern && message.cleanContent.match(this.pattern) !== null;
     }
 
 }
