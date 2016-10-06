@@ -31,8 +31,8 @@ general:
   branches:
     only:
       - /greenkeeper-.*
-      - /feature\/.*
-      - /release\/.*
-      - /hotfix\/.*
+      - /feature/.*
+      - /release/.*
+      - /hotfix/.*
       - master
       - develop
