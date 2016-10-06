@@ -30,9 +30,9 @@ deployment:
 general:
   branches:
     only:
-      - /greenkeeper-.*
-      - /feature/.*
-      - /release/.*
-      - /hotfix/.*
+      - /greenkeeper-.*/
+      - /feature\/.*/
+      - /release\/.*/
+      - /hotfix\/.*/
       - master
       - develop
