@@ -1,8 +1,6 @@
-import chai, {
-    expect
-} from 'chai';
+import chai, { expect } from 'chai';
 
-import PingCommand from './PingCommand';
+import PingCommand from '../../src/commands/PingCommand';
 
 describe('PingCommand', function() {
     describe('matches', function() {

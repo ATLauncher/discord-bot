@@ -3,7 +3,7 @@ import Discord from 'discord.js';
 import CommandBus from './CommandBus';
 import WatcherBus from './WatcherBus';
 
-import config from '../config';
+import config from './config';
 
 class Bot {
     constructor() {

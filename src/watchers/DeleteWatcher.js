@@ -1,6 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
-import * as config from '../../config';
+import config from '../config';
 
 class DeleteWatcher extends BaseWatcher {
     constructor(bot) {

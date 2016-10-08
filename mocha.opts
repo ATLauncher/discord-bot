@@ -1,5 +1,5 @@
 --compilers js:babel-core/register
---recursive ./src/**/*.spec.js
+--recursive ./test/**/*.js
 --require babel-polyfill
 --require ./testSetup
 --timeout 5000

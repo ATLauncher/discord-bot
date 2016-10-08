@@ -1,6 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
-import * as config from '../../config';
+import config from '../config';
 
 /**
  * This checks for people using @here and @everyone.

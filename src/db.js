@@ -1,16 +1,14 @@
 import Datastore from 'nedb';
 
-const db = {
+export default {
     messages: new Datastore({
-        filename: `${__dirname}/messages.db`,
+        filename: `./db/messages.db`,
         timestampData: true,
         autoload: true
     }),
     users: new Datastore({
-        filename: `${__dirname}/users.db`,
+        filename: `./db/users.db`,
         timestampData: true,
         autoload: true
     })
 };
-
-export default db;
