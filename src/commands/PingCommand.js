@@ -16,18 +16,18 @@ class PingCommand extends BaseCommand {
     method = 'message';
 
     /**
-     * The pattern to match against. If the message matches this pattern then we will respond to it with the respond method.
+     * The pattern to match against. If the message matches this pattern then we will respond to it with the action method.
      *
      * @type {RegExp}
      */
-    pattern = /^!ping$/i;
+    pattern = /^!ping$/;
 
     /**
      * The function that should be called when the event is fired.
      *
      * @param {Message} message
      */
-    respond(message) {
+    action(action, message) {
         message.reply('pong');
     }
 }

@@ -15,15 +15,18 @@ class SupportRoleWatcher extends BaseWatcher {
      *
      * @type {string}
      */
-    method = 'message';
+    method = [
+        'message',
+        'messageUpdate'
+    ];
 
-    async action(message) {
-        if (message.system) {
-            return false; // don't match system messages
+    async action(method, message, updatedMessage) {
+        if (method === 'messageUpdate') {
+            message = updatedMessage;
         }
 
-        if (message.author.bot) {
-            return false; // don't respond to bot users
+        if (!this.shouldRun(message)) {
+            return false;
         }
 
         const supportChannel = this.bot.channels.find((channel) => (channel.name === config.support_channel));

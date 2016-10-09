@@ -10,7 +10,8 @@
     "lint": "eslint src config",
     "lint:watch": "esw src config --watch",
     "clean": "rimraf dist",
-    "oauth": "babel-node getOAuthUrl.js --presets es2015,stage-0",
+    "oauth:url": "babel-node utils/getOAuthUrl.js --presets es2015,stage-0",
+    "config:base64": "babel-node utils/base64Config.js --presets es2015,stage-0",
     "test": "cross-env NODE_ENV=test mocha --opts ./mocha.opts",
     "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch"
   },

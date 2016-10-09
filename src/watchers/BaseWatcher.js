@@ -1,21 +1,16 @@
-class BaseWatcher {
+import BaseModule from '../BaseModule';
+
+class BaseWatcher extends BaseModule {
     constructor(bot) {
-        this.bot = bot;
+        super(bot);
     }
 
     /**
-     * The priority of this watcher. The lower the number the first it will be to run.
-     *
-     * @type {number}
-     */
-    priority = 0;
-
-    /**
-     * If this watcher is enabled or not.
+     * If this module should respond to all incoming messages or not.
      *
      * @type {boolean}
      */
-    enabled = true;
+    respondToAll = true;
 }
 
 export default BaseWatcher;

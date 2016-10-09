@@ -1,14 +1,14 @@
 import BaseWatcher from './BaseWatcher';
 
-import config from '../config';
-
 /**
- * This checks for people using @here and @everyone.
+ * This checks for people posting Discord invite links.
  */
-class TagRuleWatcher extends BaseWatcher {
+class InviteRuleWatcher extends BaseWatcher {
     constructor(bot) {
         super(bot);
     }
+
+    shouldRunOnBots = false;
 
     /**
      * The method this watcher should listen on.
@@ -29,10 +29,8 @@ class TagRuleWatcher extends BaseWatcher {
             return false;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
-
-        if (message.mentions.everyone) {
-            const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Use of tags such as \`@everyone\` and \`@here\` are not allowed.`);
+        if (this.isAModeratedChannel(message.channel.name) && message.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
+            const warningMessage = await message.reply(`Discord invite links are not allowed due to constant spam. If you must share Discord invite links with someone, please do it privately.`);
 
             message.delete();
             warningMessage.delete(60000);
@@ -40,4 +38,4 @@ class TagRuleWatcher extends BaseWatcher {
     }
 }
 
-export default TagRuleWatcher;
+export default InviteRuleWatcher;

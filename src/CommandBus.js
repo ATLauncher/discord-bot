@@ -44,11 +44,11 @@ class CommandBus {
      */
     setupCommandListeners() {
         Object.keys(this.commands).forEach((method) => {
-            this.bot.on(method, (message) => {
-                const command = this.commands[method].find((command) => (command.matches(message)));
+            this.bot.on(method, (...args) => {
+                const command = this.commands[method].find((command) => (command.matches(...args)));
 
                 if (command) {
-                    return command.respond(message);
+                    return command.action(method, ...args);
                 }
             });
         });

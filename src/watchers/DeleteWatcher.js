@@ -1,7 +1,5 @@
 import BaseWatcher from './BaseWatcher';
 
-import config from '../config';
-
 class DeleteWatcher extends BaseWatcher {
     constructor(bot) {
         super(bot);
@@ -14,19 +12,18 @@ class DeleteWatcher extends BaseWatcher {
      */
     method = 'messageDelete';
 
-    action(message) {
-        if (message.system) {
-            return false; // don't match system messages
-        }
-
+    action(method, message) {
+        console.log(method, message);
+        // don't log deletion of bot messages
         if (message.author.bot) {
-            return false; // don't respond to bot users
+            console.log(message);
+            return false;
         }
 
-        const moderatorChannel = this.bot.channels.find((channel) => (channel.name === config.moderator_channel));
+        const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {
-            moderatorChannel.sendMessage(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** #${message.channel.name}\n**Message:**\`\`\`${message.cleanContent}\`\`\``)
+            moderatorChannel.sendMessage(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``)
         }
     }
 }

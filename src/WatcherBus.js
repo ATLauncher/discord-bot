@@ -67,11 +67,7 @@ class WatcherBus {
         Object.keys(this.watchers).forEach((method) => {
             this.bot.on(method, (...args) => {
                 this.watchers[method].forEach((watcher) => {
-                    if (Array.isArray(watcher.method)) {
-                        return watcher.action(method, ...args);
-                    }
-
-                    return watcher.action(...args);
+                    return watcher.action(method, ...args);
                 });
             });
         });

@@ -26,7 +26,8 @@ https://hub.docker.com/r/atlauncher/discord-bot/ accessed with identifier `atlau
 ### Including config
 In order to use the docker image, configs must be provided at the **/app/config/** directory. Use this image as
 a base image and then add in your configs or you can alternatively provide a base64 encoded string of the config in the
-**DISCORD_BOT_CONFIG** environment variable.
+**DISCORD_BOT_CONFIG** environment variable. You can easily generate this from your **config/config.json** file by
+running `npm run config:base64`.
 
 ## Contributing
 If you wish to contribute, please see the **CONTRIBUTING.md** file in the root of this repository.
