@@ -1,14 +1,18 @@
 FROM node:6
+MAINTAINER RyanTheAllmighty <ryantheallmighty@atlauncher.com>
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY package.json /usr/src/app
+COPY package.json /app
 
-RUN npm install
+RUN /usr/local/bin/npm install
 
-COPY . /usr/src/app
+COPY . /app
 
-RUN npm run build
+RUN /usr/local/bin/npm run build
 
-CMD ["npm", "start"]
+VOLUME ["/app/db"]
+
+ENTRYPOINT ["/usr/local/bin/npm"]
+CMD ["start"]

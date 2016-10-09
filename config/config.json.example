@@ -1,0 +1,11 @@
+{
+    "moderator_channel": "moderation-logs",
+    "support_channel": "support",
+    "rules_channel": "rules",
+    "non_support_channels": [
+        "general"
+    ],
+    "client_id": "",
+    "client_secret": "",
+    "client_token": ""
+}
