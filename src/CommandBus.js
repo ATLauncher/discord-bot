@@ -47,7 +47,7 @@ class CommandBus {
             this.bot.on(method, (...args) => {
                 const command = this.commands[method].find((command) => (command.matches(...args)));
 
-                if (command) {
+                if (command && command.shouldRun(method, ...args)) {
                     return command.action(method, ...args);
                 }
             });

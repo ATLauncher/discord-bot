@@ -25,10 +25,6 @@ class SupportRoleWatcher extends BaseWatcher {
             message = updatedMessage;
         }
 
-        if (!this.shouldRun(message)) {
-            return false;
-        }
-
         const supportChannel = this.bot.channels.find((channel) => (channel.name === config.support_channel));
         const nonSupportChannels = this.bot.channels.filter((channel) => (config.non_support_channels.indexOf(channel.name) !== -1));
 

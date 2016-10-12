@@ -25,6 +25,10 @@ class MessageLoggerWatcher extends BaseWatcher {
         'messageUpdate'
     ];
 
+    shouldRun() {
+        return true;
+    }
+
     action(method, message, updatedMessage) {
         if (method === 'messageUpdate') {
             message = updatedMessage;
@@ -41,7 +45,8 @@ class MessageLoggerWatcher extends BaseWatcher {
             },
             user: {
                 id: message.author.id,
-                username: message.author.username
+                username: message.author.username,
+                discriminator: message.author.discriminator
             },
             deletedAt: (method === 'messageDelete') ? new Date() : null
         };

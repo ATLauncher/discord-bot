@@ -10,6 +10,8 @@ class TagRuleWatcher extends BaseWatcher {
         super(bot);
     }
 
+    usesBypassRules = true;
+
     /**
      * The method this watcher should listen on.
      *
@@ -23,10 +25,6 @@ class TagRuleWatcher extends BaseWatcher {
     async action(method, message, updatedMessage) {
         if (method === 'messageUpdate') {
             message = updatedMessage;
-        }
-
-        if (!this.shouldRun(message)) {
-            return false;
         }
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));

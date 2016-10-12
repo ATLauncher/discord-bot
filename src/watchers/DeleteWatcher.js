@@ -12,14 +12,20 @@ class DeleteWatcher extends BaseWatcher {
      */
     method = 'messageDelete';
 
-    action(method, message) {
-        console.log(method, message);
-        // don't log deletion of bot messages
-        if (message.author.bot) {
-            console.log(message);
+    shouldRun(method, message) {
+        if(!super.shouldRun(method, message)) {
             return false;
         }
 
+        // don't log deletion of bot messages
+        if (message.author.bot) {
+            return false;
+        }
+
+        return true;
+    }
+
+    action(method, message) {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {

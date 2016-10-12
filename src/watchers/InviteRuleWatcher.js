@@ -10,10 +10,12 @@ class InviteRuleWatcher extends BaseWatcher {
 
     shouldRunOnBots = false;
 
+    usesBypassRules = true;
+
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string|string[]}
      */
     method = [
         'message',
@@ -23,10 +25,6 @@ class InviteRuleWatcher extends BaseWatcher {
     async action(method, message, updatedMessage) {
         if (method === 'messageUpdate') {
             message = updatedMessage;
-        }
-
-        if (!this.shouldRun(message)) {
-            return false;
         }
 
         if (this.isAModeratedChannel(message.channel.name) && message.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {

@@ -37,6 +37,13 @@ class BaseModule {
     shouldRunOnBots = true;
 
     /**
+     * Is users and roles mentioned in the bypass section of the config shouldn't trigger this module.
+     *
+     * @type {boolean}
+     */
+    usesBypassRules = false;
+
+    /**
      * Checks to see if this message matches or not. If it returns true then we should act upon this message.
      *
      * @param {Message} message
@@ -56,6 +63,40 @@ class BaseModule {
         }
 
         return this.pattern && message.cleanContent.match(this.pattern) !== null;
+    }
+
+    /**
+     * This checks to see if this module should run for this message.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @returns {boolean}
+     */
+    shouldRun(method, message, updatedMessage = {}) {
+        if (method === 'messageUpdate') {
+            message = updatedMessage;
+        }
+
+        if (message.system) {
+            return false;
+        }
+
+        if (message.author.bot && !this.shouldRunOnBots) {
+            return false;
+        }
+
+        if (this.usesBypassRules) {
+            if (config.bypass.users && config.bypass.users.includes(`${message.member.user.username}#${message.member.user.discriminator}`)) {
+                return false;
+            }
+
+            const isFromBypassedRole = config.bypass.roles.length && this.hasBypassRole(message);
+
+            return !isFromBypassedRole;
+        }
+
+        return true;
     }
 
     /**
@@ -97,36 +138,6 @@ class BaseModule {
     }
 
     /**
-     * This checks to see if the given message should be run or not.
-     *
-     * @param {Message} message
-     * @returns {boolean}
-     */
-    shouldRun(message) {
-        if (message.system) {
-            return false;
-        }
-
-        if (message.author.bot && !this.shouldRunOnBots) {
-            return false;
-        }
-
-        if (config.bypass.users.includes(message.member.user.username)) {
-            return false;
-        }
-
-        const isFromBypassedRole = config.bypass.roles.filter((roleName) => {
-            return this.isFromRole(message, roleName);
-        }).length === 0;
-
-        if (isFromBypassedRole) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * This checks to see if the given message came from the passed in channel name.
      *
      * @param {Message} message
@@ -149,7 +160,7 @@ class BaseModule {
      * This checks to see if the given message came from the passed in user.
      *
      * @param {Message} message
-     * @param {string} channelName
+     * @param {string} username
      * @returns {boolean}
      */
     isFromUser(message, username) {
@@ -157,14 +168,19 @@ class BaseModule {
     }
 
     /**
-     * This checks to see if the given message came from a user with the passed in role.
+     * This will check the message to see if the author has one of the bypass roles.
      *
-     * @param {Message} message
-     * @param {string} roleName
+     * @param {Message}  message
      * @returns {boolean}
      */
-    isFromRole(message, roleName) {
-        return message.channel.guild.roles.exists('name', roleName)
+    hasBypassRole(message) {
+        if (!config.bypass.roles || !config.bypass.roles.length) {
+            return false;
+        }
+
+        return config.bypass.roles.filter((roleName) => {
+            return message.member.roles.exists('name', roleName);
+        }).length !== 0;
     }
 }
 
