@@ -13,7 +13,7 @@ class DeleteWatcher extends BaseWatcher {
     method = 'messageDelete';
 
     shouldRun(method, message) {
-        if(!super.shouldRun(method, message)) {
+        if (!super.shouldRun(method, message)) {
             return false;
         }
 
@@ -26,11 +26,9 @@ class DeleteWatcher extends BaseWatcher {
     }
 
     action(method, message) {
-        const moderatorChannel = this.getModerationLogsChannel();
+        const messageToSend = `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
 
-        if (moderatorChannel) {
-            moderatorChannel.sendMessage(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``)
-        }
+        this.sendMessageToModeratorLogsChannel(messageToSend);
     }
 }
 

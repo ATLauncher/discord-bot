@@ -31,6 +31,8 @@ class SupportRoleWatcher extends BaseWatcher {
         if (message.content.indexOf('paste.atlauncher.com') !== -1 && nonSupportChannels.exists('name', message.channel.name)) {
             const warningMessage = await message.reply(`It looks like you're asking for support. Please make sure all launcher/pack issues are posted in ${supportChannel}`);
 
+            this.addWarningToUser(message);
+
             message.delete();
             warningMessage.delete(60000);
         }

@@ -27,8 +27,10 @@ class InviteRuleWatcher extends BaseWatcher {
             message = updatedMessage;
         }
 
-        if (this.isAModeratedChannel(message.channel.name) && message.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
+        if (message.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
             const warningMessage = await message.reply(`Discord invite links are not allowed due to constant spam. If you must share Discord invite links with someone, please do it privately.`);
+
+            this.addWarningToUser(message);
 
             message.delete();
             warningMessage.delete(60000);

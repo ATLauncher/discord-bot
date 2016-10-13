@@ -32,6 +32,8 @@ class TagRuleWatcher extends BaseWatcher {
         if (message.mentions.everyone) {
             const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Use of tags such as \`@everyone\` and \`@here\` are not allowed.`);
 
+            this.addWarningToUser(message);
+
             message.delete();
             warningMessage.delete(60000);
         }

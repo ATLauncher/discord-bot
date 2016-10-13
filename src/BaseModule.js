@@ -1,5 +1,7 @@
 import config from './config';
 
+import { users } from './db';
+
 /**
  * This is the base module. A module is either a command or a watcher.
  */
@@ -100,6 +102,72 @@ class BaseModule {
     }
 
     /**
+     * This adds a warning to a user. 2rd and 4th warning will result in a kick, 5th warning will result in a ban.
+     *
+     * @param {Message} message
+     */
+    addWarningToUser(message) {
+        users.findOne({id: message.author.id}, (err, doc) => {
+            if (!err) {
+                let user = doc;
+
+                if (!user) {
+                    user = {
+                        id: message.author.id,
+                        warnings: 1,
+                        warningMessages: [
+                            {
+                                id: message.id,
+                                content: message.cleanContent,
+                                created_at: new Date()
+                            }
+                        ]
+                    };
+                } else {
+                    user.warnings++;
+
+                    if (!user.warningMessages) {
+                        user.warningMessages = [];
+                    }
+
+                    user.warningMessages.push({
+                        id: message.id,
+                        content: message.cleanContent,
+                        created_at: new Date()
+                    });
+                }
+
+                user.username = message.author.username;
+                user.discriminator = message.author.discriminator;
+
+                users.update({
+                    id: message.author.id
+                }, user, {
+                    upsert: true
+                });
+
+                if (user.warnings >= 5) {
+                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
+                    message.member.ban();
+                } else if (user.warnings >= 3) {
+                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
+                    message.member.kick();
+                } else {
+                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
+                }
+            }
+        });
+    }
+
+    sendMessageToModeratorLogsChannel(message) {
+        const moderatorChannel = this.getModerationLogsChannel();
+
+        if (moderatorChannel) {
+            moderatorChannel.sendMessage(message);
+        }
+    }
+
+    /**
      * This gets the channel object for the moderator channel in the config.
      *
      * @returns {TextChannel|VoiceChannel|null}
@@ -179,8 +247,8 @@ class BaseModule {
         }
 
         return config.bypass.roles.filter((roleName) => {
-            return message.member.roles.exists('name', roleName);
-        }).length !== 0;
+                return message.member.roles.exists('name', roleName);
+            }).length !== 0;
     }
 }
 
