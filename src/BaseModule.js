@@ -1,6 +1,6 @@
 import config from './config';
 
-import { users } from './db';
+import database from './db';
 
 /**
  * This is the base module. A module is either a command or a watcher.
@@ -107,7 +107,7 @@ class BaseModule {
      * @param {Message} message
      */
     addWarningToUser(message) {
-        users.findOne({id: message.author.id}, (err, doc) => {
+        database.users.findOne({id: message.author.id}, (err, doc) => {
             if (!err) {
                 let user = doc;
 
