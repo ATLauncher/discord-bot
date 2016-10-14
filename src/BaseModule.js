@@ -140,7 +140,7 @@ class BaseModule {
                 user.username = message.author.username;
                 user.discriminator = message.author.discriminator;
 
-                users.update({
+                database.users.update({
                     id: message.author.id
                 }, user, {
                     upsert: true
