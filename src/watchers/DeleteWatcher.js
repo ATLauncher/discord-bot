@@ -8,9 +8,12 @@ class DeleteWatcher extends BaseWatcher {
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string[]}
      */
-    method = 'messageDelete';
+    method = [
+        'messageDelete',
+        'messageDeleteBulk'
+    ];
 
     shouldRun(method, message) {
         if (!super.shouldRun(method, message)) {
@@ -26,6 +29,17 @@ class DeleteWatcher extends BaseWatcher {
     }
 
     action(method, message) {
+        // check if we're getting a collection of messages or not
+        if (method === 'messageDeleteBulk') {
+            message.forEach((value) => {
+                this.logMessage(value)
+            });
+        } else {
+            this.logMessage(message);
+        }
+    }
+
+    logMessage(message) {
         const messageToSend = `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
 
         this.sendMessageToModeratorLogsChannel(messageToSend);
