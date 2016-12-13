@@ -1,11 +1,9 @@
-import config from '../config';
-
 import BaseCommand from './BaseCommand';
 
 /**
- * Simple ping command that will respond to any user that says '!ping'.
+ * Simple command to simply test if the bot is working or not.
  */
-class PingCommand extends BaseCommand {
+class WorkingCommand extends BaseCommand {
     constructor(bot) {
         super(bot);
     }
@@ -30,10 +28,12 @@ class PingCommand extends BaseCommand {
      * @param {Message} message
      */
     action(action, message) {
-        if (this.hasBypassRole(message)) {
+        if (!this.hasBypassRole(message)) {
             return false;
         }
 
         message.reply('Yes I\'m working!');
     }
 }
+
+export default WorkingCommand;
