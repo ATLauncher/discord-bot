@@ -89,7 +89,7 @@ class BaseModule {
         }
 
         if (this.usesBypassRules) {
-            if (config.bypass.users && config.bypass.users.includes(`${message.member.user.username}#${message.member.user.discriminator}`)) {
+            if (config.bypass.users && message.member && message.member.user && config.bypass.users.includes(`${message.member.user.username}#${message.member.user.discriminator}`)) {
                 return false;
             }
 
