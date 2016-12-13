@@ -247,7 +247,7 @@ class BaseModule {
         }
 
         return config.bypass.roles.filter((roleName) => {
-                return message.member.roles.exists('name', roleName);
+                return message.member && message.member.roles && message.member.roles.exists('name', roleName);
             }).length !== 0;
     }
 }
