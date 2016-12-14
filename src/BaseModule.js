@@ -84,7 +84,7 @@ class BaseModule {
             return false;
         }
 
-        if (message.author.bot && !this.shouldRunOnBots) {
+        if (message.author && message.author.bot && !this.shouldRunOnBots) {
             return false;
         }
 
@@ -107,56 +107,58 @@ class BaseModule {
      * @param {Message} message
      */
     addWarningToUser(message) {
-        database.users.findOne({id: message.author.id}, (err, doc) => {
-            if (!err) {
-                let user = doc;
+        if (message.author) {
+            database.users.findOne({id: message.author.id}, (err, doc) => {
+                if (!err) {
+                    let user = doc;
 
-                if (!user) {
-                    user = {
-                        id: message.author.id,
-                        warnings: 1,
-                        warningMessages: [
-                            {
-                                id: message.id,
-                                content: message.cleanContent,
-                                created_at: new Date()
-                            }
-                        ]
-                    };
-                } else {
-                    user.warnings++;
+                    if (!user) {
+                        user = {
+                            id: message.author.id,
+                            warnings: 1,
+                            warningMessages: [
+                                {
+                                    id: message.id,
+                                    content: message.cleanContent,
+                                    created_at: new Date()
+                                }
+                            ]
+                        };
+                    } else {
+                        user.warnings++;
 
-                    if (!user.warningMessages) {
-                        user.warningMessages = [];
+                        if (!user.warningMessages) {
+                            user.warningMessages = [];
+                        }
+
+                        user.warningMessages.push({
+                            id: message.id,
+                            content: message.cleanContent,
+                            created_at: new Date()
+                        });
                     }
 
-                    user.warningMessages.push({
-                        id: message.id,
-                        content: message.cleanContent,
-                        created_at: new Date()
+                    user.username = message.author.username;
+                    user.discriminator = message.author.discriminator;
+
+                    database.users.update({
+                        id: message.author.id
+                    }, user, {
+                        upsert: true
                     });
+
+                    if (user.warnings >= 5) {
+                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
+                        message.member.ban();
+                    } else if (user.warnings >= 3) {
+                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
+                        message.member.kick();
+                    } else {
+                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
+                    }
                 }
-
-                user.username = message.author.username;
-                user.discriminator = message.author.discriminator;
-
-                database.users.update({
-                    id: message.author.id
-                }, user, {
-                    upsert: true
-                });
-
-                if (user.warnings >= 5) {
-                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
-                    message.member.ban();
-                } else if (user.warnings >= 3) {
-                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
-                    message.member.kick();
-                } else {
-                    this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
-                }
-            }
-        });
+            });
+        }
     }
 
     sendMessageToModeratorLogsChannel(message) {
@@ -232,7 +234,7 @@ class BaseModule {
      * @returns {boolean}
      */
     isFromUser(message, username) {
-        return message.author.username === username
+        return message.author && message.author.username === username
     }
 
     /**
