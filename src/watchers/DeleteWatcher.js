@@ -21,7 +21,7 @@ class DeleteWatcher extends BaseWatcher {
         }
 
         // don't log deletion of bot messages
-        if (message.author.bot) {
+        if (message.author && message.author.bot) {
             return false;
         }
 
@@ -40,7 +40,13 @@ class DeleteWatcher extends BaseWatcher {
     }
 
     logMessage(message) {
-        const messageToSend = `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
+        let messageToSend = '';
+
+        if (message.author) {
+            messageToSend = `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
+        } else {
+            messageToSend = `**User:** Unknown\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
+        }
 
         this.sendMessageToModeratorLogsChannel(messageToSend);
     }
