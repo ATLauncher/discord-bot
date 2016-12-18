@@ -20,6 +20,12 @@ class Bot {
     setupBot() {
         this.bot.on('ready', () => {
             console.log('I am ready!');
+
+            const botTestingChannel = this.bot.channels.find((channel) => (channel.name === config.bot_testing_channel));
+
+            if (botTestingChannel) {
+                botTestingChannel.sendMessage('I\'ve restarted, just FYI');
+            }
         });
     }
 
