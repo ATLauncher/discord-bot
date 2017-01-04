@@ -25,7 +25,7 @@ class LinkSpamWatcher extends BaseWatcher {
             message = updatedMessage;
         }
 
-        if (message.cleanContent.toLowerCase().indexOf('giftsofsteam.com') !== -1) {
+        if (message.cleanContent.toLowerCase().indexOf('giftsofsteam.com') !== -1 || message.cleanContent.toLowerCase().indexOf('steamdigitalgift.com') !== -1) {
             const warningMessage = await message.reply(`This link is not allowed to be posted as it is a known hoax/spam/scam.`);
 
             this.addWarningToUser(message);
