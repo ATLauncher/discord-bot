@@ -7,7 +7,7 @@ import datastore from '../db';
  *
  * It will trigger when the same message is sent 3 times within 30 seconds.
  */
-class LinkSpamWatcher extends BaseWatcher {
+class SameMessageSpamWatcher extends BaseWatcher {
     constructor(bot) {
         super(bot);
     }
@@ -54,4 +54,4 @@ class LinkSpamWatcher extends BaseWatcher {
     }
 }
 
-export default LinkSpamWatcher;
+export default SameMessageSpamWatcher;
