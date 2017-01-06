@@ -31,6 +31,10 @@ class SameMessageSpamWatcher extends BaseWatcher {
             message = updatedMessage;
         }
 
+        if (!this.isAModeratedChannel(message.channel.name)) {
+            return;
+        }
+
         const thirtySecondsAgo = new Date();
         thirtySecondsAgo.setSeconds(thirtySecondsAgo.getSeconds() - 30);
 
