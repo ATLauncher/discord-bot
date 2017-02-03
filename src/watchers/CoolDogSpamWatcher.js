@@ -29,7 +29,10 @@ class CoolDogSpamWatcher extends BaseWatcher {
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
-        if (message.cleanContent.toLowerCase().indexOf('this is cooldog') !== -1) {
+        if (
+            message.cleanContent.toLowerCase().indexOf('this is cooldog') !== -1 ||
+            message.cleanContent.toLowerCase().indexOf('this is memedog') !== -1
+        ) {
             const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`);
 
             this.addWarningToUser(message);
