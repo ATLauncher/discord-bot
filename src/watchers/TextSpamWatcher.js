@@ -3,9 +3,9 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people spamming cool dog crap.
+ * This checks for people spamming text stuff.
  */
-class CoolDogSpamWatcher extends BaseWatcher {
+class TextSpamWatcher extends BaseWatcher {
     constructor(bot) {
         super(bot);
     }
@@ -29,9 +29,13 @@ class CoolDogSpamWatcher extends BaseWatcher {
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
+        const cleanMessage = message.cleanContent.toLowerCase();
+
         if (
-            message.cleanContent.toLowerCase().indexOf('this is cooldog') !== -1 ||
-            message.cleanContent.toLowerCase().indexOf('this is memedog') !== -1
+            cleanMessage.indexOf('this is cooldog') !== -1 ||
+            cleanMessage.indexOf('this is memedog') !== -1 ||
+            cleanMessage.indexOf('chrisopeer davies') !== -1 ||
+            cleanMessage.indexOf('jessica davies') !== -1
         ) {
             const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`);
 
@@ -43,4 +47,4 @@ class CoolDogSpamWatcher extends BaseWatcher {
     }
 }
 
-export default CoolDogSpamWatcher;
+export default TextSpamWatcher;

@@ -40,6 +40,10 @@ class DeleteWatcher extends BaseWatcher {
     }
 
     logMessage(message) {
+        if (message.cleanContent === '!cyt') {
+            return;
+        }
+
         let messageToSend = '';
 
         if (message.author) {

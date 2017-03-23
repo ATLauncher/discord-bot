@@ -3,9 +3,9 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people spamming copy and past 'dont add this hacker' crap.
+ * This checks for people using self bots.
  */
-class DaviesSpamWatcher extends BaseWatcher {
+class SelfBotWatcher extends BaseWatcher {
     constructor(bot) {
         super(bot);
     }
@@ -29,8 +29,10 @@ class DaviesSpamWatcher extends BaseWatcher {
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
-        if ((message.cleanContent.toLowerCase().indexOf('chrisopeer davies') !== -1) || (message.cleanContent.toLowerCase().indexOf('jessica davies') !== -1)) {
-            const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`);
+        const cleanMessage = message.cleanContent.toLowerCase();
+
+        if (cleanMessage.indexOf('self.') === 0) {
+            const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Bots are not allowed without permission.`);
 
             this.addWarningToUser(message);
 
@@ -40,4 +42,4 @@ class DaviesSpamWatcher extends BaseWatcher {
     }
 }
 
-export default DaviesSpamWatcher;
+export default SelfBotWatcher;
