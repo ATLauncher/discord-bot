@@ -36,7 +36,8 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.indexOf('this is memedog') !== -1 ||
             cleanMessage.indexOf('chrisopeer davies') !== -1 ||
             cleanMessage.indexOf('jessica davies') !== -1 ||
-            cleanMessage.indexOf('DMing inappropriate photos of underage children') !== -1
+            cleanMessage.indexOf('DMing inappropriate photos of underage children') !== -1 ||
+            cleanMessage.indexOf('bots are joining servers and sending mass') !== -1
         ) {
             const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`);
 
