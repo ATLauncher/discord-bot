@@ -29,11 +29,13 @@ class IDBanCommand extends BaseCommand {
      */
     action(action, message) {
         if (this.hasBypassRole(message)) {
-            const id = message.cleanContent.substr(7);
+            const ids = message.cleanContent.substr(7);
 
-            message.guild.ban(id, 1);
+            ids.split(' ').forEach((id) => {
+                message.guild.ban(id, 1);
 
-            message.reply(`User with ID of '${id}' has been banned.`);
+                message.reply(`User with ID of '${id}' has been banned.`);
+            });
         }
 
         message.delete();
