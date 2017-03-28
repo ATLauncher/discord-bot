@@ -12,7 +12,7 @@ class SameMessageSpamWatcher extends BaseWatcher {
         super(bot);
     }
 
-    usesBypassRules = false;
+    usesBypassRules = true;
 
     shouldRunOnBots = false;
 
@@ -29,6 +29,10 @@ class SameMessageSpamWatcher extends BaseWatcher {
     async action(method, message, updatedMessage) {
         if (method === 'messageUpdate') {
             message = updatedMessage;
+        }
+
+        if (!this.isAModeratedChannel(message.channel.name)) {
+            return;
         }
 
         const count = await database.countMessagesInLast(message.cleanContent, 30);
