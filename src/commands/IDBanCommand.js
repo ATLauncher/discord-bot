@@ -28,17 +28,27 @@ class IDBanCommand extends BaseCommand {
      * @param {Message} message
      */
     action(action, message) {
+        message.delete();
+
         if (this.hasBypassRole(message)) {
             const ids = message.cleanContent.substr(7);
 
-            ids.split(' ').forEach((id) => {
+            if (!ids.length) {
+                return;
+            }
+
+            if (ids.indexOf(' ') === -1) {
+                return;
+            }
+
+            const splitIDs = ids.split(' ');
+
+            splitIDs.forEach((id) => {
                 message.guild.ban(id, 1);
 
-                message.reply(`User with ID of '${id}' has been banned.`);
+                message.channel.send(`User with ID of '${id}' has been banned.`);
             });
         }
-
-        message.delete();
     }
 }
 
