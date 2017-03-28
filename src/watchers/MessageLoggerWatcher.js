@@ -1,6 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
-import database from '../db';
+import * as database from '../db';
 
 class MessageLoggerWatcher extends BaseWatcher {
     constructor(bot) {
@@ -29,15 +29,16 @@ class MessageLoggerWatcher extends BaseWatcher {
         return true;
     }
 
-    action(method, message, updatedMessage) {
+    async action(method, message, updatedMessage) {
         if (method === 'messageUpdate') {
             message = updatedMessage;
         }
 
         const messageToLog = {
             id: message.id,
-            system: message.system,
-            bot: message.author.bot,
+            userID: message.author.id,
+            isSystemMessage: message.system,
+            isBotMessage: message.author.bot,
             content: message.cleanContent,
             channel: {
                 id: message.channel.id,
@@ -48,14 +49,15 @@ class MessageLoggerWatcher extends BaseWatcher {
                 username: message.author.username,
                 discriminator: message.author.discriminator
             },
-            deletedAt: (method === 'messageDelete') ? new Date() : null
+            timestamp: new Date().toISOString(),
+            deletedAt: (method === 'messageDelete') ? new Date().toISOString() : null
         };
 
-        database.messages.update({
-            id: messageToLog.id
-        }, messageToLog, {
-            upsert: true
-        });
+        try {
+            database.updateMessageByID(messageToLog.id, messageToLog);
+        } catch (e) {
+            console.error(e);
+        }
     }
 }
 

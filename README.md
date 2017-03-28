@@ -29,6 +29,37 @@ a base image and then add in your configs or you can alternatively provide a bas
 **DISCORD_BOT_CONFIG** environment variable. You can easily generate this from your **config/config.json** file by
 running `npm run config:base64`.
 
+## Database
+This bot can use one of two different types of database:
+
+ - AWS DynamoDB (remote)
+ - NEDB (local)
+ 
+To use AWS DynamoDB, put the following into your `config.js` file:
+
+```
+    "db": {
+        "messages": {
+            "params": {
+                "TableName": ""
+            },
+            "region": "us-west-2",
+            "accessKeyId": "",
+            "secretAccessKey": ""
+        },
+        "users": {
+            "params": {
+                "TableName": ""
+            },
+            "region": "us-west-2",
+            "accessKeyId": "",
+            "secretAccessKey": ""
+        }
+    },
+```
+
+To use the local NEDB you don't need to do anything. Just keep the db section in the config empty. It will store all the data locally in the `db/` directory.
+
 ## Contributing
 If you wish to contribute, please see the **CONTRIBUTING.md** file in the root of this repository.
 

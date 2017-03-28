@@ -1,6 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
-import datastore from '../db';
+import * as database from '../db';
 
 /**
  * This checks for people spamming the same message multiple times.
@@ -12,7 +12,7 @@ class SameMessageSpamWatcher extends BaseWatcher {
         super(bot);
     }
 
-    usesBypassRules = true;
+    usesBypassRules = false;
 
     shouldRunOnBots = false;
 
@@ -31,30 +31,16 @@ class SameMessageSpamWatcher extends BaseWatcher {
             message = updatedMessage;
         }
 
-        if (!this.isAModeratedChannel(message.channel.name)) {
-            return;
+        const count = await database.countMessagesInLast(message.cleanContent, 30);
+
+        if (count >= 3) {
+            const warningMessage = await message.reply(`Please do not spam the same message.`);
+
+            this.addWarningToUser(message);
+
+            message.delete();
+            warningMessage.delete(60000);
         }
-
-        const thirtySecondsAgo = new Date();
-        thirtySecondsAgo.setSeconds(thirtySecondsAgo.getSeconds() - 30);
-
-        datastore.messages.count({
-            content: message.cleanContent,
-            createdAt: {$gt: thirtySecondsAgo}
-        }, async function (err, count) {
-            if (err) {
-                console.error(err);
-            }
-
-            if (count >= 3) {
-                const warningMessage = await message.reply(`Please do not spam the same message.`);
-
-                this.addWarningToUser(message);
-
-                message.delete();
-                warningMessage.delete(60000);
-            }
-        }.bind(this));
     }
 }
 

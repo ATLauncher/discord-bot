@@ -31,9 +31,11 @@
   },
   "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
   "dependencies": {
+    "aws-sdk": "^2.33.0",
     "date-fns": "~1.28.1",
     "discord.js": "~11.0.0",
-    "nedb": "~1.8.0"
+    "nedb": "~1.8.0",
+    "nedb-promise": "^2.0.1"
   },
   "devDependencies": {
     "babel-cli": "~6.24.0",

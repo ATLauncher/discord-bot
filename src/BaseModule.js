@@ -1,6 +1,6 @@
 import config from './config';
 
-import database from './db';
+import * as database from './db';
 
 /**
  * This is the base module. A module is either a command or a watcher.
@@ -106,58 +106,37 @@ class BaseModule {
      *
      * @param {Message} message
      */
-    addWarningToUser(message) {
+    async addWarningToUser(message) {
         if (message.author) {
-            database.users.findOne({id: message.author.id}, (err, doc) => {
-                if (!err) {
-                    let user = doc;
+            let user = (await database.findUserByID(message.author.id)) || {
+                id: message.author.id,
+                warnings: 0
+            };
 
-                    if (!user) {
-                        user = {
-                            id: message.author.id,
-                            warnings: 1,
-                            warningMessages: [
-                                {
-                                    id: message.id,
-                                    content: message.cleanContent,
-                                    created_at: new Date()
-                                }
-                            ]
-                        };
-                    } else {
-                        user.warnings++;
+            console.log('*******');
+            console.log(user);
+            console.log('*******');
 
-                        if (!user.warningMessages) {
-                            user.warningMessages = [];
-                        }
+            // in case of no or bad warnings information, set it to 0, ready to be incremented
+            if (typeof user.warnings !== 'number' || Number.isNaN(user.warnings)) {
+                user.warnings = 0;
+            }
 
-                        user.warningMessages.push({
-                            id: message.id,
-                            content: message.cleanContent,
-                            created_at: new Date()
-                        });
-                    }
+            user.warnings++;
+            user.username = message.author.username;
+            user.discriminator = message.author.discriminator;
 
-                    user.username = message.author.username;
-                    user.discriminator = message.author.discriminator;
+            database.updateUserByID(message.author.id, user);
 
-                    database.users.update({
-                        id: message.author.id
-                    }, user, {
-                        upsert: true
-                    });
-
-                    if (user.warnings >= 5) {
-                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
-                        message.member.ban();
-                    } else if (user.warnings >= 3) {
-                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
-                        message.member.kick();
-                    } else {
-                        this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
-                    }
-                }
-            });
+            if (user.warnings >= 5) {
+                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
+                message.member.ban();
+            } else if (user.warnings >= 3) {
+                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
+                message.member.kick();
+            } else {
+                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
+            }
         }
     }
 
