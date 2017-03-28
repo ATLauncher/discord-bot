@@ -165,12 +165,14 @@ export async function countMessagesInLast(message, seconds = 30) {
     if (usingAWS) {
         const params = {
             Select: 'COUNT',
-            FilterExpression: '#1 > :1',
+            FilterExpression: '#1 == :1 AND #2  > :2',
             ExpressionAttributeValues: {
-                ':1': timeAgo.toISOString(),
+                ':1': message,
+                ':2': timeAgo.toISOString()
             },
             ExpressionAttributeNames: {
-                '#1': 'timestamp'
+                '#1': 'content',
+                '#2': 'timestamp'
             },
             ReturnValues: 'ALL_NEW'
         };
