@@ -113,10 +113,6 @@ class BaseModule {
                 warnings: 0
             };
 
-            console.log('*******');
-            console.log(user);
-            console.log('*******');
-
             // in case of no or bad warnings information, set it to 0, ready to be incremented
             if (typeof user.warnings !== 'number' || Number.isNaN(user.warnings)) {
                 user.warnings = 0;

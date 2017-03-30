@@ -20,12 +20,10 @@ const databases = {
     },
     dynamodb: usingAWS && {
         messages: new AWS.DynamoDB.DocumentClient({
-            ...config.db.messages,
-            logger: console
+            ...config.db.messages
         }),
         users: new AWS.DynamoDB.DocumentClient({
-            ...config.db.users,
-            logger: console
+            ...config.db.users
         })
     }
 };

@@ -40,7 +40,12 @@ class DeleteWatcher extends BaseWatcher {
     }
 
     logMessage(message) {
-        if (message.cleanContent === '!cyt') {
+        if (
+            message.cleanContent.substr(0, 4) === '!cyt' ||
+            message.cleanContent.substr(0, 5) === '!logs' ||
+            message.cleanContent.substr(0, 7) === '!idbans' ||
+            message.cleanContent.substr(0, 8) === '!working'
+        ) {
             return;
         }
 
