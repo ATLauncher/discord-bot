@@ -124,15 +124,21 @@ class BaseModule {
 
             database.updateUserByID(message.author.id, user);
 
+            let messageParts = [];
+
+            messageParts.push(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`);
+
             if (user.warnings >= 5) {
-                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member banned for having ${user.warnings} warnings!`);
+                messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
                 message.member.ban();
             } else if (user.warnings >= 3) {
-                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** member kicked for having ${user.warnings} warnings!`);
+                messageParts.push(`**Action:** member kicked for having ${user.warnings} warnings!`);
                 message.member.kick();
             } else {
-                this.sendMessageToModeratorLogsChannel(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** warning added for total of ${user.warnings} warnings!`);
+                messageParts.push(`**Action:** warning added for total of ${user.warnings} warnings!`);
             }
+
+            this.sendMessageToModeratorLogsChannel(messageParts.join("\n"));
         }
     }
 

@@ -15,28 +15,22 @@ class BanWatcher extends BaseWatcher {
         'guildBanRemove'
     ];
 
-    shouldRun(method, message) {
-        if (!super.shouldRun(method, message)) {
-            return false;
-        }
-
-        return true;
-    }
-
     action(method, guild, user) {
         this.logMessage(user, method);
     }
 
     logMessage(user, method) {
-        let messageToSend = '';
+        let messageParts = [];
+
+        messageParts.push(`**User:** ${user} (${user.username}#${user.discriminator})`);
 
         if (method === 'guildBanAdd') {
-            messageToSend = `**User:** ${user} (${user.username}#${user.discriminator})\n**Action:** user banned`;
+            messageParts.push(`**Action:** user banned`);
         } else {
-            messageToSend = `**User:** ${user} (${user.username}#${user.discriminator})\n**Action:** user unbanned`;
+            messageParts.push(`**Action:** user unbanned`);
         }
 
-        this.sendMessageToModeratorLogsChannel(messageToSend);
+        this.sendMessageToModeratorLogsChannel(messageParts.join("\n"));
     }
 }
 

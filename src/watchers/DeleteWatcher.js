@@ -49,15 +49,19 @@ class DeleteWatcher extends BaseWatcher {
             return;
         }
 
-        let messageToSend = '';
+        let messageParts = [];
 
-        if (message.author) {
-            messageToSend = `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
+        if (!message.author) {
+            messageParts.push('**User:** Unknown');
         } else {
-            messageToSend = `**User:** Unknown\n**Action:** message removed\n**Channel:** ${message.channel}\n**Message:**\`\`\`${message.cleanContent}\`\`\``;
+            messageParts.push(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`);
         }
 
-        this.sendMessageToModeratorLogsChannel(messageToSend);
+        messageParts.push('**Action:** message removed');
+        messageParts.push(`**Channel:** ${message.channel}`);
+        messageParts.push(`**Message:**\`\`\`${message.cleanContent}\`\`\``);
+
+        this.sendMessageToModeratorLogsChannel(messageParts.join("\n"));
     }
 }
 

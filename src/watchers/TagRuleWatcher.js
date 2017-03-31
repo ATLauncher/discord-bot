@@ -29,8 +29,15 @@ class TagRuleWatcher extends BaseWatcher {
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
-        if (message.mentions.everyone || message.cleanContent.indexOf('@everyone') !== -1 || message.cleanContent.indexOf('@here') !== -1 || message.cleanContent.indexOf('@all') !== -1
-            || message.content.indexOf('@everyone') !== -1 || message.content.indexOf('@here') !== -1 || message.content.indexOf('@all') !== -1) {
+        if (
+            message.mentions.everyone ||
+            message.cleanContent.indexOf('@everyone') !== -1 ||
+            message.cleanContent.indexOf('@here') !== -1 ||
+            message.cleanContent.indexOf('@all') !== -1 ||
+            message.content.indexOf('@everyone') !== -1 ||
+            message.content.indexOf('@here') !== -1 ||
+            message.content.indexOf('@all') !== -1
+        ) {
             const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Use of tags such as \`@everyone\` and \`@here\` are not allowed.`);
 
             this.addWarningToUser(message);
