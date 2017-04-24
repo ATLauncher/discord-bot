@@ -1,12 +1,12 @@
 FROM node:6
-MAINTAINER RyanTheAllmighty <ryantheallmighty@atlauncher.com>
+MAINTAINER Ryan Dowling <ryan@ryandowling.me>
 
 RUN mkdir -p /app
 WORKDIR /app
 
 COPY package.json /app
 
-RUN /usr/local/bin/npm install
+RUN /usr/local/bin/npm install --production
 
 COPY . /app
 

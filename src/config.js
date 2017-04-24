@@ -1,11 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-const config = getConfig();
-
-const environmentConfig = getEnvironmentConfig();
-
-export default Object.assign({}, config, environmentConfig);
+import fs from 'fs';
+import path from 'path';
 
 function getEnvironmentConfig() {
     if (process.env.DISCORD_BOT_CONFIG) {
@@ -24,8 +18,14 @@ function getConfig() {
 
         fs.accessSync(configPath);
 
-        return require(configPath)
-    } catch(e) {
+        return JSON.parse(fs.readFileSync(configPath));
+    } catch (e) {
         return {};
     }
 }
+
+const config = getConfig();
+
+const environmentConfig = getEnvironmentConfig();
+
+export default Object.assign({}, config, environmentConfig);

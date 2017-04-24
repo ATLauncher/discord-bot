@@ -1,10 +1,6 @@
 import BaseWatcher from './BaseWatcher';
 
 class BanWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     /**
      * The method this watcher should listen on.
      *
@@ -20,6 +16,7 @@ class BanWatcher extends BaseWatcher {
     }
 
     logMessage(user, method) {
+        // eslint-disable-next-line prefer-const
         let messageParts = [];
 
         messageParts.push(`**User:** ${user} (${user.username}#${user.discriminator})`);
@@ -30,7 +27,7 @@ class BanWatcher extends BaseWatcher {
             messageParts.push(`**Action:** user unbanned`);
         }
 
-        this.sendMessageToModeratorLogsChannel(messageParts.join("\n"));
+        this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
     }
 }
 

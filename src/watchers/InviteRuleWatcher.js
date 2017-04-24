@@ -4,10 +4,6 @@ import BaseWatcher from './BaseWatcher';
  * This checks for people posting Discord invite links.
  */
 class InviteRuleWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     shouldRunOnBots = false;
 
     usesBypassRules = true;
@@ -15,7 +11,7 @@ class InviteRuleWatcher extends BaseWatcher {
     /**
      * The method this watcher should listen on.
      *
-     * @type {string|string[]}
+     * @type {string[]}
      */
     method = [
         'message',
@@ -23,20 +19,25 @@ class InviteRuleWatcher extends BaseWatcher {
     ];
 
     async action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
-        if (!this.isAModeratedChannel(message.channel.name)) {
+        if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
             return;
         }
 
-        if (message.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
-            const warningMessage = await message.reply(`Discord invite links are not allowed due to constant spam. If you must share Discord invite links with someone, please do it privately.`);
+        if (messageToActUpon.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
+            const warningMessage = await messageToActUpon.reply(
+                `Discord invite links are not allowed due to constant spam. ` +
+                `If you must share Discord invite links with someone, please do it privately.`
+            );
 
-            this.addWarningToUser(message);
+            this.addWarningToUser(messageToActUpon);
 
-            message.delete();
+            messageToActUpon.delete();
             warningMessage.delete(60000);
         }
     }

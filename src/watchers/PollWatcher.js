@@ -1,19 +1,17 @@
 import BaseWatcher from './BaseWatcher';
 
+import config from '../config';
+
 /**
  * This checks for people spamming links.
  */
 class PollWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string[]}
      */
     method = [
         'message',
@@ -21,22 +19,26 @@ class PollWatcher extends BaseWatcher {
     ];
 
     async action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
-        const cleanMessage = message.cleanContent.toLowerCase();
+        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (
             cleanMessage.indexOf('strawpoll.me') !== -1
         ) {
             const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
-            const warningMessage = await message.reply(`Please read the ${rulesChannel}. Polls are not allowed without permission.`);
+            const warningMessage = await messageToActUpon.reply(
+                `Please read the ${rulesChannel}. Polls are not allowed without permission.`
+            );
 
-            this.addWarningToUser(message);
+            this.addWarningToUser(messageToActUpon);
 
-            message.delete();
+            messageToActUpon.delete();
             warningMessage.delete(60000);
         }
     }

@@ -6,16 +6,12 @@ import config from '../config';
  * This checks for people spamming text stuff.
  */
 class TextSpamWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string[]}
      */
     method = [
         'message',
@@ -23,13 +19,15 @@ class TextSpamWatcher extends BaseWatcher {
     ];
 
     async action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
         const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
 
-        const cleanMessage = message.cleanContent.toLowerCase();
+        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (
             cleanMessage.indexOf('this is cooldog') !== -1 ||
@@ -39,11 +37,13 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.indexOf('DMing inappropriate photos of underage children') !== -1 ||
             cleanMessage.indexOf('bots are joining servers and sending mass') !== -1
         ) {
-            const warningMessage = await message.reply(`Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`);
+            const warningMessage = await messageToActUpon.reply(
+                `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
+            );
 
-            this.addWarningToUser(message);
+            this.addWarningToUser(messageToActUpon);
 
-            message.delete();
+            messageToActUpon.delete();
             warningMessage.delete(60000);
         }
     }

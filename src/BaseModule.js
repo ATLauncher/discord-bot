@@ -72,28 +72,37 @@ class BaseModule {
      *
      * @param {string} method
      * @param {Message} message
-     * @param {Message} updatedMessage
+     * @param {Message|object} [updatedMessage={}]
      * @returns {boolean}
      */
     shouldRun(method, message, updatedMessage = {}) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
-        if (message.system) {
+        if (messageToActUpon.system) {
             return false;
         }
 
-        if (message.author && message.author.bot && !this.shouldRunOnBots) {
+        if (messageToActUpon.author && messageToActUpon.author.bot && !this.shouldRunOnBots) {
             return false;
         }
 
         if (this.usesBypassRules) {
-            if (config.bypass.users && message.member && message.member.user && config.bypass.users.includes(`${message.member.user.username}#${message.member.user.discriminator}`)) {
+            if (
+                config.bypass.users &&
+                messageToActUpon.member &&
+                messageToActUpon.member.user &&
+                config.bypass.users.includes(
+                    `${messageToActUpon.member.user.username}#${messageToActUpon.member.user.discriminator}`
+                )
+            ) {
                 return false;
             }
 
-            const isFromBypassedRole = config.bypass.roles.length && this.hasBypassRole(message);
+            const isFromBypassedRole = config.bypass.roles.length && this.hasBypassRole(messageToActUpon);
 
             return !isFromBypassedRole;
         }
@@ -108,6 +117,7 @@ class BaseModule {
      */
     async addWarningToUser(message) {
         if (message.author) {
+            // eslint-disable-next-line prefer-const
             let user = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
                 warnings: 0
@@ -124,9 +134,12 @@ class BaseModule {
 
             database.updateUserByID(message.author.id, user);
 
+            // eslint-disable-next-line prefer-const
             let messageParts = [];
 
-            messageParts.push(`**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`);
+            messageParts.push(
+                `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`
+            );
 
             if (user.warnings >= 5) {
                 messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
@@ -138,7 +151,7 @@ class BaseModule {
                 messageParts.push(`**Action:** warning added for total of ${user.warnings} warnings!`);
             }
 
-            this.sendMessageToModeratorLogsChannel(messageParts.join("\n"));
+            this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
         }
     }
 
@@ -156,9 +169,7 @@ class BaseModule {
      * @returns {TextChannel|VoiceChannel|null}
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => {
-            return channel.name === config.moderator_channel
-        });
+        return this.bot.channels.find((channel) => (channel.name === config.moderator_channel));
     }
 
     /**
@@ -167,9 +178,7 @@ class BaseModule {
      * @returns {Collection<TextChannel|VoiceChannel>|null}
      */
     getModeratedChannels() {
-        return this.bot.channels.filter((channel) => {
-            return config.moderated_channels.indexOf(channel.name) !== -1
-        });
+        return this.bot.channels.filter((channel) => (config.moderated_channels.indexOf(channel.name) !== -1));
     }
 
     /**
@@ -196,9 +205,7 @@ class BaseModule {
      * @returns {boolean}
      */
     isFromChannel(message, channelName) {
-        const wantedChannel = this.bot.channels.filter((channel) => {
-            return channel.name === channelName;
-        });
+        const wantedChannel = this.bot.channels.filter((channel) => (channel.name === channelName));
 
         if (!wantedChannel) {
             return false;
@@ -215,7 +222,7 @@ class BaseModule {
      * @returns {boolean}
      */
     isFromUser(message, username) {
-        return message.author && message.author.username === username
+        return message.author && message.author.username === username;
     }
 
     /**
@@ -229,9 +236,11 @@ class BaseModule {
             return false;
         }
 
-        return config.bypass.roles.filter((roleName) => {
-                return message.member && message.member.roles && message.member.roles.exists('name', roleName);
-            }).length !== 0;
+        const filteredRoles = config.bypass.roles.filter((roleName) => (
+            message.member && message.member.roles && message.member.roles.exists('name', roleName)
+        ));
+
+        return filteredRoles.length !== 0;
     }
 }
 

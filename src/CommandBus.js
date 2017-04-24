@@ -27,7 +27,7 @@ class CommandBus {
         });
 
         // remove any non active commands
-        loadedCommands = loadedCommands.filter((command) => ( command.enabled ));
+        loadedCommands = loadedCommands.filter((command) => (command.enabled));
 
         // group the commands by method
         loadedCommands.forEach((command) => {
@@ -48,7 +48,7 @@ class CommandBus {
                 const command = this.commands[method].find((command) => (command.matches(...args)));
 
                 if (command && command.shouldRun(method, ...args)) {
-                    return command.action(method, ...args);
+                    command.action(method, ...args);
                 }
             });
         });

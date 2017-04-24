@@ -42,17 +42,17 @@ export async function findUserByID(id) {
                     return reject(err);
                 }
 
-                // DynamoDB returns an empty object if not found, so resolve that as a null
+                // the DynamoDB package will return an empty object if not found, so resolve that as a null
                 if (Object.keys(data).length === 0 && data.constructor === Object) {
                     return resolve(null);
                 }
 
-                resolve(data.Item);
+                return resolve(data.Item);
             });
         });
-    } else {
-        return await databases.nedb.users.findOne({id});
     }
+
+    return await databases.nedb.users.findOne({id});
 }
 
 /**
@@ -60,6 +60,7 @@ export async function findUserByID(id) {
  *
  * @param {number} id
  * @param {object} data
+ * @returns {Promise}
  */
 export function updateUserByID(id, data) {
     if (usingAWS) {
@@ -68,17 +69,17 @@ export function updateUserByID(id, data) {
                 id: parseInt(id, 10)
             },
             ExpressionAttributeValues: {
-                ":1": data.warnings,
-                ":2": data.username,
-                ":3": data.discriminator
+                ':1': data.warnings,
+                ':2': data.username,
+                ':3': data.discriminator
             },
             ExpressionAttributeNames: {
-                "#1": "warnings",
-                "#2": "username",
-                "#3": "discriminator"
+                '#1': 'warnings',
+                '#2': 'username',
+                '#3': 'discriminator'
             },
-            UpdateExpression: "SET #1=:1, #2=:2, #3=:3",
-            ReturnValues: "ALL_NEW"
+            UpdateExpression: 'SET #1=:1, #2=:2, #3=:3',
+            ReturnValues: 'ALL_NEW'
         };
 
         return new Promise((resolve, reject) => {
@@ -87,12 +88,12 @@ export function updateUserByID(id, data) {
                     return reject(err);
                 }
 
-                resolve(data);
+                return resolve(data);
             });
         });
-    } else {
-        return databases.nedb.users.update({id}, data, {upsert: true});
     }
+
+    return databases.nedb.users.update({id}, data, {upsert: true});
 }
 
 /**
@@ -100,6 +101,7 @@ export function updateUserByID(id, data) {
  *
  * @param {number} id
  * @param {object} data
+ * @returns {Promise}
  */
 export function updateMessageByID(id, data) {
     if (usingAWS) {
@@ -108,32 +110,32 @@ export function updateMessageByID(id, data) {
                 id: parseInt(id, 10)
             },
             ExpressionAttributeValues: {
-                ":1": data.isSystemMessage,
-                ":2": data.isBotMessage,
-                ":3": data.content,
-                ":4": {
+                ':1': data.isSystemMessage,
+                ':2': data.isBotMessage,
+                ':3': data.content,
+                ':4': {
                     id: data.channel.id,
                     name: data.channel.name
                 },
-                ":5": {
+                ':5': {
                     id: data.user.id,
                     username: data.user.username,
                     discriminator: data.user.discriminator
                 },
-                ":6": data.timestamp,
-                ":7": data.deletedAt
+                ':6': data.timestamp,
+                ':7': data.deletedAt
             },
             ExpressionAttributeNames: {
-                "#1": "isSystemMessage",
-                "#2": "isBotMessage",
-                "#3": "content",
-                "#4": "channel",
-                "#5": "user",
-                "#6": "timestamp",
-                "#7": "deletedAt",
+                '#1': 'isSystemMessage',
+                '#2': 'isBotMessage',
+                '#3': 'content',
+                '#4': 'channel',
+                '#5': 'user',
+                '#6': 'timestamp',
+                '#7': 'deletedAt'
             },
-            UpdateExpression: "SET #1=:1, #2=:2, #3=:3, #4=:4, #5=:5, #6=:6, #7=:7",
-            ReturnValues: "ALL_NEW"
+            UpdateExpression: 'SET #1=:1, #2=:2, #3=:3, #4=:4, #5=:5, #6=:6, #7=:7',
+            ReturnValues: 'ALL_NEW'
         };
 
         return new Promise((resolve, reject) => {
@@ -142,12 +144,12 @@ export function updateMessageByID(id, data) {
                     return reject(err);
                 }
 
-                resolve(data);
+                return resolve(data);
             });
         });
-    } else {
-        return databases.nedb.messages.update({id}, data, {upsert: true});
     }
+
+    return databases.nedb.messages.update({id}, data, {upsert: true});
 }
 
 /**
@@ -155,9 +157,12 @@ export function updateMessageByID(id, data) {
  *
  * @param {string} message
  * @param {number} [seconds=30]
+ * @returns {Promise}
  */
 export async function countMessagesInLast(message, seconds = 30) {
+    // eslint-disable-next-line prefer-const
     let timeAgo = new Date();
+
     timeAgo.setSeconds(timeAgo.getSeconds() - seconds);
 
     if (usingAWS) {
@@ -181,13 +186,13 @@ export async function countMessagesInLast(message, seconds = 30) {
                     return reject(err);
                 }
 
-                resolve(data.Count || 0);
+                return resolve(data.Count || 0);
             });
         });
-    } else {
-        return await databases.nedb.messages.count({
-            content: message,
-            createdAt: {$gt: timeAgo}
-        });
     }
+
+    return await databases.nedb.messages.count({
+        content: message,
+        createdAt: {$gt: timeAgo}
+    });
 }

@@ -8,10 +8,6 @@ import * as database from '../db';
  * It will trigger when the same message is sent 3 times within 30 seconds.
  */
 class SameMessageSpamWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     usesBypassRules = true;
 
     shouldRunOnBots = false;
@@ -27,22 +23,24 @@ class SameMessageSpamWatcher extends BaseWatcher {
     ];
 
     async action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
-        if (!this.isAModeratedChannel(message.channel.name)) {
+        if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
             return;
         }
 
-        const count = await database.countMessagesInLast(message.cleanContent, 30);
+        const count = await database.countMessagesInLast(messageToActUpon.cleanContent, 30);
 
         if (count >= 3) {
-            const warningMessage = await message.reply(`Please do not spam the same message.`);
+            const warningMessage = await messageToActUpon.reply(`Please do not spam the same message.`);
 
-            this.addWarningToUser(message);
+            this.addWarningToUser(messageToActUpon);
 
-            message.delete();
+            messageToActUpon.delete();
             warningMessage.delete(60000);
         }
     }

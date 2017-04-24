@@ -1,9 +1,5 @@
 import BaseModule from '../BaseModule';
 
-class BaseCommand extends BaseModule {
-    constructor(bot) {
-        super(bot);
-    }
-}
+class BaseCommand extends BaseModule {}
 
 export default BaseCommand;

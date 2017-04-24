@@ -1,4 +1,7 @@
-import chai, { expect } from 'chai';
+import { expect } from 'chai';
 
-describe('ExampleTest', function() {
+describe('ExampleTest', () => {
+    it('should pass', () => {
+        expect(true).to.be.true;
+    });
 });

@@ -4,16 +4,12 @@ import BaseWatcher from './BaseWatcher';
  * This checks for people spamming links.
  */
 class LinkSpamWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string[]}
      */
     method = [
         'message',
@@ -21,11 +17,13 @@ class LinkSpamWatcher extends BaseWatcher {
     ];
 
     async action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
-        const cleanMessage = message.cleanContent.toLowerCase();
+        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (
             cleanMessage.indexOf('giftsofsteam.com') !== -1 ||
@@ -36,11 +34,13 @@ class LinkSpamWatcher extends BaseWatcher {
             cleanMessage.indexOf('splix.io') !== -1 ||
             cleanMessage.indexOf('gaschoolstore.com') !== -1
         ) {
-            const warningMessage = await message.reply(`This link is not allowed to be posted as it is a known hoax/spam/scam.`);
+            const warningMessage = await messageToActUpon.reply(
+                `This link is not allowed to be posted as it is a known hoax/spam/scam.`
+            );
 
-            this.addWarningToUser(message);
+            this.addWarningToUser(messageToActUpon);
 
-            message.delete();
+            messageToActUpon.delete();
             warningMessage.delete(60000);
         }
     }

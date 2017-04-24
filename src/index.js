@@ -6,10 +6,12 @@ const bot = new Bot();
 
 bot.start();
 
-process.on('uncaughtException', function (error) {
+process.on('uncaughtException', (error) => {
+    // eslint-disable-next-line no-console
     console.error('uncaughtException', error || '');
 });
 
-process.on('unhandledRejection', function (reason, p) {
+process.on('unhandledRejection', (reason, p) => {
+    // eslint-disable-next-line no-console
     console.error('unhandledRejection', reason || '', p || '');
 });

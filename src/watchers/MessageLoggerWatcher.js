@@ -3,10 +3,6 @@ import BaseWatcher from './BaseWatcher';
 import * as database from '../db';
 
 class MessageLoggerWatcher extends BaseWatcher {
-    constructor(bot) {
-        super(bot);
-    }
-
     /**
      * The priority of this watcher. The lower the number the first it will be to run.
      *
@@ -17,7 +13,7 @@ class MessageLoggerWatcher extends BaseWatcher {
     /**
      * The method this watcher should listen on.
      *
-     * @type {string|string[]}
+     * @type {string[]}
      */
     method = [
         'message',
@@ -25,29 +21,36 @@ class MessageLoggerWatcher extends BaseWatcher {
         'messageUpdate'
     ];
 
+    /**
+     * If this watcher should be run or not.
+     *
+     * @returns {boolean}
+     */
     shouldRun() {
         return true;
     }
 
-    async action(method, message, updatedMessage) {
+    action(method, message, updatedMessage) {
+        let messageToActUpon = message;
+
         if (method === 'messageUpdate') {
-            message = updatedMessage;
+            messageToActUpon = updatedMessage;
         }
 
         const messageToLog = {
-            id: message.id,
-            userID: message.author.id,
-            isSystemMessage: message.system,
-            isBotMessage: message.author.bot,
-            content: message.cleanContent,
+            id: messageToActUpon.id,
+            userID: messageToActUpon.author.id,
+            isSystemMessage: messageToActUpon.system,
+            isBotMessage: messageToActUpon.author.bot,
+            content: messageToActUpon.cleanContent,
             channel: {
-                id: message.channel.id,
-                name: message.channel.name
+                id: messageToActUpon.channel.id,
+                name: messageToActUpon.channel.name
             },
             user: {
-                id: message.author.id,
-                username: message.author.username,
-                discriminator: message.author.discriminator
+                id: messageToActUpon.author.id,
+                username: messageToActUpon.author.username,
+                discriminator: messageToActUpon.author.discriminator
             },
             timestamp: new Date().toISOString(),
             deletedAt: (method === 'messageDelete') ? new Date().toISOString() : null
@@ -56,7 +59,6 @@ class MessageLoggerWatcher extends BaseWatcher {
         try {
             database.updateMessageByID(messageToLog.id, messageToLog);
         } catch (e) {
-            console.error(e);
         }
     }
 }

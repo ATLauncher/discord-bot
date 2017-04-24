@@ -17,6 +17,7 @@ class WatcherBus {
      * This will load all the watchers in the watchers directory.
      */
     loadWatchers() {
+        // eslint-disable-next-line prefer-const
         let loadedWatchers = [];
 
         // instantiate all the commands
@@ -68,7 +69,7 @@ class WatcherBus {
             this.bot.on(method, (...args) => {
                 this.watchers[method].forEach((watcher) => {
                     if (watcher.shouldRun(method, ...args)) {
-                        return watcher.action(method, ...args);
+                        watcher.action(method, ...args);
                     }
                 });
             });
