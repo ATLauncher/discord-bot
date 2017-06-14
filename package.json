@@ -32,7 +32,7 @@
   },
   "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
   "dependencies": {
-    "@atlauncher/babel-preset-atlauncher": "^0.1.0-3",
+    "@atlauncher/babel-preset-atlauncher": "0.1.0-3",
     "aws-sdk": "^2.43.0",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.24.1",
