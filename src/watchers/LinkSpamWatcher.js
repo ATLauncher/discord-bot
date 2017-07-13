@@ -32,7 +32,8 @@ class LinkSpamWatcher extends BaseWatcher {
             cleanMessage.indexOf('hellcase.com') !== -1 ||
             cleanMessage.indexOf('fatalpvp.serv.nu') !== -1 ||
             cleanMessage.indexOf('splix.io') !== -1 ||
-            cleanMessage.indexOf('gaschoolstore.com') !== -1
+            cleanMessage.indexOf('gaschoolstore.com') !== -1 ||
+            cleanMessage.indexOf('steamspecial.com') !== -1
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
