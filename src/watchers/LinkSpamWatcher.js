@@ -35,7 +35,8 @@ class LinkSpamWatcher extends BaseWatcher {
             cleanMessage.indexOf('gaschoolstore.com') !== -1 ||
             cleanMessage.indexOf('steamspecial.com') !== -1 ||
             cleanMessage.indexOf('gamekit.com') !== -1 ||
-            cleanMessage.indexOf('aternos.me') !== -1
+            cleanMessage.indexOf('aternos.me') !== -1 ||
+            cleanMessage.indexOf('steamquests.com') !== -1
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
