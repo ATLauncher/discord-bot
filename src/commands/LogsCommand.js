@@ -39,8 +39,8 @@ class LogsCommand extends BaseCommand {
             `how to generate the link. Once done please paste the link here.`
         );
 
-        // delete message after an hour
-        sentMessage.delete(60 * 60 * 1000);
+        // delete message after 24 hours
+        sentMessage.delete(60 * 60 * 24 * 1000);
 
         await sentMessage.react('🇱');
         await sentMessage.react('🇴');
