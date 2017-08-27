@@ -1,9 +1,10 @@
-FROM node:6
-MAINTAINER Ryan Dowling <ryan@ryandowling.me>
+FROM node:8
+MAINTAINER Ryan Dowling <ryan.dowling@atlauncher.com>
 
 RUN mkdir -p /app
 WORKDIR /app
 
+COPY package-lock.json /app
 COPY package.json /app
 
 RUN /usr/local/bin/npm install --production
