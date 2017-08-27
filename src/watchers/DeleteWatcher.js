@@ -1,16 +1,29 @@
 import BaseWatcher from './BaseWatcher';
 
+/**
+ * A watcher that listens for message/s being deleted. This can occur from either a user deleting it themselves or a
+ * moderator deleting them. There is no way to distinguish them.
+ *
+ * @class DeleteWatcher
+ * @extends {BaseWatcher}
+ */
 class DeleteWatcher extends BaseWatcher {
     /**
      * The method this watcher should listen on.
      *
      * @type {string[]}
+     * @memberof DeleteWatcher
      */
-    method = [
-        'messageDelete',
-        'messageDeleteBulk'
-    ];
+    method = ['messageDelete', 'messageDeleteBulk'];
 
+    /**
+     * If this watcher should run on the given method and message.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @returns {boolean}
+     * @memberof DeleteWatcher
+     */
     shouldRun(method, message) {
         if (!super.shouldRun(method, message)) {
             return false;
@@ -24,6 +37,13 @@ class DeleteWatcher extends BaseWatcher {
         return true;
     }
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @memberof DeleteWatcher
+     */
     action(method, message) {
         // check if we're getting a collection of messages or not
         if (method === 'messageDeleteBulk') {
@@ -35,12 +55,20 @@ class DeleteWatcher extends BaseWatcher {
         }
     }
 
+    /**
+     * Logs the given message to the moderator logs channel.
+     *
+     * @param {Message} message
+     * @returns {void}
+     * @memberof DeleteWatcher
+     */
     logMessage(message) {
+        // don't log deletions of commands
         if (
-            message.cleanContent.substr(0, 4) === '!cyt' ||
-            message.cleanContent.substr(0, 5) === '!logs' ||
-            message.cleanContent.substr(0, 7) === '!idbans' ||
-            message.cleanContent.substr(0, 8) === '!working'
+            message.cleanContent.toLowerCase().startsWith('!cyt') ||
+            message.cleanContent.toLowerCase().startsWith('!logs') ||
+            message.cleanContent.toLowerCase().startsWith('!idbans') ||
+            message.cleanContent.toLowerCase().startsWith('!working')
         ) {
             return;
         }

@@ -1,21 +1,36 @@
 import BaseWatcher from './BaseWatcher';
 
 /**
- * This checks for people spamming links.
+ * This watcher checks for people spamming links.
+ *
+ * @class LinkSpamWatcher
+ * @extends {BaseWatcher}
  */
 class LinkSpamWatcher extends BaseWatcher {
+    /**
+     * If this watcher uses bypass rules.
+     *
+     * @type {boolean}
+     * @memberof LinkSpamWatcher
+     */
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof InviteRuleWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof LinkSpamWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 

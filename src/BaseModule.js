@@ -3,9 +3,17 @@ import config from './config';
 import * as database from './db';
 
 /**
- * This is the base module. A module is either a command or a watcher.
+ * This is the base module class. A module is either a command or a watcher.
+ *
+ * @class BaseModule
  */
 class BaseModule {
+    /**
+     * Creates an instance of BaseModule.
+     *
+     * @param {Client} bot
+     * @memberof BaseModule
+     */
     constructor(bot) {
         this.bot = bot;
     }
@@ -14,6 +22,7 @@ class BaseModule {
      * If this module is enabled or not.
      *
      * @type {boolean}
+     * @memberof BaseModule
      */
     enabled = true;
 
@@ -21,6 +30,7 @@ class BaseModule {
      * If this module should respond to all incoming messages or not.
      *
      * @type {boolean}
+     * @memberof BaseModule
      */
     respondToAll = false;
 
@@ -28,6 +38,7 @@ class BaseModule {
      * The priority of this module. The lower the number the first it will be to run.
      *
      * @type {number}
+     * @memberof BaseModule
      */
     priority = 0;
 
@@ -35,6 +46,7 @@ class BaseModule {
      * If this module can be run on bot messages.
      *
      * @type {boolean}
+     * @memberof BaseModule
      */
     shouldRunOnBots = true;
 
@@ -42,6 +54,7 @@ class BaseModule {
      * Is users and roles mentioned in the bypass section of the config shouldn't trigger this module.
      *
      * @type {boolean}
+     * @memberof BaseModule
      */
     usesBypassRules = false;
 
@@ -50,6 +63,7 @@ class BaseModule {
      *
      * @param {Message} message
      * @returns {boolean}
+     * @memberof BaseModule
      */
     matches(message) {
         if (this.respondToAll) {
@@ -74,6 +88,7 @@ class BaseModule {
      * @param {Message} message
      * @param {Message|object} [updatedMessage={}]
      * @returns {boolean}
+     * @memberof BaseModule
      */
     shouldRun(method, message, updatedMessage = {}) {
         let messageToActUpon = message;
@@ -114,13 +129,14 @@ class BaseModule {
      * This adds a warning to a user. 2rd and 4th warning will result in a kick, 5th warning will result in a ban.
      *
      * @param {Message} message
+     * @memberof BaseModule
      */
     async addWarningToUser(message) {
         if (message.author) {
             // eslint-disable-next-line prefer-const
             let user = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
-                warnings: 0
+                warnings: 0,
             };
 
             // in case of no or bad warnings information, set it to 0, ready to be incremented
@@ -155,11 +171,17 @@ class BaseModule {
         }
     }
 
+    /**
+     * This will send the given message to the moderator logs channel.
+     *
+     * @param {string} message
+     * @memberof BaseModule
+     */
     sendMessageToModeratorLogsChannel(message) {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {
-            moderatorChannel.sendMessage(message);
+            moderatorChannel.send(message);
         }
     }
 
@@ -167,18 +189,24 @@ class BaseModule {
      * This gets the channel object for the moderator channel in the config.
      *
      * @returns {TextChannel|VoiceChannel|null}
+     * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => (channel.name === config.moderator_channel));
+        return this.bot.channels.find((channel) => {
+            return channel.name === config.moderator_channel;
+        });
     }
 
     /**
      * This will get all the channels which should be moderated.
      *
      * @returns {Collection<TextChannel|VoiceChannel>|null}
+     * @memberof BaseModule
      */
     getModeratedChannels() {
-        return this.bot.channels.filter((channel) => (config.moderated_channels.indexOf(channel.name) !== -1));
+        return this.bot.channels.filter((channel) => {
+            return config.moderated_channels.indexOf(channel.name) !== -1;
+        });
     }
 
     /**
@@ -186,6 +214,7 @@ class BaseModule {
      *
      * @param {string} channel
      * @returns {boolean}
+     * @memberof BaseModule
      */
     isAModeratedChannel(channel) {
         const moderatedChannels = this.getModeratedChannels();
@@ -203,9 +232,12 @@ class BaseModule {
      * @param {Message} message
      * @param {string} channelName
      * @returns {boolean}
+     * @memberof BaseModule
      */
     isFromChannel(message, channelName) {
-        const wantedChannel = this.bot.channels.filter((channel) => (channel.name === channelName));
+        const wantedChannel = this.bot.channels.filter((channel) => {
+            return channel.name === channelName;
+        });
 
         if (!wantedChannel) {
             return false;
@@ -220,6 +252,7 @@ class BaseModule {
      * @param {Message} message
      * @param {string} username
      * @returns {boolean}
+     * @memberof BaseModule
      */
     isFromUser(message, username) {
         return message.author && message.author.username === username;
@@ -230,15 +263,16 @@ class BaseModule {
      *
      * @param {Message}  message
      * @returns {boolean}
+     * @memberof BaseModule
      */
     hasBypassRole(message) {
         if (!config.bypass.roles || !config.bypass.roles.length) {
             return false;
         }
 
-        const filteredRoles = config.bypass.roles.filter((roleName) => (
-            message.member && message.member.roles && message.member.roles.exists('name', roleName)
-        ));
+        const filteredRoles = config.bypass.roles.filter((roleName) => {
+            return message.member && message.member.roles && message.member.roles.exists('name', roleName);
+        });
 
         return filteredRoles.length !== 0;
     }

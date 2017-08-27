@@ -1,6 +1,6 @@
 machine:
   node:
-    version: 6.7.0
+    version: 8
 
 dependencies:
   pre:
@@ -15,7 +15,6 @@ dependencies:
 test:
   override:
      - npm run lint
-     - npm run test
 
 deployment:
   beta:
@@ -30,7 +29,6 @@ deployment:
 general:
   branches:
     only:
-      - /greenkeeper-.*/
       - /feature\/.*/
       - /release\/.*/
       - /hotfix\/.*/

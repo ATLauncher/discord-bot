@@ -3,21 +3,36 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people spamming text stuff.
+ * This watcher checks for people spamming text stuff.
+ *
+ * @class TextSpamWatcher
+ * @extends {BaseWatcher}
  */
 class TextSpamWatcher extends BaseWatcher {
+    /**
+     * If this watcher uses bypass rules.
+     *
+     * @type {boolean}
+     * @memberof TextSpamWatcher
+     */
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof TextSpamWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * Run the watcher with the given parameters.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof TextSpamWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 
@@ -25,20 +40,22 @@ class TextSpamWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
+        const rulesChannel = this.bot.channels.find((channel) => {
+            return channel.name === config.rules_channel;
+        });
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (
-            cleanMessage.indexOf('this is cooldog') !== -1 ||
-            cleanMessage.indexOf('this is memedog') !== -1 ||
-            cleanMessage.indexOf('chrisopeer davies') !== -1 ||
-            cleanMessage.indexOf('jessica davies') !== -1 ||
-            cleanMessage.indexOf('DMing inappropriate photos of underage children') !== -1 ||
-            cleanMessage.indexOf('bots are joining servers and sending mass') !== -1 ||
-            cleanMessage.indexOf('kazuto kirigia') !== -1 ||
-            cleanMessage.indexOf('Colyn_9') !== -1 ||
-            cleanMessage.indexOf('teenagers would cry') !== -1
+            cleanMessage.toLowerCase().includes('this is cooldog') ||
+            cleanMessage.toLowerCase().includes('this is memedog') ||
+            cleanMessage.toLowerCase().includes('chrisopeer davies') ||
+            cleanMessage.toLowerCase().includes('jessica davies') ||
+            cleanMessage.toLowerCase().includes('DMing inappropriate photos of underage children') ||
+            cleanMessage.toLowerCase().includes('bots are joining servers and sending mass') ||
+            cleanMessage.toLowerCase().includes('kazuto kirigia') ||
+            cleanMessage.toLowerCase().includes('Colyn_9') ||
+            cleanMessage.toLowerCase().includes('teenagers would cry')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`

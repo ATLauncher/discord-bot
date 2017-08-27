@@ -1,66 +1,55 @@
 {
-  "name": "@atlauncher/discord-bot",
-  "version": "0.1.0",
-  "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
-  "main": "dist",
-  "scripts": {
-    "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"babel-node src\"",
-    "build": "babel src -D -d dist",
-    "start": "node dist",
-    "lint": "eslint config/ src/ test/",
-    "lint:watch": "esw config/ src/ test/ --watch",
-    "clean": "rimraf dist",
-    "oauth:url": "babel-node utils/getOAuthUrl.js",
-    "config:base64": "babel-node utils/base64Config.js",
-    "test": "cross-env NODE_ENV=test mocha --opts ./mocha.opts",
-    "test:watch": "cross-env NODE_ENV=test mocha --opts ./mocha.opts --watch",
-    "precommit": "npm run lint && npm run test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ATLauncher/Discord-Bot.git"
-  },
-  "keywords": [
-    "discord",
-    "atlauncher",
-    "bot"
-  ],
-  "author": "RyanTheAllmighty <ryantheallmighty@atlauncher.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ATLauncher/Discord-Bot/issues"
-  },
-  "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
-  "dependencies": {
-    "@atlauncher/babel-preset-atlauncher": "0.1.0-3",
-    "aws-sdk": "^2.43.0",
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.24.1",
-    "babel-eslint": "^7.2.2",
-    "babel-polyfill": "^6.23.0",
-    "babel-register": "^6.24.1",
-    "date-fns": "^1.28.3",
-    "discord.js": "^11.0.0",
-    "nedb": "^1.8.0",
-    "nedb-promise": "^2.0.1"
-  },
-  "devDependencies": {
-    "@atlauncher/eslint-config-atlauncher": "0.1.0-4",
-    "@atlauncher/eslint-plugin-atlauncher": "^0.1.0",
-    "chai": "^3.5.0",
-    "chai-as-promised": "^6.0.0",
-    "cross-env": "^4.0.0",
-    "eslint": "^3.19.0",
-    "eslint-plugin-filenames": "^1.2.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^4.0.0",
-    "eslint-plugin-no-empty-blocks": "0.0.2",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-react": "^6.10.3",
-    "eslint-watch": "^3.1.0",
-    "husky": "^0.13.3",
-    "mocha": "^3.2.0",
-    "nodemon": "^1.11.0",
-    "rimraf": "^2.6.1"
-  }
+    "name": "@atlauncher/discord-bot",
+    "version": "0.1.0",
+    "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
+    "main": "dist",
+    "scripts": {
+        "build": "babel src -D -d dist",
+        "clean": "rimraf dist",
+        "config:base64": "babel-node utils/base64Config.js",
+        "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"babel-node src\"",
+        "lint": "atlauncher-scripts lint js",
+        "lint:watch": "npm run lint -- --watch",
+        "oauth:url": "babel-node utils/getOAuthUrl.js",
+        "prepush": "npm run lint",
+        "start": "node dist"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ATLauncher/Discord-Bot.git"
+    },
+    "keywords": [
+        "discord",
+        "atlauncher",
+        "bot"
+    ],
+    "author": "RyanTheAllmighty <ryantheallmighty@atlauncher.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ATLauncher/Discord-Bot/issues"
+    },
+    "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
+    "dependencies": {
+        "@atlauncher/babel-preset-atlauncher": "0.1.0-3",
+        "aws-sdk": "^2.104.0",
+        "babel-cli": "^6.26.0",
+        "babel-core": "^6.26.0",
+        "babel-eslint": "^7.2.3",
+        "babel-polyfill": "^6.26.0",
+        "babel-register": "^6.26.0",
+        "date-fns": "^1.28.5",
+        "discord.js": "^11.1.0",
+        "nedb": "^1.8.0",
+        "nedb-promise": "^2.0.1"
+    },
+    "devDependencies": {
+        "@atlauncher/atlauncher-scripts": "0.1.0-0",
+        "chai": "^4.1.1",
+        "chai-as-promised": "^7.1.1",
+        "cross-env": "^5.0.5",
+        "husky": "^0.14.3",
+        "mocha": "^3.5.0",
+        "nodemon": "^1.11.0",
+        "rimraf": "^2.6.1"
+    }
 }

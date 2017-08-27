@@ -1,13 +1,17 @@
 import BaseCommand from './BaseCommand';
 
 /**
- * Simple command to ban a uaer by their ID.
+ * This will ban the given user/s by their Discord user id.
+ *
+ * @class IDBanCommand
+ * @extends {BaseCommand}
  */
 class IDBanCommand extends BaseCommand {
     /**
      * This event method we should listen for.
      *
      * @type {string}
+     * @memberof IDBanCommand
      */
     method = 'message';
 
@@ -16,6 +20,7 @@ class IDBanCommand extends BaseCommand {
      * method.
      *
      * @type {RegExp}
+     * @memberof IDBanCommand
      */
     pattern = /^!idban/;
 
@@ -24,6 +29,7 @@ class IDBanCommand extends BaseCommand {
      *
      * @param {string} action
      * @param {Message} message
+     * @memberof IDBanCommand
      */
     action(action, message) {
         message.delete();
@@ -51,4 +57,3 @@ class IDBanCommand extends BaseCommand {
 }
 
 export default IDBanCommand;
-

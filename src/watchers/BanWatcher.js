@@ -1,31 +1,33 @@
 import BaseWatcher from './BaseWatcher';
 
+/**
+ * Watcher to detect when bans have been added or removed
+ *
+ * @class BanWatcher
+ * @extends {BaseWatcher}
+ */
 class BanWatcher extends BaseWatcher {
     /**
-     * The method this watcher should listen on.
+     * The method/s this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof BanWatcher
      */
-    method = [
-        'guildBanAdd',
-        'guildBanRemove'
-    ];
+    method = ['guildBanAdd', 'guildBanRemove'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Guild} guild
+     * @param {User} user
+     * @memberof BanWatcher
+     */
     action(method, guild, user) {
-        this.logMessage(user, method);
-    }
-
-    logMessage(user, method) {
-        // eslint-disable-next-line prefer-const
-        let messageParts = [];
-
-        messageParts.push(`**User:** ${user} (${user.username}#${user.discriminator})`);
-
-        if (method === 'guildBanAdd') {
-            messageParts.push(`**Action:** user banned`);
-        } else {
-            messageParts.push(`**Action:** user unbanned`);
-        }
+        const messageParts = [
+            `**User:** ${user} (${user.username}#${user.discriminator})`,
+            `**Action:** user ${method === 'guildBanRemove' ? 'un' : ''}banned`,
+        ];
 
         this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
     }

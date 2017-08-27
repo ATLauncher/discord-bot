@@ -22,12 +22,12 @@ class Bot {
             // eslint-disable-next-line no-console
             console.log('I am ready!');
 
-            const botTestingChannel = this.bot.channels.find((channel) => (
-                channel.name === config.bot_testing_channel
-            ));
+            const botTestingChannel = this.bot.channels.find((channel) => {
+                return channel.name === config.bot_testing_channel;
+            });
 
             if (botTestingChannel) {
-                botTestingChannel.sendMessage('I\'ve restarted, just FYI');
+                botTestingChannel.send("I've restarted, just FYI");
             }
         });
     }

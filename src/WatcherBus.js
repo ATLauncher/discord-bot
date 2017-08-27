@@ -2,12 +2,22 @@ import fs from 'fs';
 
 /**
  * The watcher bus loads all the watchers and sets up the listeners and any configuration.
+ *
+ * @class WatcherBus
  */
 class WatcherBus {
+    /**
+     * Creates an instance of WatcherBus.
+     *
+     * @param {Client} bot
+     * @memberof WatcherBus
+     */
     constructor(bot) {
         this.bot = bot;
         this.watchers = {};
-        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => (file !== 'BaseWatcher.js'));
+        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => {
+            return file !== 'BaseWatcher.js';
+        });
 
         this.loadWatchers();
         this.setupWatcherListeners();
@@ -15,9 +25,10 @@ class WatcherBus {
 
     /**
      * This will load all the watchers in the watchers directory.
+     *
+     * @memberof WatcherBus
      */
     loadWatchers() {
-        // eslint-disable-next-line prefer-const
         let loadedWatchers = [];
 
         // instantiate all the commands
@@ -28,7 +39,9 @@ class WatcherBus {
         });
 
         // remove any non active commands
-        loadedWatchers = loadedWatchers.filter((watcher) => (watcher.enabled));
+        loadedWatchers = loadedWatchers.filter((watcher) => {
+            return watcher.enabled;
+        });
 
         // sort by priority
         loadedWatchers.sort((a, b) => {
@@ -63,6 +76,8 @@ class WatcherBus {
 
     /**
      * This will setup all the watcher listeners and register them with the bot.
+     *
+     * @memberof WatcherBus
      */
     setupWatcherListeners() {
         Object.keys(this.watchers).forEach((method) => {

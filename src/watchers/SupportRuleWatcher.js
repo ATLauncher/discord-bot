@@ -3,19 +3,28 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people asking for support in non support channels.
+ * This watcher checks for people asking for support in non support channels.
+ *
+ * @class SupportRoleWatcher
+ * @extends {BaseWatcher}
  */
 class SupportRoleWatcher extends BaseWatcher {
     /**
      * The method this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof SupportRuleWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof SupportRuleWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 
@@ -23,17 +32,17 @@ class SupportRoleWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const supportChannel = this.bot.channels.find((channel) => (channel.name === config.support_channel));
-        const nonSupportChannels = this.bot.channels.filter((channel) => (
-            config.non_support_channels.indexOf(channel.name) !== -1)
-        );
-
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+        const supportChannel = this.bot.channels.find((channel) => {
+            return channel.name === config.support_channel;
+        });
+        const nonSupportChannels = this.bot.channels.filter((channel) => {
+            return config.non_support_channels.indexOf(channel.name) !== -1;
+        });
 
         if (
-            cleanMessage.indexOf('paste.atlauncher.com') !== -1 ||
-            cleanMessage.indexOf('USERSDIR\\Instances') !== -1 ||
-            cleanMessage.indexOf('USERSDIR/Instances') !== -1
+            messageToActUpon.cleanContent.toLowerCase().includes('paste.atlauncher.com') ||
+            messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR\\Instances') ||
+            messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR/Instances')
         ) {
             if (nonSupportChannels.exists('name', messageToActUpon.channel.name)) {
                 const warningMessage = await messageToActUpon.reply(

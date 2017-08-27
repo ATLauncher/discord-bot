@@ -3,21 +3,36 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people spamming links.
+ * This watcher checks for people spamming links.
+ *
+ * @class PollWatcher
+ * @extends {BaseWatcher}
  */
 class PollWatcher extends BaseWatcher {
+    /**
+     * If this watcher uses bypass rules.
+     *
+     * @type {boolean}
+     * @memberof PollWatcher
+     */
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof PollWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof PollWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 
@@ -27,10 +42,10 @@ class PollWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (
-            cleanMessage.indexOf('strawpoll.me') !== -1
-        ) {
-            const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
+        if (cleanMessage.toLowerCase().includes('strawpoll.me')) {
+            const rulesChannel = this.bot.channels.find((channel) => {
+                return channel.name === config.rules_channel;
+            });
 
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel}. Polls are not allowed without permission.`

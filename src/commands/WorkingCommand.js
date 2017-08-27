@@ -8,6 +8,7 @@ class WorkingCommand extends BaseCommand {
      * This event method we should listen for.
      *
      * @type {string}
+     * @memberof WorkingCommand
      */
     method = 'message';
 
@@ -16,6 +17,7 @@ class WorkingCommand extends BaseCommand {
      * method.
      *
      * @type {RegExp}
+     * @memberof WorkingCommand
      */
     pattern = /^!working/;
 
@@ -24,12 +26,13 @@ class WorkingCommand extends BaseCommand {
      *
      * @param {string} action
      * @param {Message} message
+     * @memberof WorkingCommand
      */
     action(action, message) {
         message.delete();
 
         if (this.hasBypassRole(message)) {
-            message.reply('Yes I\'m working!');
+            message.reply("Yes I'm working!");
         }
     }
 }

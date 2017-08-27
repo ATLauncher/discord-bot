@@ -8,6 +8,7 @@ class LogsCommand extends BaseCommand {
      * This event method we should listen for.
      *
      * @type {string}
+     * @memberof LogsCommand
      */
     method = 'message';
 
@@ -16,6 +17,7 @@ class LogsCommand extends BaseCommand {
      * method.
      *
      * @type {RegExp}
+     * @memberof LogsCommand
      */
     pattern = /^!logs/;
 
@@ -24,6 +26,7 @@ class LogsCommand extends BaseCommand {
      *
      * @param {string} action
      * @param {Message} message
+     * @memberof LogsCommand
      */
     async action(action, message) {
         message.delete();
@@ -35,8 +38,8 @@ class LogsCommand extends BaseCommand {
         }
 
         const sentMessage = await message.channel.send(
-            `In order to help you ${user}, we need some logs. Please see http://enderman.atlcdn.net/UploadLogs.gif on` +
-            `how to generate the link. Once done please paste the link here.`
+            `In order to help you ${user}, we need some logs. Please see http://enderman.atlcdn.net/UploadLogs.gif ` +
+                `on how to generate the link. Once done please paste the link here.`
         );
 
         // delete message after 24 hours

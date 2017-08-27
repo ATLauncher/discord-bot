@@ -10,30 +10,37 @@ const databases = {
         messages: new Datastore({
             filename: `./db/messages.db`,
             timestampData: true,
-            autoload: true
+            autoload: true,
         }),
         users: new Datastore({
             filename: `./db/users.db`,
             timestampData: true,
-            autoload: true
-        })
+            autoload: true,
+        }),
     },
     dynamodb: usingAWS && {
         messages: new AWS.DynamoDB.DocumentClient({
-            ...config.db.messages
+            ...config.db.messages,
         }),
         users: new AWS.DynamoDB.DocumentClient({
-            ...config.db.users
-        })
-    }
+            ...config.db.users,
+        }),
+    },
 };
 
+/**
+ * This will find a user by the given id.
+ *
+ * @export
+ * @param {number} id
+ * @returns {object|null}
+ */
 export async function findUserByID(id) {
     if (usingAWS) {
         const params = {
             Key: {
-                id: parseInt(id, 10)
-            }
+                id: parseInt(id, 10),
+            },
         };
 
         return await new Promise((resolve, reject) => {
@@ -52,7 +59,7 @@ export async function findUserByID(id) {
         });
     }
 
-    return await databases.nedb.users.findOne({id});
+    return await databases.nedb.users.findOne({ id });
 }
 
 /**
@@ -66,20 +73,20 @@ export function updateUserByID(id, data) {
     if (usingAWS) {
         const params = {
             Key: {
-                id: parseInt(id, 10)
+                id: parseInt(id, 10),
             },
             ExpressionAttributeValues: {
                 ':1': data.warnings,
                 ':2': data.username,
-                ':3': data.discriminator
+                ':3': data.discriminator,
             },
             ExpressionAttributeNames: {
                 '#1': 'warnings',
                 '#2': 'username',
-                '#3': 'discriminator'
+                '#3': 'discriminator',
             },
             UpdateExpression: 'SET #1=:1, #2=:2, #3=:3',
-            ReturnValues: 'ALL_NEW'
+            ReturnValues: 'ALL_NEW',
         };
 
         return new Promise((resolve, reject) => {
@@ -93,7 +100,7 @@ export function updateUserByID(id, data) {
         });
     }
 
-    return databases.nedb.users.update({id}, data, {upsert: true});
+    return databases.nedb.users.update({ id }, data, { upsert: true });
 }
 
 /**
@@ -107,7 +114,7 @@ export function updateMessageByID(id, data) {
     if (usingAWS) {
         const params = {
             Key: {
-                id: parseInt(id, 10)
+                id: parseInt(id, 10),
             },
             ExpressionAttributeValues: {
                 ':1': data.isSystemMessage,
@@ -115,15 +122,15 @@ export function updateMessageByID(id, data) {
                 ':3': data.content,
                 ':4': {
                     id: data.channel.id,
-                    name: data.channel.name
+                    name: data.channel.name,
                 },
                 ':5': {
                     id: data.user.id,
                     username: data.user.username,
-                    discriminator: data.user.discriminator
+                    discriminator: data.user.discriminator,
                 },
                 ':6': data.timestamp,
-                ':7': data.deletedAt
+                ':7': data.deletedAt,
             },
             ExpressionAttributeNames: {
                 '#1': 'isSystemMessage',
@@ -132,10 +139,10 @@ export function updateMessageByID(id, data) {
                 '#4': 'channel',
                 '#5': 'user',
                 '#6': 'timestamp',
-                '#7': 'deletedAt'
+                '#7': 'deletedAt',
             },
             UpdateExpression: 'SET #1=:1, #2=:2, #3=:3, #4=:4, #5=:5, #6=:6, #7=:7',
-            ReturnValues: 'ALL_NEW'
+            ReturnValues: 'ALL_NEW',
         };
 
         return new Promise((resolve, reject) => {
@@ -149,7 +156,7 @@ export function updateMessageByID(id, data) {
         });
     }
 
-    return databases.nedb.messages.update({id}, data, {upsert: true});
+    return databases.nedb.messages.update({ id }, data, { upsert: true });
 }
 
 /**
@@ -171,13 +178,13 @@ export async function countMessagesInLast(message, seconds = 30) {
             FilterExpression: '#1 = :1 AND #2 > :2',
             ExpressionAttributeValues: {
                 ':1': message,
-                ':2': timeAgo.toISOString()
+                ':2': timeAgo.toISOString(),
             },
             ExpressionAttributeNames: {
                 '#1': 'content',
-                '#2': 'timestamp'
+                '#2': 'timestamp',
             },
-            ReturnValues: 'ALL_NEW'
+            ReturnValues: 'ALL_NEW',
         };
 
         return new Promise((resolve, reject) => {
@@ -193,6 +200,6 @@ export async function countMessagesInLast(message, seconds = 30) {
 
     return await databases.nedb.messages.count({
         content: message,
-        createdAt: {$gt: timeAgo}
+        createdAt: { $gt: timeAgo },
     });
 }

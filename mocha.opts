@@ -1,5 +1,0 @@
---compilers js:babel-core/register
---recursive ./test/**/*.js
---require babel-polyfill
---require ./testSetup
---timeout 5000

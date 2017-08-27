@@ -3,25 +3,46 @@ import BaseWatcher from './BaseWatcher';
 import * as database from '../db';
 
 /**
- * This checks for people spamming the same message multiple times.
+ * This watcher checks for people spamming the same message multiple times.
  *
  * It will trigger when the same message is sent 3 times within 30 seconds.
+ *
+ * @class SameMessageSpamWatcher
+ * @extends {BaseWatcher}
  */
 class SameMessageSpamWatcher extends BaseWatcher {
-    usesBypassRules = true;
-
+    /**
+     * If this watcher should run on bots or not.
+     *
+     * @type {boolean}
+     * @memberof SameMessageSpamWatcher
+     */
     shouldRunOnBots = false;
+
+    /**
+     * If this watcher uses bypass rules.
+     *
+     * @type {boolean}
+     * @memberof SameMessageSpamWatcher
+     */
+    usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string}
+     * @type {string|string[]}
+     * @memberof SameMessageSpamWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof SameMessageSpamWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 

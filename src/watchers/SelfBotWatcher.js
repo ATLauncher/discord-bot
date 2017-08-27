@@ -3,21 +3,36 @@ import BaseWatcher from './BaseWatcher';
 import config from '../config';
 
 /**
- * This checks for people using self bots.
+ * This watcher checks for people using self bots.
+ *
+ * @class SelfBotWatcher
+ * @extends {BaseWatcher}
  */
 class SelfBotWatcher extends BaseWatcher {
+    /**
+     * If this watcher uses bypass rules.
+     *
+     * @type {boolean}
+     * @memberof SelfBotWatcher
+     */
     usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
      *
-     * @type {string[]}
+     * @type {string|string[]}
+     * @memberof SelfBotWatcher
      */
-    method = [
-        'message',
-        'messageUpdate'
-    ];
+    method = ['message', 'messageUpdate'];
 
+    /**
+     * The function that should be called when the event is fired.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message} updatedMessage
+     * @memberof SelfBotWatcher
+     */
     async action(method, message, updatedMessage) {
         let messageToActUpon = message;
 
@@ -25,11 +40,13 @@ class SelfBotWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => (channel.name === config.rules_channel));
+        const rulesChannel = this.bot.channels.find((channel) => {
+            return channel.name === config.rules_channel;
+        });
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (cleanMessage.indexOf('self.') === 0) {
+        if (cleanMessage.toLowerCase().startsWith('self.')) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`
             );
