@@ -41,17 +41,18 @@ class LinkSpamWatcher extends BaseWatcher {
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (
-            cleanMessage.indexOf('giftsofsteam.com') !== -1 ||
-            cleanMessage.indexOf('steamdigitalgift.com') !== -1 ||
-            cleanMessage.indexOf('steam.cubecode.site') !== -1 ||
-            cleanMessage.indexOf('hellcase.com') !== -1 ||
-            cleanMessage.indexOf('fatalpvp.serv.nu') !== -1 ||
-            cleanMessage.indexOf('splix.io') !== -1 ||
-            cleanMessage.indexOf('gaschoolstore.com') !== -1 ||
-            cleanMessage.indexOf('steamspecial.com') !== -1 ||
-            cleanMessage.indexOf('gamekit.com') !== -1 ||
-            cleanMessage.indexOf('aternos.me') !== -1 ||
-            cleanMessage.indexOf('steamquests.com') !== -1
+            cleanMessage.includes('giftsofsteam.com') ||
+            cleanMessage.includes('steamdigitalgift.com') ||
+            cleanMessage.includes('steam.cubecode.site') ||
+            cleanMessage.includes('hellcase.com') ||
+            cleanMessage.includes('fatalpvp.serv.nu') ||
+            cleanMessage.includes('splix.io') ||
+            cleanMessage.includes('gaschoolstore.com') ||
+            cleanMessage.includes('steamspecial.com') ||
+            cleanMessage.includes('gamekit.com') ||
+            cleanMessage.includes('aternos.me') ||
+            cleanMessage.includes('steamquests.com') ||
+            cleanMessage.includes('link.clashroyale.com')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
