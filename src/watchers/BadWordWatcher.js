@@ -53,7 +53,7 @@ class BadWordWatcher extends BaseWatcher {
 
         if (containsBadWord) {
             const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
+                `Please read the ${rulesChannel} channel and don't be vulgar.`
             );
 
             this.addWarningToUser(messageToActUpon);
