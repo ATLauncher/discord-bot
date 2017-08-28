@@ -5,6 +5,10 @@
     "non_support_channels": [
         "general"
     ],
+    "bad_words": [
+        "bum",
+        "hole"
+    ],
     "client_id": "",
     "client_secret": "",
     "client_token": ""
