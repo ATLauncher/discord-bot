@@ -159,10 +159,13 @@ class BaseModule {
 
             if (user.warnings >= 5) {
                 messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
-                message.member.ban();
+                message.member.ban({
+                    days: 1,
+                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.appeal_url}`,
+                });
             } else if (user.warnings >= 3) {
                 messageParts.push(`**Action:** member kicked for having ${user.warnings} warnings!`);
-                message.member.kick();
+                message.member.kick('Not following the rules and accumulating 3 warnings');
             } else {
                 messageParts.push(`**Action:** warning added for total of ${user.warnings} warnings!`);
             }
