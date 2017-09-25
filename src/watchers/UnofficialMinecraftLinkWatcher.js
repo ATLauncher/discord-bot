@@ -398,4 +398,4 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
     }
 }
 
-export default LinkSpamWatcher;
+export default UnofficialMinecraftLinkWatcher;
