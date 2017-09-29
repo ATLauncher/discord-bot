@@ -30,7 +30,7 @@
     },
     "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
     "dependencies": {
-        "@atlauncher/atlauncher-scripts": "0.1.0-12",
+        "@atlauncher/atlauncher-scripts": "0.1.0-14",
         "aws-sdk": "^2.104.0",
         "date-fns": "^1.28.5",
         "discord.js": "^11.1.0",

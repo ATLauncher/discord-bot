@@ -387,7 +387,8 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
             cleanMessage.includes('майнкрафтин.рф')
         ) {
             const warningMessage = await messageToActUpon.reply(
-                `This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use Minecraft Forums or Curse for mod downloads.`
+                'This link is not allowed to be posted as it\'s a mod repost/virus/unofficial site. Please only use ' +
+                'Minecraft Forums or Curse for mod downloads.'
             );
 
             this.addWarningToUser(messageToActUpon);
