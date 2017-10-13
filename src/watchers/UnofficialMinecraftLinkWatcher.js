@@ -166,6 +166,7 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
             cleanMessage.includes('minecraft-area.ru') ||
             cleanMessage.includes('minecraft-book.ru') ||
             cleanMessage.includes('minecraft-cube.ru') ||
+            cleanMessage.includes('minecraft-downloads.com') ||
             cleanMessage.includes('minecraft-double.ru') ||
             cleanMessage.includes('minecraft-en.ucoz.com') ||
             cleanMessage.includes('minecraft-files.ru') ||
