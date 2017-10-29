@@ -52,7 +52,8 @@ class LinkSpamWatcher extends BaseWatcher {
             cleanMessage.includes('gamekit.com') ||
             cleanMessage.includes('aternos.me') ||
             cleanMessage.includes('steamquests.com') ||
-            cleanMessage.includes('link.clashroyale.com')
+            cleanMessage.includes('link.clashroyale.com') ||
+            cleanMessage.includes('paysafecards.org')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
