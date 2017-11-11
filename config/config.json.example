@@ -11,10 +11,8 @@
     ],
     "bypass": {
         "roles": [
-            "ATLauncher Staff",
-            "NodeCraft Staff",
-            "Moderators",
-            "AllmightyBot"
+            "Owner",
+            "Moderator"
         ],
         "users": [
 		]
