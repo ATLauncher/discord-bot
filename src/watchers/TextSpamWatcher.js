@@ -49,6 +49,7 @@ class TextSpamWatcher extends BaseWatcher {
         if (
             cleanMessage.toLowerCase().includes('this is cooldog') ||
             cleanMessage.toLowerCase().includes('this is memedog') ||
+            cleanMessage.toLowerCase().includes('this is trolldog') ||
             cleanMessage.toLowerCase().includes('chrisopeer davies') ||
             cleanMessage.toLowerCase().includes('jessica davies') ||
             cleanMessage.toLowerCase().includes('DMing inappropriate photos of underage children') ||
