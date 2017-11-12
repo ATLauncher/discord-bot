@@ -14,8 +14,7 @@
             "Owner",
             "Moderator"
         ],
-        "users": [
-        ]
+        "users": []
     },
     "bad_words": [
         "bum",
