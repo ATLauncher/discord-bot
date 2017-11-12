@@ -5,6 +5,17 @@
     "non_support_channels": [
         "general"
     ],
+    "moderated_channels": [
+        "general",
+        "support"
+    ],
+    "bypass": {
+        "roles": [
+            "Owner",
+            "Moderator"
+        ],
+        "users": []
+    },
     "bad_words": [
         "bum",
         "hole"
