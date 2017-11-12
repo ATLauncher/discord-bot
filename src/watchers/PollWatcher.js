@@ -42,7 +42,10 @@ class PollWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (cleanMessage.toLowerCase().includes('strawpoll.me')) {
+        if (
+            cleanMessage.toLowerCase().includes('strawpoll.me') ||
+            cleanMessage.toLowerCase().includes('strawpoll.com')
+        ) {
             const rulesChannel = this.bot.channels.find((channel) => {
                 return channel.name === config.rules_channel;
             });
