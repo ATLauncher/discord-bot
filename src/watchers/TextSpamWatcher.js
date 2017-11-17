@@ -52,11 +52,12 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.toLowerCase().includes('this is trolldog') ||
             cleanMessage.toLowerCase().includes('chrisopeer davies') ||
             cleanMessage.toLowerCase().includes('jessica davies') ||
-            cleanMessage.toLowerCase().includes('DMing inappropriate photos of underage children') ||
+            cleanMessage.toLowerCase().includes('dming inappropriate photos of underage children') ||
             cleanMessage.toLowerCase().includes('bots are joining servers and sending mass') ||
             cleanMessage.toLowerCase().includes('kazuto kirigia') ||
-            cleanMessage.toLowerCase().includes('Colyn_9') ||
-            cleanMessage.toLowerCase().includes('teenagers would cry')
+            cleanMessage.toLowerCase().includes('colyn_9') ||
+            cleanMessage.toLowerCase().includes('teenagers would cry') ||
+            cleanMessage.toLowerCase().includes('little girl called clarissa')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
