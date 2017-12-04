@@ -38,7 +38,7 @@ class LogsCommand extends BaseCommand {
         }
 
         const sentMessage = await message.channel.send(
-            `In order to help you ${user}, we need some logs. Please see http://enderman.atlcdn.net/UploadLogs.gif ` +
+            `In order to help you ${user}, we need some logs. Please see https://enderman.atlcdn.net/UploadLogs.gif ` +
                 `on how to generate the link. Once done please paste the link here.`
         );
 
