@@ -57,7 +57,8 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.toLowerCase().includes('kazuto kirigia') ||
             cleanMessage.toLowerCase().includes('colyn_9') ||
             cleanMessage.toLowerCase().includes('teenagers would cry') ||
-            cleanMessage.toLowerCase().includes('little girl called clarissa')
+            cleanMessage.toLowerCase().includes('little girl called clarissa') ||
+            cleanMessage.toLowerCase().includes('become part of the ugandan squad')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
