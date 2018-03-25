@@ -1,4 +1,6 @@
 # Discord-Bot
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_shield)
+
 This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord.
 
 ## Development
@@ -72,3 +74,6 @@ If you wish to contribute, please see the `CONTRIBUTING.md` file in the root of 
 ## License
 This code is licensed under the MIT license. For more details see the `LICENSE` file in the root
 of this repository.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_large)
