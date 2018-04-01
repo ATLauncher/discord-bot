@@ -16,16 +16,6 @@ test:
   override:
      - npm run lint
 
-deployment:
-  beta:
-    branch: develop
-    commands:
-      - npm publish --tag next
-  release:
-    branch: master
-    commands:
-      - npm publish
-
 general:
   branches:
     only:
