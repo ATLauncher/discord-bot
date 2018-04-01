@@ -24,7 +24,7 @@ looked after in a timely and sensitive manner.
 
 ## Pull Request's
 
-* Ensure the [Pull Request Template](PULL_REQUEST_TEMPLATE.md) is filled out
+* Ensure the Pull Request template is filled out
 * Ensure that your commit history is clean, lean and follows our [Branching Structure](#branching-structure)
 * Include screenshots and animated GIFs in your Pull Request when possible
 * Follow our [styling best practices](#styling-best-practices) for all code and documentation
@@ -79,8 +79,7 @@ issues or pull requests you're interested in.
 | `feedback` | General feedback more than bug reports or feature requests. |
 | `help-wanted` | The ATLauncher team would appreciate help from the community in resolving these issues. |
 | `beginner` | Less complex issues which would be good first issues to work on for users who want to contribute. |
-| `more-information-needed` | More information needs to be collected about these problems or feature requests |
-| `needs-reproduction` | Likely bugs, but haven't been reliably reproduced. |
+| `more-information-needed` | More information needs to be collected about these problems or feature requests. |
 | `triage-help-needed` | Help is needed to triage the issue. |
 | `blocked` | Issues blocked on other issues. |
 | `duplicate` | Issues which are duplicates of other issues, i.e. they have been reported before. |
@@ -94,7 +93,15 @@ issues or pull requests you're interested in.
 | --- | --- |
 | `work-in-progress` | Pull requests which are still being worked on, more changes will follow. |
 | `needs-review` | Pull requests which need code review, and approval from maintainers or ATLauncher team. |
-| `under-review` | Pull requests being reviewed by maintainers or ATLauncher team. |
+| `under-review` | Pull requests being reviewed by maintainers and/or ATLauncher team. |
 | `requires-changes` | Pull requests which need to be updated based on review comments and then reviewed again. |
 | `needs-testing` | Pull requests which need manual testing. |
 | `ready-to-merge` | Pull requests which have been reviewed and are ready to merge. |
+
+### Priority Labels
+
+| Label name | Description
+| --- | --- |
+| `critical-priority` | Should be addressed with the highest priority. |
+| `high-priority` | High priority to be addressed. |
+| `low-priority` | Low priority to be addressed. |
