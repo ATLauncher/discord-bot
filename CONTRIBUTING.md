@@ -42,8 +42,8 @@ Our branching structure is based on
     all be merged into the branch. Once approved and tested it gets merged into master and tagged. They should be named
     'release/4.1.1'
 * **hotfix/\*** will contain hotfixes going to be merged directly into master then tagged. Hotfixes should only need to
-    occur when there is a very critical bug in the current release that needs to be fixed ASAP. All hotfix branches should
-    be branched off of master
+    occur when there is a very critical bug in the current release that needs to be fixed ASAP. All hotfix branches
+    should be branched off of master
 
 All tags are done on the **master** branch only and should be in format **v(version number)**. Most versioning and
 tagging is done automatically, so please check before doing so manually.
@@ -71,22 +71,23 @@ issues or pull requests you're interested in.
 
 ### Issue Labels
 
-| Label name                | Description                                                                                       |
-| ------------------------- | ------------------------------------------------------------------------------------------------- |
-| `enhancement`             | Feature requests.                                                                                 |
-| `bug`                     | Confirmed bugs or reports that are very likely to be bugs.                                        |
-| `question`                | Questions more than bug reports or feature requests (e.g. how do I do X).                         |
-| `feedback`                | General feedback more than bug reports or feature requests.                                       |
-| `help-wanted`             | The ATLauncher team would appreciate help from the community in resolving these issues.           |
-| `beginner`                | Less complex issues which would be good first issues to work on for users who want to contribute. |
-| `more-information-needed` | More information needs to be collected about these problems or feature requests.                  |
-| `triage-help-needed`      | Help is needed to triage the issue.                                                               |
-| `blocked`                 | Issues blocked on other issues.                                                                   |
-| `duplicate`               | Issues which are duplicates of other issues, i.e. they have been reported before.                 |
-| `wontfix`                 | The ATLauncher team has decided not to fix these issues for now for some reason.                  |
-| `invalid`                 | Issues which aren't valid (e.g. user errors).                                                     |
-| `wrong-repo`              | Issues reported on the wrong repository.                                                          |
-| `support`                 | User has asked for support, but support is not given via issues                                   |
+| Label name                | Description                                                                             |
+| ------------------------- | --------------------------------------------------------------------------------------- |
+| `enhancement`             | Feature requests.                                                                       |
+| `bug`                     | Confirmed bugs or reports that are very likely to be bugs.                              |
+| `question`                | Questions more than bug reports or feature requests (e.g. how do I do X).               |
+| `feedback`                | General feedback more than bug reports or feature requests.                             |
+| `help-wanted`             | The ATLauncher team would appreciate help from the community in resolving these issues. |
+| `beginner`                | Less complex issues which would be good first issues to work on.                        |
+| `more-information-needed` | More information needs to be collected about these problems or feature requests.        |
+| `triage-help-needed`      | Help is needed to triage the issue.                                                     |
+| `blocked`                 | Issues blocked on other issues.                                                         |
+| `duplicate`               | Issues which are duplicates of other issues, i.e. they have been reported before.       |
+| `wontfix`                 | The ATLauncher team has decided not to fix these issues for now for some reason.        |
+| `invalid`                 | Issues which aren't valid (e.g. user errors).                                           |
+| `wrong-repo`              | Issues reported on the wrong repository.                                                |
+| `discussion`              | Issue that is having/needs discussion.                                                  |
+| `support`                 | User has asked for support, but support is not given via issues.                        |
 
 ### Pull Request Labels
 
@@ -109,8 +110,8 @@ issues or pull requests you're interested in.
 
 ### Roadmap Labels
 
-| Label name            | Description                                          |
-| --------------------- | ---------------------------------------------------- |
-| `roadmap-short-term`  | Items on the roadmap in the short term (1 month)     |
-| `roadmap-medium-term` | Items on the roadmap in the medium term (3-6 months) |
-| `roadmap-long-term`   | Items on the roadmap in the long term (6-12 months)  |
+| Label name            | Description                                           |
+| --------------------- | ----------------------------------------------------- |
+| `roadmap-short-term`  | Items on the roadmap in the short term (1 month).     |
+| `roadmap-medium-term` | Items on the roadmap in the medium term (3-6 months). |
+| `roadmap-long-term`   | Items on the roadmap in the long term (6-12 months).  |
