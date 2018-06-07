@@ -46,8 +46,7 @@ class TagRuleWatcher extends BaseWatcher {
 
         if (
             messageToActUpon.cleanContent.toLowerCase().includes('@everyone') ||
-            messageToActUpon.cleanContent.toLowerCase().includes('@here') ||
-            messageToActUpon.cleanContent.toLowerCase().includes('@all')
+            messageToActUpon.cleanContent.toLowerCase().includes('@here')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Tags such as \`@everyone\` and \`@here\` are not allowed.`
