@@ -61,7 +61,7 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.toLowerCase().includes('teenagers would cry') ||
             cleanMessage.toLowerCase().includes('little girl called clarissa') ||
             cleanMessage.toLowerCase().includes('become part of the ugandan squad') ||
-            cleanMessage.toLowerCase().includes('Discord is supposed to be closing down') ||
+            cleanMessage.toLowerCase().includes('discord is supposed to be closing down') ||
             cleanMessage.toLowerCase().includes('with the tag #1828') 
         ) {
             const warningMessage = await messageToActUpon.reply(
