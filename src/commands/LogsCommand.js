@@ -39,7 +39,8 @@ class LogsCommand extends BaseCommand {
 
         const sentMessage = await message.channel.send(
             `In order to help you ${user}, we need some logs. Please see https://enderman.atlcdn.net/UploadLogs.gif ` +
-                `on how to generate the link. Once done please paste the link here.`
+                `on how to generate the link. Please make sure that you press the button after the error/issue occurs. ` +
+                `Once done please paste the link here.`
         );
 
         // delete message after 24 hours
