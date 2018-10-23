@@ -33,10 +33,6 @@ class LogsCommand extends BaseCommand {
 
         const user = message.mentions.users.first();
 
-        if (!user) {
-            return;
-        }
-
         const sentMessage = await message.channel.send(
             `In order to help you ${user}, we need some logs. Please see https://enderman.atlcdn.net/UploadLogs.gif ` +
                 `on how to generate the link. Please make sure that you press the button after the error/issue occurs. ` +
