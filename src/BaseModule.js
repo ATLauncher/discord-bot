@@ -218,7 +218,7 @@ class BaseModule {
     isAModeratedChannel(channel) {
         const moderatedChannels = this.getModeratedChannels();
 
-        if (moderatedChannels && moderatedChannels.filter(({ name }) => name === channel).length) {
+        if (moderatedChannels && moderatedChannels.filter(({ name }) => name === channel).length !== 0) {
             return true;
         }
 
@@ -267,14 +267,13 @@ class BaseModule {
             return false;
         }
 
-        const filteredRoles = config.bypass.roles.filter(
-            (roleName) =>
+        const filteredRoles = config.bypass.roles.filter((roleName) => {
+            return (
                 message.member &&
                 message.member.roles &&
-                message.member.roles.filter(({ name }) => name === roleName).length
-        );
-
-        console.log('filteredRoles', filteredRoles);
+                message.member.roles.filter(({ name }) => name === roleName).length !== 0
+            );
+        });
 
         return filteredRoles.length !== 0;
     }

@@ -32,24 +32,17 @@ class SupportRoleWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const supportChannel = this.bot.channels.find(channel => {
-            return channel.name === config.support_channel;
-        });
-        const nonSupportChannels = this.bot.channels.filter(channel => {
-            return config.non_support_channels.indexOf(channel.name) !== -1;
-        });
+        const supportChannel = this.bot.channels.find((channel) => channel.name === config.support_channel);
+        const nonSupportChannels = this.bot.channels.filter((channel) => config.non_support_channels.indexOf(channel.name) !== -1);
 
         if (
             messageToActUpon.cleanContent.toLowerCase().includes('paste.atlauncher.com') ||
             messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR\\Instances') ||
             messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR/Instances')
         ) {
-            if (
-                nonSupportChannels.filter(({ name }) => name === messageToActUpon.channel.name)
-                    .length
-            ) {
+            if (nonSupportChannels.filter(({ name }) => name === messageToActUpon.channel.name).length !== 0) {
                 const warningMessage = await messageToActUpon.reply(
-                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`,
+                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`
                 );
 
                 this.addWarningToUser(messageToActUpon);

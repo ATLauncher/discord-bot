@@ -29,11 +29,11 @@ class WorkingCommand extends BaseCommand {
      * @memberof WorkingCommand
      */
     action(action, message) {
-        message.delete();
-
         if (this.hasBypassRole(message)) {
             message.reply("Yes I'm working!");
         }
+
+        message.delete();
     }
 }
 
