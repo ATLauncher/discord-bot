@@ -8,11 +8,15 @@
         "clean": "atlauncher-scripts clean",
         "config:base64": "atlauncher-scripts babel:run utils/base64Config.js",
         "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"atlauncher-scripts babel:run src\"",
-        "lint": "atlauncher-scripts lint js",
+        "lint": "atlauncher-scripts lint:js",
         "lint:watch": "npm run lint -- --watch",
         "oauth:url": "atlauncher-scripts babel:run utils/getOAuthUrl.js",
-        "prepush": "npm run lint",
         "start": "node dist"
+    },
+    "husky": {
+      "hooks": {
+        "pre-push": "npm run lint"
+      }
     },
     "repository": {
         "type": "git",
