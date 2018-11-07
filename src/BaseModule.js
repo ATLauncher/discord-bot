@@ -111,13 +111,16 @@ class BaseModule {
                 messageToActUpon.member &&
                 messageToActUpon.member.user &&
                 config.bypass.users.includes(
-                    `${messageToActUpon.member.user.username}#${messageToActUpon.member.user.discriminator}`
+                    `${messageToActUpon.member.user.username}#${
+                        messageToActUpon.member.user.discriminator
+                    }`,
                 )
             ) {
                 return false;
             }
 
-            const isFromBypassedRole = config.bypass.roles.length && this.hasBypassRole(messageToActUpon);
+            const isFromBypassedRole =
+                config.bypass.roles.length && this.hasBypassRole(messageToActUpon);
 
             return !isFromBypassedRole;
         }
@@ -154,20 +157,30 @@ class BaseModule {
             let messageParts = [];
 
             messageParts.push(
-                `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`
+                `**User:** ${message.author} (${message.author.username}#${
+                    message.author.discriminator
+                })`,
             );
 
             if (user.warnings >= 5) {
-                messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
+                messageParts.push(
+                    `**Action:** member banned for having ${user.warnings} warnings!`,
+                );
                 message.member.ban({
                     days: 1,
-                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.appeal_url}`,
+                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${
+                        config.appeal_url
+                    }`,
                 });
             } else if (user.warnings >= 3) {
-                messageParts.push(`**Action:** member kicked for having ${user.warnings} warnings!`);
+                messageParts.push(
+                    `**Action:** member kicked for having ${user.warnings} warnings!`,
+                );
                 message.member.kick('Not following the rules and accumulating 3 warnings');
             } else {
-                messageParts.push(`**Action:** warning added for total of ${user.warnings} warnings!`);
+                messageParts.push(
+                    `**Action:** warning added for total of ${user.warnings} warnings!`,
+                );
             }
 
             this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
@@ -195,7 +208,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => {
+        return this.bot.channels.find(channel => {
             return channel.name === config.moderator_channel;
         });
     }
@@ -207,7 +220,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModeratedChannels() {
-        return this.bot.channels.filter((channel) => {
+        return this.bot.channels.filter(channel => {
             return config.moderated_channels.indexOf(channel.name) !== -1;
         });
     }
@@ -222,7 +235,7 @@ class BaseModule {
     isAModeratedChannel(channel) {
         const moderatedChannels = this.getModeratedChannels();
 
-        if (moderatedChannels && moderatedChannels.exists('name', channel)) {
+        if (moderatedChannels && moderatedChannels.filter(({ name }) => name === channel).length) {
             return true;
         }
 
@@ -238,7 +251,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     isFromChannel(message, channelName) {
-        const wantedChannel = this.bot.channels.filter((channel) => {
+        const wantedChannel = this.bot.channels.filter(channel => {
             return channel.name === channelName;
         });
 
@@ -273,8 +286,12 @@ class BaseModule {
             return false;
         }
 
-        const filteredRoles = config.bypass.roles.filter((roleName) => {
-            return message.member && message.member.roles && message.member.roles.exists('name', roleName);
+        const filteredRoles = config.bypass.roles.filter(roleName => {
+            return (
+                message.member &&
+                message.member.roles &&
+                message.member.roles.filter(({ name }) => name === roleName).length
+            );
         });
 
         return filteredRoles.length !== 0;

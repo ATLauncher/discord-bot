@@ -32,10 +32,10 @@ class SupportRoleWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const supportChannel = this.bot.channels.find((channel) => {
+        const supportChannel = this.bot.channels.find(channel => {
             return channel.name === config.support_channel;
         });
-        const nonSupportChannels = this.bot.channels.filter((channel) => {
+        const nonSupportChannels = this.bot.channels.filter(channel => {
             return config.non_support_channels.indexOf(channel.name) !== -1;
         });
 
@@ -44,9 +44,12 @@ class SupportRoleWatcher extends BaseWatcher {
             messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR\\Instances') ||
             messageToActUpon.cleanContent.toLowerCase().includes('USERSDIR/Instances')
         ) {
-            if (nonSupportChannels.exists('name', messageToActUpon.channel.name)) {
+            if (
+                nonSupportChannels.filter(({ name }) => name === messageToActUpon.channel.name)
+                    .length
+            ) {
                 const warningMessage = await messageToActUpon.reply(
-                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`
+                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`,
                 );
 
                 this.addWarningToUser(messageToActUpon);

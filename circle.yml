@@ -1,10 +1,9 @@
 machine:
   node:
-    version: 8
+    version: 10
 
 dependencies:
   pre:
-    - npm install -g npm@3
     - npm prune
     - npm install
   override:

@@ -1,4 +1,4 @@
-FROM node:8
+FROM node:10
 MAINTAINER Ryan Dowling <ryan.dowling@atlauncher.com>
 
 RUN mkdir -p /app
