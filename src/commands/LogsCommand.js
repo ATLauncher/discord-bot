@@ -29,8 +29,6 @@ class LogsCommand extends BaseCommand {
      * @memberof LogsCommand
      */
     async action(action, message) {
-        message.delete();
-
         const user = message.mentions.users.first();
 
         const sentMessage = await message.channel.send(
@@ -38,6 +36,8 @@ class LogsCommand extends BaseCommand {
                 `on how to generate the link. Please make sure that you press the button after the error/issue occurs. ` +
                 `Once done please paste the link here.`
         );
+
+        message.delete();
 
         // delete message after 24 hours
         sentMessage.delete(60 * 60 * 24 * 1000);

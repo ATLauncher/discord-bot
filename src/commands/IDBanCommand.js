@@ -32,8 +32,6 @@ class IDBanCommand extends BaseCommand {
      * @memberof IDBanCommand
      */
     action(action, message) {
-        message.delete();
-
         if (this.hasBypassRole(message)) {
             const ids = message.cleanContent.substr(7);
 
@@ -53,6 +51,8 @@ class IDBanCommand extends BaseCommand {
                 message.channel.send(`User with ID of '${id}' has been banned.`);
             });
         }
+
+        message.delete();
     }
 }
 

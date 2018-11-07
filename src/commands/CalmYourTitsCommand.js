@@ -32,8 +32,6 @@ class CalmYourTitsCommand extends BaseCommand {
      * @memberof CalmYourTitsCommand
      */
     action(action, message) {
-        message.delete();
-
         if (this.hasBypassRole(message)) {
             message.channel.send(
                 [
@@ -53,6 +51,8 @@ class CalmYourTitsCommand extends BaseCommand {
                 ].join('\n')
             );
         }
+        
+        message.delete();
     }
 }
 
