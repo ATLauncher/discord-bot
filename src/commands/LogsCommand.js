@@ -29,7 +29,7 @@ class LogsCommand extends BaseCommand {
      * @memberof LogsCommand
      */
     async action(action, message) {
-        const user = message.mentions.users.first();
+        const user = message.mentions.users.first() || '';
 
         const userPre = user ? ' ' : '';
 
