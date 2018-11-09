@@ -205,7 +205,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModeratedChannels() {
-        return this.bot.channels.filter((channel) => config.moderated_channels.indexOf(channel.name) !== -1);
+        return this.bot.channels.filter(({ name }) => config.moderated_channels.includes(name));
     }
 
     /**
@@ -218,7 +218,7 @@ class BaseModule {
     isAModeratedChannel(channel) {
         const moderatedChannels = this.getModeratedChannels();
 
-        if (moderatedChannels && moderatedChannels.filter(({ name }) => name === channel).length !== 0) {
+        if (moderatedChannels && moderatedChannels.some(({ name }) => name === channel)) {
             return true;
         }
 
@@ -234,7 +234,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     isFromChannel(message, channelName) {
-        const wantedChannel = this.bot.channels.filter((channel) => channel.name === channelName);
+        const wantedChannel = this.bot.channels.find(({ name }) => name === channelName);
 
         if (!wantedChannel) {
             return false;
@@ -267,13 +267,11 @@ class BaseModule {
             return false;
         }
 
-        const filteredRoles = config.bypass.roles.filter((roleName) => {
-            return (
-                message.member &&
+        const filteredRoles = config.bypass.roles.some((roleName) => (
+            message.member &&
                 message.member.roles &&
-                message.member.roles.filter(({ name }) => name === roleName).length !== 0
-            );
-        });
+                message.member.roles.some(({ name }) => name === roleName)
+        ));
 
         return filteredRoles.length !== 0;
     }

@@ -15,9 +15,7 @@ class CommandBus {
     constructor(bot) {
         this.bot = bot;
         this.commands = {};
-        this.commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => {
-            return file !== 'BaseCommand.js';
-        });
+        this.commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => file !== 'BaseCommand.js');
 
         this.loadCommands();
         this.setupCommandListeners();
@@ -39,9 +37,7 @@ class CommandBus {
         });
 
         // remove any non active commands
-        loadedCommands = loadedCommands.filter((command) => {
-            return command.enabled;
-        });
+        loadedCommands = loadedCommands.filter(({ enabled }) => enabled);
 
         // group the commands by method
         loadedCommands.forEach((command) => {
@@ -61,9 +57,7 @@ class CommandBus {
     setupCommandListeners() {
         Object.keys(this.commands).forEach((method) => {
             this.bot.on(method, (...args) => {
-                const command = this.commands[method].find((command) => {
-                    return command.matches(...args);
-                });
+                const command = this.commands[method].find((command) => command.matches(...args));
 
                 if (command && command.shouldRun(method, ...args)) {
                     command.action(method, ...args);

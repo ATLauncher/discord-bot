@@ -15,9 +15,7 @@ class WatcherBus {
     constructor(bot) {
         this.bot = bot;
         this.watchers = {};
-        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => {
-            return file !== 'BaseWatcher.js';
-        });
+        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => file !== 'BaseWatcher.js');
 
         this.loadWatchers();
         this.setupWatcherListeners();
@@ -39,9 +37,7 @@ class WatcherBus {
         });
 
         // remove any non active commands
-        loadedWatchers = loadedWatchers.filter((watcher) => {
-            return watcher.enabled;
-        });
+        loadedWatchers = loadedWatchers.filter((watcher) => watcher.enabled);
 
         // sort by priority
         loadedWatchers.sort((a, b) => {

@@ -31,8 +31,10 @@ class LogsCommand extends BaseCommand {
     async action(action, message) {
         const user = message.mentions.users.first();
 
+        const userPre = user ? ' ' : '';
+
         const sentMessage = await message.channel.send(
-            `In order to help you ${user}, we need some logs. Please see https://enderman.atlcdn.net/UploadLogs.gif ` +
+            `In order to help you${userPre}${user}, we need some logs. Please see https://enderman.atlcdn.net/UploadLogs.gif ` +
                 `on how to generate the link. Please make sure that you press the button after the error/issue occurs. ` +
                 `Once done please paste the link here.`
         );
