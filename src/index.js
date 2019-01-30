@@ -1,10 +1,10 @@
 import config from 'config';
-import Sentry from '@sentry/node';
+import * as Sentry from '@sentry/node';
 
 import Bot from './Bot';
 import logger from './logger';
 
-if (config.get('sentry.dsn')) {
+if (config.has('sentry.dsn')) {
     Sentry.init({ dsn: config.get('sentry.dsn') });
 }
 
