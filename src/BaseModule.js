@@ -1,4 +1,4 @@
-import config from './config';
+import config from 'config';
 
 import * as database from './db';
 
@@ -107,17 +107,17 @@ class BaseModule {
 
         if (this.usesBypassRules) {
             if (
-                config.bypass.users &&
+                config.get('bot.bypass.users') &&
                 messageToActUpon.member &&
                 messageToActUpon.member.user &&
-                config.bypass.users.includes(
-                    `${messageToActUpon.member.user.username}#${messageToActUpon.member.user.discriminator}`
-                )
+                config
+                    .get('bot.bypass.users')
+                    .includes(`${messageToActUpon.member.user.username}#${messageToActUpon.member.user.discriminator}`)
             ) {
                 return false;
             }
 
-            const isFromBypassedRole = config.bypass.roles.length && this.hasBypassRole(messageToActUpon);
+            const isFromBypassedRole = config.get('bot.bypass.roles').length && this.hasBypassRole(messageToActUpon);
 
             return !isFromBypassedRole;
         }
@@ -161,7 +161,9 @@ class BaseModule {
                 messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
                 message.member.ban({
                     days: 1,
-                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.appeal_url}`,
+                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.get(
+                        'bot.appeal_url'
+                    )}`,
                 });
             } else if (user.warnings >= 3) {
                 messageParts.push(`**Action:** member kicked for having ${user.warnings} warnings!`);
@@ -195,7 +197,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => channel.name === config.moderator_channel);
+        return this.bot.channels.find((channel) => channel.name === config.get('bot.moderator_channel'));
     }
 
     /**
@@ -205,7 +207,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModeratedChannels() {
-        return this.bot.channels.filter(({ name }) => config.moderated_channels.includes(name));
+        return this.bot.channels.filter(({ name }) => config.get('bot.moderated_channels').includes(name));
     }
 
     /**
@@ -263,15 +265,16 @@ class BaseModule {
      * @memberof BaseModule
      */
     hasBypassRole(message) {
-        if (!config.bypass.roles || !config.bypass.roles.length) {
+        if (!config.has('bot.bypass.roles') || !config.get('bot.bypass.roles').length) {
             return false;
         }
 
-        const filteredRoles = config.bypass.roles.some((roleName) => (
-            message.member &&
-                message.member.roles &&
-                message.member.roles.some(({ name }) => name === roleName)
-        ));
+        const filteredRoles = config
+            .get('bot.bypass.roles')
+            .some(
+                (roleName) =>
+                    message.member && message.member.roles && message.member.roles.some(({ name }) => name === roleName)
+            );
 
         return filteredRoles.length !== 0;
     }

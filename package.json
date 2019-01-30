@@ -36,10 +36,13 @@
     "dependencies": {
         "@atlauncher/atlauncher-scripts": "0.2.4",
         "aws-sdk": "^2.350.0",
+        "config": "^3.0.1",
         "date-fns": "^1.29.0",
         "discord.js": "^11.4.2",
         "nedb": "^1.8.0",
-        "nedb-promise": "^2.0.1"
+        "nedb-promise": "^2.0.1",
+        "winston": "^3.2.1",
+        "winston-logzio": "^3.0.3"
     },
     "devDependencies": {
         "cross-env": "^5.2.0",

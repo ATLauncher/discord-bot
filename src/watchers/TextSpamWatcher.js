@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people spamming text stuff.
@@ -40,9 +40,7 @@ class TextSpamWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => {
-            return channel.name === config.rules_channel;
-        });
+        const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
@@ -62,7 +60,7 @@ class TextSpamWatcher extends BaseWatcher {
             cleanMessage.toLowerCase().includes('little girl called clarissa') ||
             cleanMessage.toLowerCase().includes('become part of the ugandan squad') ||
             cleanMessage.toLowerCase().includes('discord is supposed to be closing down') ||
-            cleanMessage.toLowerCase().includes('with the tag #1828') 
+            cleanMessage.toLowerCase().includes('with the tag #1828')
         ) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`

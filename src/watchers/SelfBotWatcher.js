@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people using self bots.
@@ -41,7 +41,7 @@ class SelfBotWatcher extends BaseWatcher {
         }
 
         const rulesChannel = this.bot.channels.find((channel) => {
-            return channel.name === config.rules_channel;
+            return channel.name === config.get('bot.rules_channel');
         });
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();

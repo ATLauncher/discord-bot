@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people using bad tags such as @here, @all and @everyone.
@@ -40,9 +40,7 @@ class TagRuleWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => {
-            return channel.name === config.rules_channel;
-        });
+        const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
 
         if (
             messageToActUpon.cleanContent.toLowerCase().includes('@everyone') ||

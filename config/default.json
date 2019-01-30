@@ -1,0 +1,19 @@
+{
+  "logging": {
+    "level": "error"
+  },
+  "bot": {
+    "moderator_channel": "moderation-logs",
+    "support_channel": "support",
+    "rules_channel": "rules",
+    "bot_testing_channel": "bot-testing",
+    "non_support_channels": [],
+    "moderated_channels": [],
+    "appeal_url": "https://google.com",
+    "bypass": {
+        "roles": [],
+        "users": []
+    },
+    "bad_words": []
+  }
+}

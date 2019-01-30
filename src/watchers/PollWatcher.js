@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people spamming links.
@@ -47,7 +47,7 @@ class PollWatcher extends BaseWatcher {
             cleanMessage.toLowerCase().includes('strawpoll.com')
         ) {
             const rulesChannel = this.bot.channels.find((channel) => {
-                return channel.name === config.rules_channel;
+                return channel.name === config.get('bot.rules_channel');
             });
 
             const warningMessage = await messageToActUpon.reply(

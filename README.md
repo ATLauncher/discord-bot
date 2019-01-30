@@ -8,8 +8,8 @@ This is the code for our Discord bot which runs on our official Discord server a
 
 To get setup you will need to make sure you have the following installed on your machine:
 
-* [NodeJS 10](https://nodejs.org/en/download/)
-  * check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
+-   [NodeJS 10](https://nodejs.org/en/download/)
+    -   check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
 
 We'll assume you're a capable developer, so we won't tell you how to go about installing those on your machine :)
 
@@ -37,12 +37,25 @@ to use.
 Alternatively we have an automated build running on our Docker Hub repo at
 https://hub.docker.com/r/atlauncher/discord-bot/ accessed with identifier `atlauncher/discord-bot`.
 
-### Including config
+## Config
 
-In order to use the docker image, configs must be provided at the `/app/config/` directory. Use
-this image as a base image and then add in your configs or you can alternatively provide a base64
-encoded string of the config in the `DISCORD_BOT_CONFIG` environment variable. You can easily
-generate this from your `config/config.json` file by running `npm run config:base64`.
+Configuration is handled through a NPM package called `config`. You can see all the ways to change
+the configuration at <https://github.com/lorenwest/node-config>.
+
+Do not change the `default.json` file at all. When new configs are added with defaults, if you have
+a conflict here, it may negate some changes and cause issues.
+
+The best thing to do is to create a `local.json` file in the config folder and put your config in
+there. That file is gitignored by default, so shouldn't get committed up.
+
+Alternatively you can provide a `NODE_CONFIG` environment variable with a json string. The easiest
+way to get this, is to create a `local.json` file in the config folder, and then run:
+
+```sh
+node utils/stringifyConfig.json
+```
+
+This will print out a json string of the generated config
 
 ## Database
 
@@ -51,7 +64,7 @@ This bot can use one of two different types of database:
 -   AWS DynamoDB (remote)
 -   NEDB (local)
 
-To use AWS DynamoDB, put the following into your `config.js` file:
+To use AWS DynamoDB, put the following into your config:
 
 ```
     "db": {
@@ -76,6 +89,22 @@ To use AWS DynamoDB, put the following into your `config.js` file:
 
 To use the local NEDB you don't need to do anything. Just keep the db section in the config empty.
 It will store all the data locally in the `db/` directory.
+
+## Logging
+
+By default, all logging will be done to the console during development, and to a log file in the
+`logs` directory in production.
+
+By default the logging level is set to `error` level, but can be set to:
+
+-   error
+-   info
+-   debug
+
+### Logz.io Logging
+
+To log to a Logz.io account, simply add a config value in `logging.logz_io_token` with a string
+containing your api token.
 
 ## Contributing
 

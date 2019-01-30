@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people saying bad words.
@@ -40,16 +40,12 @@ class BadWordWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => {
-            return channel.name === config.rules_channel;
-        });
+        const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
         const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
 
-        const containsBadWord = messageParts.some((word) => {
-            return config.bad_words.includes(word);
-        });
+        const containsBadWord = messageParts.some((word) => config.get('bot.bad_words').includes(word));
 
         if (containsBadWord) {
             const warningMessage = await messageToActUpon.reply(

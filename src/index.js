@@ -1,19 +1,18 @@
 import Bot from './Bot';
+import logger from './logger';
 
 const bot = new Bot();
 
 bot.start();
 
 process.on('uncaughtException', (error) => {
-    // eslint-disable-next-line no-console
-    console.error('uncaughtException', error || '');
-    
+    logger.error(error.message);
+
     process.exit(1);
 });
 
-process.on('unhandledRejection', (reason, p) => {
-    // eslint-disable-next-line no-console
-    console.error('unhandledRejection', reason || '', p || '');
-    
+process.on('unhandledRejection', (event) => {
+    logger.error(event.message);
+
     process.exit(1);
 });

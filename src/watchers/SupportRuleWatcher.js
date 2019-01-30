@@ -1,6 +1,6 @@
-import BaseWatcher from './BaseWatcher';
+import config from 'config';
 
-import config from '../config';
+import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people asking for support in non support channels.
@@ -32,8 +32,8 @@ class SupportRoleWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const supportChannel = this.bot.channels.find(({ name }) => name === config.support_channel);
-        const nonSupportChannels = this.bot.channels.filter(({ name }) => config.non_support_channels.includes(name));
+        const supportChannel = this.bot.channels.find(({ name }) => name === config.get('bot.support_channel'));
+        const nonSupportChannels = this.bot.channels.filter(({ name }) => config.get('bot.non_support_channels').includes(name));
 
         if (
             messageToActUpon.cleanContent.toLowerCase().includes('paste.atlauncher.com') ||

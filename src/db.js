@@ -1,9 +1,9 @@
 import AWS from 'aws-sdk';
 import Datastore from 'nedb-promise';
 
-import config from './config';
+import config from 'config';
 
-export const usingAWS = !!config.db;
+export const usingAWS = !!config.has('db');
 
 const databases = {
     nedb: !usingAWS && {
@@ -20,10 +20,10 @@ const databases = {
     },
     dynamodb: usingAWS && {
         messages: new AWS.DynamoDB.DocumentClient({
-            ...config.db.messages,
+            ...config.get('db.messages'),
         }),
         users: new AWS.DynamoDB.DocumentClient({
-            ...config.db.users,
+            ...config.get('db.users'),
         }),
     },
 };
