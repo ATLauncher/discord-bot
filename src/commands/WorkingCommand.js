@@ -30,7 +30,7 @@ class WorkingCommand extends BaseCommand {
      */
     action(action, message) {
         if (this.hasBypassRole(message)) {
-            message.reply("Yes I'm working!");
+            message.reply(`Yes I'm "working"!`);
         }
 
         message.delete();
