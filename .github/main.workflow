@@ -19,9 +19,9 @@ action "Build Docker image" {
 }
 
 action "Tag with latest" {
-  uses = "actions/docker/tag@c08a5fc9e0286844156fefff2c141072048141f6"
+  uses = "actions/docker/cli@c08a5fc9e0286844156fefff2c141072048141f6"
   needs = ["Build Docker image"]
-  args = "build atlauncher/discord-bot:latest"
+  args = "tag build atlauncher/discord-bot:latest"
 }
 
 action "Push latest image" {
@@ -34,9 +34,9 @@ action "Push latest image" {
 }
 
 action "Tag with commit hash" {
-  uses = "actions/docker/tag@c08a5fc9e0286844156fefff2c141072048141f6"
+  uses = "actions/docker/cli@c08a5fc9e0286844156fefff2c141072048141f6"
   needs = ["Build Docker image"]
-  args = "build atlauncher/discord-bot:$GITHUB_SHA"
+  args = "tag build atlauncher/discord-bot:$GITHUB_SHA"
 }
 
 action "Push commit hash image" {
