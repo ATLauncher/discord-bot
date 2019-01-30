@@ -14,9 +14,9 @@
         "start": "node dist"
     },
     "husky": {
-      "hooks": {
-        "pre-push": "npm run lint"
-      }
+        "hooks": {
+            "pre-push": "npm run lint"
+        }
     },
     "repository": {
         "type": "git",
