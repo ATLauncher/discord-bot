@@ -1,5 +1,12 @@
+import config from 'config';
+import Sentry from '@sentry/node';
+
 import Bot from './Bot';
 import logger from './logger';
+
+if (config.get('sentry.dsn')) {
+    Sentry.init({ dsn: config.get('sentry.dsn') });
+}
 
 const bot = new Bot();
 

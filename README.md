@@ -106,6 +106,10 @@ By default the logging level is set to `error` level, but can be set to:
 To log to a Logz.io account, simply add a config value in `logging.logz_io_token` with a string
 containing your api token.
 
+## Sentry error reporting
+
+If you wish to enable sentry error reporting, simply add your DSN as config value `sentry.dsn`.
+
 ## Contributing
 
 If you wish to contribute, please see the `CONTRIBUTING.md` file in the root of this repository.
