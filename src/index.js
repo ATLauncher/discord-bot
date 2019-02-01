@@ -12,14 +12,12 @@ const bot = new Bot();
 
 bot.start();
 
-process.on('uncaughtException', (error) => {
-    logger.error(error.message);
+const catchThemErrors = (error) => {
+    Sentry.captureException(error);
+    logger.error(typeof error.message === 'string' ? error.message : JSON.stringify(error.message));
 
     process.exit(1);
-});
+};
 
-process.on('unhandledRejection', (event) => {
-    logger.error(event.message);
-
-    process.exit(1);
-});
+process.on('uncaughtException', catchThemErrors);
+process.on('unhandledRejection', catchThemErrors);
