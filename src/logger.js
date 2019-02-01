@@ -14,6 +14,7 @@ const logger = winston.createLogger({
             isProductionEnvironment() &&
             new winston.transports.File({ filename: path.resolve(__dirname, '../logs/server.log') }),
         hasLogzIoConfig &&
+            isProductionEnvironment() &&
             new LogzioWinstonTransport({
                 level: config.get('logging.level'),
                 token: config.get('logging.logz_io_token'),
@@ -35,5 +36,9 @@ const logger = winston.createLogger({
     ].filter(Boolean),
     level: config.get('logging.level'),
 });
+
+if (hasLogzIoConfig && isProductionEnvironment()) {
+    winston.remove(winston.transports.Console);
+}
 
 export default logger;
