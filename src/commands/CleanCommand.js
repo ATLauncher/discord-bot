@@ -50,7 +50,9 @@ class CleanCommand extends BaseCommand {
         if (input.length) {
             const linesToClean = parseInt(input, 10);
 
-            await message.channel.bulkDelete(linesToClean);
+            if (linesToClean > 0 && linesToClean <= 25) {
+                await message.channel.bulkDelete(linesToClean);
+            }
         }
 
         await database.updateSetting('logMessageDeletions', true);
