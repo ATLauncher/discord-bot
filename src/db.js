@@ -239,7 +239,7 @@ export async function getSetting(name, defaultValue) {
                     return resolve(defaultValue);
                 }
 
-                return resolve(data.Item);
+                return resolve(data.Item.value);
             });
         });
     }
@@ -248,7 +248,7 @@ export async function getSetting(name, defaultValue) {
         return defaultValue;
     }
 
-    return await databases.nedb.settings.findOne({ name });
+    return (await databases.nedb.settings.findOne({ name })).value;
 }
 
 /**
