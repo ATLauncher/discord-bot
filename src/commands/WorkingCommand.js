@@ -28,9 +28,9 @@ class WorkingCommand extends BaseCommand {
      * @param {Message} message
      * @memberof WorkingCommand
      */
-    action(action, message) {
+    async action(action, message) {
         if (this.hasBypassRole(message)) {
-            message.reply(`Yes I'm "working"!`);
+            await message.reply(`Yes I'm "working"!`);
         }
 
         message.delete();
