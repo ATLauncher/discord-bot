@@ -1,4 +1,5 @@
 import BaseCommand from './BaseCommand';
+import { PERMISSIONS } from '../constants';
 
 /**
  * Simple command to remind people support is free and not immediate.
@@ -25,6 +26,14 @@ class CalmYourTitsCommand extends BaseCommand {
     pattern = /^!cyt/;
 
     /**
+     * The permissions the user requires in order to use this command.
+     *
+     * @type {String[]}
+     * @memberof CleanCommand
+     */
+    permissions = [PERMISSIONS.MANAGE_MESSAGES];
+
+    /**
      * The function that should be called when the event is fired.
      *
      * @param {string} action
@@ -32,26 +41,24 @@ class CalmYourTitsCommand extends BaseCommand {
      * @memberof CalmYourTitsCommand
      */
     action(action, message) {
-        if (this.hasBypassRole(message)) {
-            message.channel.send(
-                [
-                    '⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔',
-                    '',
-                    'Everyone in here are volunteers who take time out of their day to help you.',
-                    'They do not have to help you; it is their choice. Respect this, and be patient when awaiting ' +
-                        'help, or they may decide not to help you.',
-                    '',
-                    "If you don't feel like waiting you are perfectly welcome to Google your problem and attempt to " +
-                        'fix it yourself.',
-                    '',
-                    "If you tried to get this level of support elsewhere, you'd be paying over $50(USD)/hr. Be " +
-                        'grateful.',
-                    '',
-                    '⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔',
-                ].join('\n')
-            );
-        }
-        
+        message.channel.send(
+            [
+                '⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔',
+                '',
+                'Everyone in here are volunteers who take time out of their day to help you.',
+                'They do not have to help you; it is their choice. Respect this, and be patient when awaiting ' +
+                    'help, or they may decide not to help you.',
+                '',
+                "If you don't feel like waiting you are perfectly welcome to Google your problem and attempt to " +
+                    'fix it yourself.',
+                '',
+                "If you tried to get this level of support elsewhere, you'd be paying over $50(USD)/hr. Be " +
+                    'grateful.',
+                '',
+                '⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔',
+            ].join('\n')
+        );
+
         message.delete();
     }
 }

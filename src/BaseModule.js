@@ -2,7 +2,7 @@ import config from 'config';
 import Discord from 'discord.js';
 
 import * as database from './db';
-import { COLOURS } from './constants';
+import { COLOURS, PERMISSIONS } from './constants';
 
 /**
  * This is the base module class. A module is either a command or a watcher.
@@ -61,6 +61,14 @@ class BaseModule {
     usesBypassRules = false;
 
     /**
+     * The permissions the user requires in order to use this command.
+     *
+     * @type {String[]}
+     * @memberof BaseModule
+     */
+    permissions = [];
+
+    /**
      * Checks to see if this message matches or not. If it returns true then we should act upon this message.
      *
      * @param {Message} message
@@ -104,6 +112,10 @@ class BaseModule {
         }
 
         if (messageToActUpon.author && messageToActUpon.author.bot && !this.shouldRunOnBots) {
+            return false;
+        }
+
+        if (this.permissions.length && !messageToActUpon.member.hasPermission(this.permissions)) {
             return false;
         }
 
@@ -156,7 +168,11 @@ class BaseModule {
                 .setTitle('Warning added')
                 .setColor(COLOURS.YELLOW)
                 .setTimestamp(new Date().toISOString())
-                .addField('User', `${message.author} (${message.author.username}#${message.author.discriminator})`, true)
+                .addField(
+                    'User',
+                    `${message.author} (${message.author.username}#${message.author.discriminator})`,
+                    true
+                )
                 .addField('Warnings', user.warnings, true);
 
             this.sendEmbedToModeratorLogsChannel(embed);
