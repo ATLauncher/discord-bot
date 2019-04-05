@@ -76,6 +76,14 @@ To use AWS DynamoDB, put the following into your config:
             "accessKeyId": "",
             "secretAccessKey": ""
         },
+        "settings": {
+            "params": {
+                "TableName": ""
+            },
+            "region": "us-west-2",
+            "accessKeyId": "",
+            "secretAccessKey": ""
+        },
         "users": {
             "params": {
                 "TableName": ""

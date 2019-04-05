@@ -2,7 +2,7 @@ import config from 'config';
 import Discord from 'discord.js';
 
 import * as database from './db';
-import { COLOURS, PERMISSIONS } from './constants';
+import { COLOURS } from './constants';
 
 /**
  * This is the base module class. A module is either a command or a watcher.

@@ -2,6 +2,7 @@ import Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 import { COLOURS } from '../constants';
+import * as database from '../db';
 
 /**
  * A watcher that listens for message/s being deleted. This can occur from either a user deleting it themselves or a
@@ -27,7 +28,7 @@ class DeleteWatcher extends BaseWatcher {
      * @returns {boolean}
      * @memberof DeleteWatcher
      */
-    shouldRun(method, message) {
+    async shouldRun(method, message) {
         if (!super.shouldRun(method, message)) {
             return false;
         }
@@ -37,7 +38,7 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
-        return true;
+        return await database.getSetting('logMessageDeletions', true);
     }
 
     /**

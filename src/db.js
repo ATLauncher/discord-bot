@@ -12,6 +12,11 @@ const databases = {
             timestampData: true,
             autoload: true,
         }),
+        settings: new Datastore({
+            filename: `./db/settings.db`,
+            timestampData: true,
+            autoload: true,
+        }),
         users: new Datastore({
             filename: `./db/users.db`,
             timestampData: true,
@@ -21,6 +26,9 @@ const databases = {
     dynamodb: usingAWS && {
         messages: new AWS.DynamoDB.DocumentClient({
             ...config.get('db.messages'),
+        }),
+        settings: new AWS.DynamoDB.DocumentClient({
+            ...config.get('db.settings'),
         }),
         users: new AWS.DynamoDB.DocumentClient({
             ...config.get('db.users'),
@@ -202,4 +210,80 @@ export async function countMessagesInLast(message, seconds = 30) {
         content: message,
         createdAt: { $gt: timeAgo },
     });
+}
+
+/**
+ * This will get a setting by the given name.
+ *
+ * @export
+ * @param {string} name
+ * @param {any} defaultValue
+ * @returns {object|null}
+ */
+export async function getSetting(name, defaultValue) {
+    if (usingAWS) {
+        const params = {
+            Key: {
+                name: name,
+            },
+        };
+
+        return await new Promise((resolve, reject) => {
+            databases.dynamodb.settings.get(params, function (err, data) {
+                if (err) {
+                    return reject(err);
+                }
+
+                // the DynamoDB package will return an empty object if not found, so resolve that as a null
+                if (Object.keys(data).length === 0 && data.constructor === Object) {
+                    return resolve(defaultValue);
+                }
+
+                return resolve(data.Item);
+            });
+        });
+    }
+
+    if (!(await databases.nedb.settings.count({ name }))) {
+        return defaultValue;
+    }
+
+    return await databases.nedb.settings.findOne({ name });
+}
+
+/**
+ * This will update a setting in the DB, upserting it if it doesn't exist.
+ *
+ * @param {string} name
+ * @param {any} value
+ * @returns {Promise}
+ */
+export function updateSetting(name, value) {
+    if (usingAWS) {
+        const params = {
+            Key: {
+                name: name,
+            },
+            ExpressionAttributeValues: {
+                ':1': value,
+            },
+            ExpressionAttributeNames: {
+                '#1': 'value',
+            },
+            UpdateExpression: 'SET #1=:1',
+            ReturnValues: 'ALL_NEW',
+        };
+
+        return new Promise((resolve, reject) => {
+            databases.dynamodb.settings.update(params, function (err, data) {
+                if (err) {
+                    return reject(err);
+                }
+
+                return resolve(data);
+            });
+        });
+    }
+
+    return databases.nedb.settings.update({ name }, { [name]: value }, { upsert: true });
 }
