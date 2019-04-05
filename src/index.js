@@ -3,21 +3,17 @@ import * as Sentry from '@sentry/node';
 
 import Bot from './Bot';
 import logger from './logger';
+import { isDevelopmentEnvironment, isProductionEnvironment } from './utils';
 
 if (config.has('sentry.dsn')) {
-    Sentry.init({ dsn: config.get('sentry.dsn') });
+    logger.debug('Setting up Sentry logging');
+    Sentry.init({
+        dsn: config.get('sentry.dsn'),
+        debug: isDevelopmentEnvironment(),
+        environment: isProductionEnvironment() ? 'prod' : 'dev',
+    });
 }
 
 const bot = new Bot();
 
 bot.start();
-
-const catchThemErrors = (error) => {
-    Sentry.captureException(error);
-    logger.error(typeof error.message === 'string' ? error.message : JSON.stringify(error.message));
-
-    process.exit(1);
-};
-
-process.on('uncaughtException', catchThemErrors);
-process.on('unhandledRejection', catchThemErrors);
