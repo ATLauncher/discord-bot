@@ -1,4 +1,7 @@
+import Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
+import { COLOURS } from '../constants';
 
 /**
  * A watcher that listens for message/s being deleted. This can occur from either a user deleting it themselves or a
@@ -73,22 +76,21 @@ class DeleteWatcher extends BaseWatcher {
             return;
         }
 
-        // eslint-disable-next-line prefer-const
-        let messageParts = [];
+        let user = 'Unknown';
 
-        if (!message.author) {
-            messageParts.push('**User:** Unknown');
-        } else {
-            messageParts.push(
-                `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`
-            );
+        if (message.author) {
+            user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        messageParts.push('**Action:** message removed');
-        messageParts.push(`**Channel:** ${message.channel}`);
-        messageParts.push(`**Message:**\`\`\`${message.cleanContent}\`\`\``);
+        const embed = new Discord.RichEmbed()
+            .setTitle('Message deleted')
+            .setColor(COLOURS.RED)
+            .setTimestamp(new Date().toISOString())
+            .addField('User', user, true)
+            .addField('Channel', message.channel, true)
+            .addField('Message', `\`\`\`${message.cleanContent.replace(/`/g, '\\`')}\`\`\``);
 
-        this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
+        this.sendEmbedToModeratorLogsChannel(embed);
     }
 }
 

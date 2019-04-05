@@ -191,6 +191,20 @@ class BaseModule {
     }
 
     /**
+     * This will send the given embed message to the moderator logs channel.
+     *
+     * @param {Discord.RichMedia} embed
+     * @memberof BaseModule
+     */
+    sendEmbedToModeratorLogsChannel(embed) {
+        const moderatorChannel = this.getModerationLogsChannel();
+
+        if (moderatorChannel) {
+            moderatorChannel.send({ embed });
+        }
+    }
+
+    /**
      * This gets the channel object for the moderator channel in the config.
      *
      * @returns {TextChannel|VoiceChannel|null}

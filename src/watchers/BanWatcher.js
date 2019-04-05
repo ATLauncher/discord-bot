@@ -1,4 +1,7 @@
+import Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
+import { COLOURS } from '../constants';
 
 /**
  * Watcher to detect when bans have been added or removed
@@ -24,12 +27,21 @@ class BanWatcher extends BaseWatcher {
      * @memberof BanWatcher
      */
     action(method, guild, user) {
-        const messageParts = [
-            `**User:** ${user} (${user.username}#${user.discriminator})`,
-            `**Action:** user ${method === 'guildBanRemove' ? 'un' : ''}banned`,
-        ];
+        const unbanned = method === 'guildBanRemove';
 
-        this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
+        let userToLog = 'Unknown';
+
+        if (user) {
+            userToLog = `${user} (${user.username}#${user.discriminator})`;
+        }
+
+        const embed = new Discord.RichEmbed()
+            .setTitle(`User ${unbanned ? 'unbanned' : 'banned'}`)
+            .setColor(unbanned ? COLOURS.GREEN : COLOURS.RED)
+            .setTimestamp(new Date().toISOString())
+            .addField('User', userToLog);
+
+        this.sendEmbedToModeratorLogsChannel(embed);
     }
 }
 
