@@ -1,6 +1,8 @@
 import config from 'config';
+import Discord from 'discord.js';
 
 import * as database from './db';
+import { COLOURS } from './constants';
 
 /**
  * This is the base module class. A module is either a command or a watcher.
@@ -150,15 +152,16 @@ class BaseModule {
 
             database.updateUserByID(message.author.id, user);
 
-            // eslint-disable-next-line prefer-const
-            let messageParts = [];
+            const embed = new Discord.RichEmbed()
+                .setTitle('Warning added')
+                .setColor(COLOURS.YELLOW)
+                .setTimestamp(new Date().toISOString())
+                .addField('User', `${message.author} (${message.author.username}#${message.author.discriminator})`, true)
+                .addField('Warnings', user.warnings, true);
 
-            messageParts.push(
-                `**User:** ${message.author} (${message.author.username}#${message.author.discriminator})`
-            );
+            this.sendEmbedToModeratorLogsChannel(embed);
 
             if (user.warnings >= 5) {
-                messageParts.push(`**Action:** member banned for having ${user.warnings} warnings!`);
                 message.member.ban({
                     days: 1,
                     reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.get(
@@ -166,13 +169,16 @@ class BaseModule {
                     )}`,
                 });
             } else if (user.warnings >= 3) {
-                messageParts.push(`**Action:** member kicked for having ${user.warnings} warnings!`);
                 message.member.kick('Not following the rules and accumulating 3 warnings');
-            } else {
-                messageParts.push(`**Action:** warning added for total of ${user.warnings} warnings!`);
-            }
 
-            this.sendMessageToModeratorLogsChannel(messageParts.join('\n'));
+                const embed = new Discord.RichEmbed()
+                    .setTitle(`User kicked`)
+                    .setColor(COLOURS.RED)
+                    .setTimestamp(new Date().toISOString())
+                    .addField('User', `${message.author} (${message.author.username}#${message.author.discriminator})`);
+
+                this.sendEmbedToModeratorLogsChannel(embed);
+            }
         }
     }
 
@@ -221,7 +227,9 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModeratedChannels() {
-        return this.bot.channels.filter(({ name }) => config.get('bot.moderated_channels').includes(name));
+        const moderatedChannels = config.get('bot.moderated_channels');
+
+        return this.bot.channels.filter(({ name }) => moderatedChannels.includes(name));
     }
 
     /**
