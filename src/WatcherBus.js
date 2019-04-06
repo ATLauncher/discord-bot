@@ -78,8 +78,8 @@ class WatcherBus {
     setupWatcherListeners() {
         Object.keys(this.watchers).forEach((method) => {
             this.bot.on(method, (...args) => {
-                this.watchers[method].forEach((watcher) => {
-                    if (watcher.shouldRun(method, ...args)) {
+                this.watchers[method].forEach(async (watcher) => {
+                    if (await watcher.shouldRun(method, ...args)) {
                         watcher.action(method, ...args);
                     }
                 });
