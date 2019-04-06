@@ -19,7 +19,7 @@ class LogsCommand extends BaseCommand {
      * @type {RegExp}
      * @memberof LogsCommand
      */
-    pattern = /^!logs/;
+    pattern = /^!logs\s/;
 
     /**
      * The function that should be called when the event is fired.
