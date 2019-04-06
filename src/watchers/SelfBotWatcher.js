@@ -40,9 +40,7 @@ class SelfBotWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => {
-            return channel.name === config.get('bot.rules_channel');
-        });
+        const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 

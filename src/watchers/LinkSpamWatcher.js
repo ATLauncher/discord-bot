@@ -19,9 +19,34 @@ class LinkSpamWatcher extends BaseWatcher {
      * The method this watcher should listen on.
      *
      * @type {string|string[]}
-     * @memberof InviteRuleWatcher
+     * @memberof LinkSpamWatcher
      */
     method = ['message', 'messageUpdate'];
+
+    /**
+     * The links that this watcher should remove.
+     *
+     * @type {string[]}
+     * @memberof LinkSpamWatcher
+     */
+    links = [
+        'giftsofsteam.com',
+        'steamdigitalgift.com',
+        'steam.cubecode.site',
+        'hellcase.com',
+        'fatalpvp.serv.nu',
+        'splix.io',
+        'gaschoolstore.com',
+        'steamspecial.com',
+        'gamekit.com',
+        'aternos.me',
+        'steamquests.com',
+        'link.clashroyale.com',
+        'paysafecards.org',
+        'minecraftgeek.com',
+        'free-gg.com',
+        'fortnite-vbucks.net',
+    ];
 
     /**
      * The function that should be called when the event is fired.
@@ -40,25 +65,7 @@ class LinkSpamWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (
-            cleanMessage.includes('giftsofsteam.com') ||
-            cleanMessage.includes('steamdigitalgift.com') ||
-            cleanMessage.includes('steam.cubecode.site') ||
-            cleanMessage.includes('hellcase.com') ||
-            cleanMessage.includes('fatalpvp.serv.nu') ||
-            cleanMessage.includes('splix.io') ||
-            cleanMessage.includes('gaschoolstore.com') ||
-            cleanMessage.includes('steamspecial.com') ||
-            cleanMessage.includes('gamekit.com') ||
-            cleanMessage.includes('aternos.me') ||
-            cleanMessage.includes('steamquests.com') ||
-            cleanMessage.includes('link.clashroyale.com') ||
-            cleanMessage.includes('paysafecards.org') ||
-            cleanMessage.includes('minecraftgeek.com') ||
-            cleanMessage.includes('?ref=') ||
-            cleanMessage.includes('free-gg.com') ||
-            cleanMessage.includes('fortnite-vbucks.net')
-        ) {
+        if (this.links.some((string) => cleanMessage.contains(string))) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
             );

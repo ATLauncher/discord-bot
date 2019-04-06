@@ -26,6 +26,31 @@ class TextSpamWatcher extends BaseWatcher {
     method = ['message', 'messageUpdate'];
 
     /**
+     * The strings that this watcher should remove.
+     *
+     * @type {string[]}
+     * @memberof LinkSpamWatcher
+     */
+    strings = [
+        'this is cooldog',
+        'this is memedog',
+        'this is memecat',
+        'this is trolldog',
+        'this is screwoff',
+        'chrisopeer davies',
+        'jessica davies',
+        'dming inappropriate photos of underage children',
+        'bots are joining servers and sending mass',
+        'kazuto kirigia',
+        'colyn_9',
+        'teenagers would cry',
+        'little girl called clarissa',
+        'become part of the ugandan squad',
+        'discord is supposed to be closing down',
+        'with the tag #1828',
+    ];
+
+    /**
      * Run the watcher with the given parameters.
      *
      * @param {string} method
@@ -44,24 +69,7 @@ class TextSpamWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (
-            cleanMessage.toLowerCase().includes('this is cooldog') ||
-            cleanMessage.toLowerCase().includes('this is memedog') ||
-            cleanMessage.toLowerCase().includes('this is memecat') ||
-            cleanMessage.toLowerCase().includes('this is trolldog') ||
-            cleanMessage.toLowerCase().includes('this is screwoff') ||
-            cleanMessage.toLowerCase().includes('chrisopeer davies') ||
-            cleanMessage.toLowerCase().includes('jessica davies') ||
-            cleanMessage.toLowerCase().includes('dming inappropriate photos of underage children') ||
-            cleanMessage.toLowerCase().includes('bots are joining servers and sending mass') ||
-            cleanMessage.toLowerCase().includes('kazuto kirigia') ||
-            cleanMessage.toLowerCase().includes('colyn_9') ||
-            cleanMessage.toLowerCase().includes('teenagers would cry') ||
-            cleanMessage.toLowerCase().includes('little girl called clarissa') ||
-            cleanMessage.toLowerCase().includes('become part of the ugandan squad') ||
-            cleanMessage.toLowerCase().includes('discord is supposed to be closing down') ||
-            cleanMessage.toLowerCase().includes('with the tag #1828')
-        ) {
+        if (this.strings.some((string) => cleanMessage.contains(string))) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
             );

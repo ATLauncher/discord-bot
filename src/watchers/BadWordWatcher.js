@@ -45,9 +45,7 @@ class BadWordWatcher extends BaseWatcher {
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
         const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
 
-        const containsBadWord = messageParts.some((word) => config.get('bot.bad_words').includes(word));
-
-        if (containsBadWord) {
+        if (messageParts.some((word) => config.get('bot.bad_words').includes(word))) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel and don't be vulgar.`
             );

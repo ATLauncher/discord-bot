@@ -26,6 +26,14 @@ class TagRuleWatcher extends BaseWatcher {
     method = ['message', 'messageUpdate'];
 
     /**
+     * The strings that this watcher should remove.
+     *
+     * @type {string[]}
+     * @memberof TagRuleWatcher
+     */
+    strings = ['@everyone', '@channel', '@here'];
+
+    /**
      * The function that should be called when the event is fired.
      *
      * @param {string} method
@@ -42,10 +50,9 @@ class TagRuleWatcher extends BaseWatcher {
 
         const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
 
-        if (
-            messageToActUpon.cleanContent.toLowerCase().includes('@everyone') ||
-            messageToActUpon.cleanContent.toLowerCase().includes('@here')
-        ) {
+        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+
+        if (this.strings.some((string) => cleanMessage.contains(string))) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Tags such as \`@everyone\` and \`@here\` are not allowed.`
             );
