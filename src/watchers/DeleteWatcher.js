@@ -29,7 +29,7 @@ class DeleteWatcher extends BaseWatcher {
      * @memberof DeleteWatcher
      */
     async shouldRun(method, message) {
-        if (!super.shouldRun(method, message)) {
+        if (!(await super.shouldRun(method, message))) {
             return false;
         }
 
@@ -38,7 +38,20 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
-        return await database.getSetting('logMessageDeletions', true);
+        // don't log deletions of commands
+        if (
+            message.cleanContent.toLowerCase().startsWith('!cyt') ||
+            message.cleanContent.toLowerCase().startsWith('!log') ||
+            message.cleanContent.toLowerCase().startsWith('!idbans') ||
+            message.cleanContent.toLowerCase().startsWith('!working') ||
+            message.cleanContent.toLowerCase().startsWith('!clean')
+        ) {
+            return false;
+        }
+
+        const logMessageDeletions = await database.getSetting('logMessageDeletions', true);
+
+        return logMessageDeletions;
     }
 
     /**
@@ -67,17 +80,6 @@ class DeleteWatcher extends BaseWatcher {
      * @memberof DeleteWatcher
      */
     logMessage(message) {
-        // don't log deletions of commands
-        if (
-            message.cleanContent.toLowerCase().startsWith('!cyt') ||
-            message.cleanContent.toLowerCase().startsWith('!logs') ||
-            message.cleanContent.toLowerCase().startsWith('!idbans') ||
-            message.cleanContent.toLowerCase().startsWith('!working') ||
-            message.cleanContent.toLowerCase().startsWith('!clean')
-        ) {
-            return;
-        }
-
         let user = 'Unknown';
 
         if (message.author) {

@@ -100,7 +100,7 @@ class BaseModule {
      * @returns {boolean}
      * @memberof BaseModule
      */
-    shouldRun(method, message, updatedMessage = {}) {
+    async shouldRun(method, message, updatedMessage = {}) {
         let messageToActUpon = message;
 
         if (method === 'messageUpdate') {
@@ -116,6 +116,8 @@ class BaseModule {
         }
 
         if (this.permissions.length && !messageToActUpon.member.hasPermission(this.permissions)) {
+            await messageToActUpon.delete();
+
             return false;
         }
 

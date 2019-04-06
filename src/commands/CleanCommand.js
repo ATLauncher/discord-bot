@@ -1,6 +1,7 @@
+import Discord from 'discord.js';
+
 import BaseCommand from './BaseCommand';
-import { PERMISSIONS } from '../constants';
-import * as database from '../db';
+import { COLOURS, PERMISSIONS } from '../constants';
 
 /**
  * This will clean the last x messages from the current channel.
@@ -42,7 +43,6 @@ class CleanCommand extends BaseCommand {
      * @memberof CleanCommand
      */
     async action(action, message) {
-        await database.updateSetting('logMessageDeletions', false);
         await message.delete();
 
         const input = message.cleanContent.substr(7);
@@ -52,10 +52,24 @@ class CleanCommand extends BaseCommand {
 
             if (linesToClean > 0 && linesToClean <= 25) {
                 await message.channel.bulkDelete(linesToClean);
+
+                let user = 'Unknown';
+
+                if (message.author) {
+                    user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
+                }
+
+                const embed = new Discord.RichEmbed()
+                    .setTitle('Clean command run')
+                    .setColor(COLOURS.YELLOW)
+                    .setTimestamp(new Date().toISOString())
+                    .addField('User', user, true)
+                    .addField('Channel', message.channel, true)
+                    .addField('Lines', linesToClean, true);
+
+                this.sendEmbedToModeratorLogsChannel(embed);
             }
         }
-
-        await database.updateSetting('logMessageDeletions', true);
     }
 }
 

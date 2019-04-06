@@ -3,6 +3,8 @@ import Datastore from 'nedb-promise';
 
 import config from 'config';
 
+import logger from './logger';
+
 export const usingAWS = !!config.has('db');
 
 const databases = {
@@ -285,5 +287,12 @@ export function updateSetting(name, value) {
         });
     }
 
-    return databases.nedb.settings.update({ name }, { [name]: value }, { upsert: true });
+    return databases.nedb.settings.update(
+        { name },
+        {
+            name,
+            value,
+        },
+        { upsert: true }
+    );
 }
