@@ -47,6 +47,9 @@ class LogOffCommand extends BaseCommand {
         await message.delete();
         await database.updateSetting('logMessageDeletions', false);
 
+        const input = message.cleanContent.replace('!logoff', '');
+        const timeout = input.length ? parseInt(input, 10) : null;
+
         let user = 'Unknown';
 
         if (message.author) {
@@ -60,6 +63,20 @@ class LogOffCommand extends BaseCommand {
             .addField('User', user, true);
 
         this.sendEmbedToModeratorLogsChannel(embed);
+
+        if (timeout) {
+            setTimeout(async () => {
+                await database.updateSetting('logMessageDeletions', true);
+
+                const embed = new Discord.RichEmbed()
+                    .setTitle('Message deletion logging turned on')
+                    .setColor(COLOURS.GREEN)
+                    .setTimestamp(new Date().toISOString())
+                    .addField('User', user, true);
+
+                this.sendEmbedToModeratorLogsChannel(embed);
+            }, timeout * 1000);
+        }
     }
 }
 
