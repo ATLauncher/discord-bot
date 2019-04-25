@@ -19,7 +19,7 @@ class ScanCommand extends BaseCommand {
      * @type {RegExp}
      * @memberof ScanCommand
      */
-    pattern = /^!scan\s/;
+    pattern = /^!scan\s[0-9][a-f]/;
 
     /**
      * The function that should be called when the event is fired.
@@ -29,9 +29,16 @@ class ScanCommand extends BaseCommand {
      * @memberof ScanCommand
      */
     async action(action, message) {
-        const user = message.mentions.users.first() || '';
+        let pasteCode = String(this.pattern);
+        pasteCode = pasteCode.substr(pasteCode.length - 8);
+        let fileLink = "https://paste.atlauncher.com/view/raw/"+pasteCode;
+        await message.reply(
+            `Now scanning logfile ${fileLink}, this may take a moment...`
+         );
 
-        const userPre = user ? ' ' : '';
+
     }
 }
+
+export default ScanCommand;
 
