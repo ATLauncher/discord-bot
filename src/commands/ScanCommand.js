@@ -19,7 +19,7 @@ class ScanCommand extends BaseCommand {
      * @type {RegExp}
      * @memberof ScanCommand
      */
-    pattern = /^!scan\s[0-9][a-f]/;
+    pattern = /^!scan\s([0-9a-f]{8})/;
 
     /**
      * The function that should be called when the event is fired.
@@ -29,7 +29,7 @@ class ScanCommand extends BaseCommand {
      * @memberof ScanCommand
      */
     async action(action, message) {
-        let pasteCode = String(this.pattern);
+        let [pasteCode] = message.cleanContent.match(this.pattern);
         pasteCode = pasteCode.substr(pasteCode.length - 8);
         let fileLink = "https://paste.atlauncher.com/view/raw/"+pasteCode;
         await message.reply(
