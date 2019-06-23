@@ -56,7 +56,7 @@ class CalmYourTitsCommand extends BaseCommand {
                     'grateful.',
                 '',
                 '⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔~~⛔',
-            ].join('\n')
+            ].join('\n'),
         );
 
         message.delete();

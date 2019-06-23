@@ -1,59 +1,70 @@
 {
-    "name": "@atlauncher/discord-bot",
-    "version": "0.1.0",
-    "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
-    "main": "dist",
-    "scripts": {
-        "build": "atlauncher-scripts build",
-        "clean": "atlauncher-scripts clean",
-        "config:base64": "atlauncher-scripts babel:run utils/base64Config.js",
-        "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"atlauncher-scripts babel:run src\"",
-        "lint": "atlauncher-scripts lint:js",
-        "lint:watch": "npm run lint -- --watch",
-        "oauth:url": "atlauncher-scripts babel:run utils/getOAuthUrl.js",
-        "start": "node dist"
-    },
-    "husky": {
-        "hooks": {
-            "pre-push": "npm run lint"
-        }
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/ATLauncher/Discord-Bot.git"
-    },
-    "keywords": [
-        "discord",
-        "atlauncher",
-        "bot"
-    ],
-    "author": "Ryan Dowling <ryan.dowling@atlauncher.com>",
-    "license": "MIT",
-    "bugs": {
-        "url": "https://github.com/ATLauncher/Discord-Bot/issues"
-    },
-    "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
-    "dependencies": {
-        "@atlauncher/atlauncher-scripts": "0.2.4",
-        "@sentry/node": "^5.4.3",
-        "aws-sdk": "^2.480.0",
-        "config": "^3.1.0",
-        "date-fns": "^1.30.1",
-        "discord.js": "^11.5.1",
-        "nedb": "^1.8.0",
-        "nedb-promise": "^2.0.1",
-        "winston": "^3.2.1",
-        "winston-logzio": "^5.0.0"
-    },
-    "devDependencies": {
-        "cross-env": "^5.2.0",
-        "husky": "^2.4.1",
-        "nodemon": "^1.19.1",
-        "rimraf": "^2.6.3"
-    },
-    "engineStrict": true,
-    "engines": {
-        "node": ">= 8",
-        "npm": ">=5"
+  "name": "@atlauncher/discord-bot",
+  "version": "0.1.0",
+  "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
+  "main": "dist",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ATLauncher/Discord-Bot.git"
+  },
+  "keywords": [
+    "discord",
+    "atlauncher",
+    "bot"
+  ],
+  "author": "Ryan Dowling <ryan.dowling@atlauncher.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ATLauncher/Discord-Bot/issues"
+  },
+  "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "clean": "rimraf dist",
+    "config:base64": "babel-node utils/base64Config.js",
+    "dev": "cross-env NODE_ENV=development nodemon",
+    "format": "prettier --write \"src/**/*.js\"",
+    "oauth:url": "babel-node utils/getOAuthUrl.js",
+    "start": "node dist"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
     }
+  },
+  "lint-staged": {
+    "linters": {
+      "src/**/*.js": [
+        "prettier --write",
+        "git add"
+      ]
+    }
+  },
+  "dependencies": {
+    "@sentry/node": "^5.4.3",
+    "aws-sdk": "^2.480.0",
+    "config": "^3.1.0",
+    "date-fns": "^1.30.1",
+    "discord.js": "^11.5.1",
+    "nedb": "^1.8.0",
+    "nedb-promise": "^2.0.1",
+    "winston": "^3.2.1",
+    "winston-logzio": "^5.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/node": "^7.4.5",
+    "@babel/plugin-syntax-class-properties": "^7.2.0",
+    "@babel/preset-env": "^7.4.5",
+    "@commitlint/cli": "^8.0.0",
+    "@commitlint/config-conventional": "^8.0.0",
+    "cross-env": "^5.2.0",
+    "husky": "^2.4.1",
+    "lint-staged": "^8.2.1",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2",
+    "rimraf": "^2.6.3"
+  }
 }

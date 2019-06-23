@@ -1,6 +1,6 @@
 {
   "logging": {
-    "level": "error"
+    "level": "info"
   },
   "bot": {
     "moderator_channel": "moderation-logs",
@@ -11,9 +11,13 @@
     "moderated_channels": [],
     "appeal_url": "https://google.com",
     "bypass": {
-        "roles": [],
-        "users": []
+      "roles": [],
+      "users": []
     },
     "bad_words": []
+  },
+  "discord": {
+    "client_id": "",
+    "client_token": ""
   }
 }

@@ -3,13 +3,13 @@ import config from 'config';
 import winston from 'winston';
 import LogzioWinstonTransport from 'winston-logzio';
 
-import { isDevelopmentEnvironment, isProductionEnvironment } from './utils';
+import { isProductionEnvironment } from './utils';
 
 const hasLogzIoConfig = config.has('logging.logz_io_token');
 
 const logger = winston.createLogger({
     transports: [
-        isDevelopmentEnvironment() && new winston.transports.Console(),
+        !isProductionEnvironment() && new winston.transports.Console(),
         !hasLogzIoConfig &&
             isProductionEnvironment() &&
             new winston.transports.File({ filename: path.resolve(__dirname, '../logs/server.log') }),
@@ -19,18 +19,16 @@ const logger = winston.createLogger({
                 level: config.get('logging.level'),
                 token: config.get('logging.logz_io_token'),
                 format: winston.format.combine(
-                    winston.format(function (info) {
-                        return {
-                            ...info,
+                    winston.format(info => ({
+                        ...info,
 
-                            nodejs: {
-                                labels: {
-                                    app: 'discord-bot',
-                                },
+                        nodejs: {
+                            labels: {
+                                app: 'discord-bot',
                             },
-                        };
-                    })(),
-                    winston.format.json()
+                        },
+                    }))(),
+                    winston.format.json(),
                 ),
             }),
     ].filter(Boolean),

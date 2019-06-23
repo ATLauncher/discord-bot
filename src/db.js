@@ -3,24 +3,22 @@ import Datastore from 'nedb-promise';
 
 import config from 'config';
 
-import logger from './logger';
-
 export const usingAWS = !!config.has('db');
 
 const databases = {
     nedb: !usingAWS && {
         messages: new Datastore({
-            filename: `./db/messages.db`,
+            filename: './db/messages.db',
             timestampData: true,
             autoload: true,
         }),
         settings: new Datastore({
-            filename: `./db/settings.db`,
+            filename: './db/settings.db',
             timestampData: true,
             autoload: true,
         }),
         users: new Datastore({
-            filename: `./db/users.db`,
+            filename: './db/users.db',
             timestampData: true,
             autoload: true,
         }),
@@ -45,7 +43,7 @@ const databases = {
  * @param {number} id
  * @returns {object|null}
  */
-export async function findUserByID(id) {
+export function findUserByID(id) {
     if (usingAWS) {
         const params = {
             Key: {
@@ -53,8 +51,8 @@ export async function findUserByID(id) {
             },
         };
 
-        return await new Promise((resolve, reject) => {
-            databases.dynamodb.users.get(params, function (err, data) {
+        return new Promise((resolve, reject) => {
+            databases.dynamodb.users.get(params, (err, data) => {
                 if (err) {
                     return reject(err);
                 }
@@ -69,7 +67,7 @@ export async function findUserByID(id) {
         });
     }
 
-    return await databases.nedb.users.findOne({ id });
+    return databases.nedb.users.findOne({ id });
 }
 
 /**
@@ -100,12 +98,12 @@ export function updateUserByID(id, data) {
         };
 
         return new Promise((resolve, reject) => {
-            databases.dynamodb.users.update(params, function (err, data) {
+            databases.dynamodb.users.update(params, (err, users) => {
                 if (err) {
                     return reject(err);
                 }
 
-                return resolve(data);
+                return resolve(users);
             });
         });
     }
@@ -156,12 +154,12 @@ export function updateMessageByID(id, data) {
         };
 
         return new Promise((resolve, reject) => {
-            databases.dynamodb.messages.update(params, function (err, data) {
+            databases.dynamodb.messages.update(params, (err, messages) => {
                 if (err) {
                     return reject(err);
                 }
 
-                return resolve(data);
+                return resolve(messages);
             });
         });
     }
@@ -177,7 +175,6 @@ export function updateMessageByID(id, data) {
  * @returns {Promise}
  */
 export async function countMessagesInLast(message, seconds = 30) {
-    // eslint-disable-next-line prefer-const
     let timeAgo = new Date();
 
     timeAgo.setSeconds(timeAgo.getSeconds() - seconds);
@@ -198,7 +195,7 @@ export async function countMessagesInLast(message, seconds = 30) {
         };
 
         return new Promise((resolve, reject) => {
-            databases.dynamodb.messages.scan(params, function (err, data) {
+            databases.dynamodb.messages.scan(params, (err, data) => {
                 if (err) {
                     return reject(err);
                 }
@@ -208,7 +205,7 @@ export async function countMessagesInLast(message, seconds = 30) {
         });
     }
 
-    return await databases.nedb.messages.count({
+    return databases.nedb.messages.count({
         content: message,
         createdAt: { $gt: timeAgo },
     });
@@ -226,12 +223,12 @@ export async function getSetting(name, defaultValue) {
     if (usingAWS) {
         const params = {
             Key: {
-                name: name,
+                name,
             },
         };
 
-        return await new Promise((resolve, reject) => {
-            databases.dynamodb.settings.get(params, function (err, data) {
+        return new Promise((resolve, reject) => {
+            databases.dynamodb.settings.get(params, (err, data) => {
                 if (err) {
                     return reject(err);
                 }
@@ -264,7 +261,7 @@ export function updateSetting(name, value) {
     if (usingAWS) {
         const params = {
             Key: {
-                name: name,
+                name,
             },
             ExpressionAttributeValues: {
                 ':1': value,
@@ -277,7 +274,7 @@ export function updateSetting(name, value) {
         };
 
         return new Promise((resolve, reject) => {
-            databases.dynamodb.settings.update(params, function (err, data) {
+            databases.dynamodb.settings.update(params, (err, data) => {
                 if (err) {
                     return reject(err);
                 }
@@ -293,6 +290,6 @@ export function updateSetting(name, value) {
             name,
             value,
         },
-        { upsert: true }
+        { upsert: true },
     );
 }

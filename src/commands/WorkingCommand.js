@@ -30,7 +30,7 @@ class WorkingCommand extends BaseCommand {
      */
     async action(action, message) {
         if (this.hasBypassRole(message)) {
-            await message.reply(`Yes I'm "working"!`);
+            await message.reply('Yes I\'m "working"!');
         }
 
         message.delete();

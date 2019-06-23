@@ -40,13 +40,13 @@ class SelfBotWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find((channel) => channel.name === config.get('bot.rules_channel'));
+        const rulesChannel = this.bot.channels.find(channel => channel.name === config.get('bot.rules_channel'));
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
         if (cleanMessage.toLowerCase().startsWith('self.')) {
             const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`
+                `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`,
             );
 
             this.addWarningToUser(messageToActUpon);

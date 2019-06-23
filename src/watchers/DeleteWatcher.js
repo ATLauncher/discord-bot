@@ -64,7 +64,7 @@ class DeleteWatcher extends BaseWatcher {
     action(method, message) {
         // check if we're getting a collection of messages or not
         if (method === 'messageDeleteBulk') {
-            message.forEach((value) => {
+            message.forEach(value => {
                 this.logMessage(value);
             });
         } else {
