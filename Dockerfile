@@ -1,7 +1,9 @@
-FROM node:10
+FROM node:10-alpine
 MAINTAINER Ryan Dowling <ryan.dowling@atlauncher.com>
 
-RUN mkdir -p /app
+RUN mkdir -p /app \
+ && apk add --no-cache git
+
 WORKDIR /app
 
 COPY package-lock.json /app
