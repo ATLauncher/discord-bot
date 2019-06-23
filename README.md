@@ -52,7 +52,7 @@ Alternatively you can provide a `NODE_CONFIG` environment variable with a json s
 way to get this, is to create a `local.json` file in the config folder, and then run:
 
 ```sh
-node utils/stringifyConfig.json
+node utils/stringifyConfig.js
 ```
 
 This will print out a json string of the generated config
