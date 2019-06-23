@@ -16,6 +16,8 @@ COPY . /app
 
 RUN /usr/local/bin/npm run build
 
+ENV NODE_ENV=production
+
 VOLUME ["/app/db"]
 
 ENTRYPOINT ["/usr/local/bin/npm"]
