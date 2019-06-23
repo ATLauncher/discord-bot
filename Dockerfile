@@ -1,5 +1,6 @@
 FROM node:10-alpine
-MAINTAINER Ryan Dowling <ryan.dowling@atlauncher.com>
+
+LABEL author="Ryan Dowling" maintainer="ryan.dowling@atlauncher.com"
 
 RUN mkdir -p /app \
  && apk add --no-cache git
