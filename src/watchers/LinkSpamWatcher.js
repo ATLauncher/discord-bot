@@ -65,7 +65,7 @@ class LinkSpamWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (this.links.some((string) => cleanMessage.contains(string))) {
+        if (this.links.some((string) => cleanMessage.includes(string))) {
             const warningMessage = await messageToActUpon.reply(
                 `This link is not allowed to be posted as it is a known hoax/spam/scam.`
             );

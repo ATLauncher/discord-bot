@@ -69,7 +69,7 @@ class TextSpamWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (this.strings.some((string) => cleanMessage.contains(string))) {
+        if (this.strings.some((string) => cleanMessage.includes(string))) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`
             );

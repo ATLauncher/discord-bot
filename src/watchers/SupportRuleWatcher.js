@@ -55,7 +55,7 @@ class SupportRuleWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (this.strings.some((string) => cleanMessage.contains(string))) {
+        if (this.strings.some((string) => cleanMessage.includes(string))) {
             if (nonSupportChannels.some(({ name }) => name === messageToActUpon.channel.name)) {
                 const warningMessage = await messageToActUpon.reply(
                     `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`
