@@ -1,6 +1,7 @@
 # Discord-Bot
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_shield)
+[![Discord](https://discordapp.com/api/guilds/117047818136322057/embed.png?style=shield)](https://atl.pw/discordfromgithub)
 
 This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord.
 
@@ -52,7 +53,7 @@ Alternatively you can provide a `NODE_CONFIG` environment variable with a json s
 way to get this, is to create a `local.json` file in the config folder, and then run:
 
 ```sh
-node utils/stringifyConfig.json
+node utils/stringifyConfig.js
 ```
 
 This will print out a json string of the generated config

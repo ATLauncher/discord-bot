@@ -149,7 +149,6 @@ class BaseModule {
      */
     async addWarningToUser(message) {
         if (message.author) {
-            // eslint-disable-next-line prefer-const
             let user = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
                 warnings: 0,
@@ -173,7 +172,7 @@ class BaseModule {
                 .addField(
                     'User',
                     `${message.author} (${message.author.username}#${message.author.discriminator})`,
-                    true
+                    true,
                 )
                 .addField('Warnings', user.warnings, true);
 
@@ -183,14 +182,14 @@ class BaseModule {
                 message.member.ban({
                     days: 1,
                     reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.get(
-                        'bot.appeal_url'
+                        'bot.appeal_url',
                     )}`,
                 });
             } else if (user.warnings >= 3) {
                 message.member.kick('Not following the rules and accumulating 3 warnings');
 
                 const embed = new Discord.RichEmbed()
-                    .setTitle(`User kicked`)
+                    .setTitle('User kicked')
                     .setColor(COLOURS.RED)
                     .setTimestamp(new Date().toISOString())
                     .addField('User', `${message.author} (${message.author.username}#${message.author.discriminator})`);
@@ -235,7 +234,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => channel.name === config.get('bot.moderator_channel'));
+        return this.bot.channels.find(channel => channel.name === config.get('bot.moderator_channel'));
     }
 
     /**
@@ -312,8 +311,10 @@ class BaseModule {
         const filteredRoles = config
             .get('bot.bypass.roles')
             .some(
-                (roleName) =>
-                    message.member && message.member.roles && message.member.roles.some(({ name }) => name === roleName)
+                roleName =>
+                    message.member &&
+                    message.member.roles &&
+                    message.member.roles.some(({ name }) => name === roleName),
             );
 
         return filteredRoles.length !== 0;

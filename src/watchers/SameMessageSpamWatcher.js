@@ -57,7 +57,7 @@ class SameMessageSpamWatcher extends BaseWatcher {
         const count = await database.countMessagesInLast(messageToActUpon.cleanContent, 30);
 
         if (count >= 3) {
-            const warningMessage = await messageToActUpon.reply(`Please do not spam the same message.`);
+            const warningMessage = await messageToActUpon.reply('Please do not spam the same message.');
 
             this.addWarningToUser(messageToActUpon);
 

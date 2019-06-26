@@ -50,7 +50,7 @@ class CleanCommand extends BaseCommand {
         if (input.length) {
             const linesToClean = parseInt(input, 10);
 
-            if (linesToClean > 0 && linesToClean <= 25) {
+            if (linesToClean > 0 && linesToClean <= 100) {
                 await message.channel.bulkDelete(linesToClean);
 
                 let user = 'Unknown';

@@ -375,7 +375,7 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
         'zip-mc.com',
         'майнкрафт18.рф',
         'майнкрафтин.рф',
-    ]
+    ];
 
     /**
      * The function that should be called when the event is fired.
@@ -394,10 +394,10 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (this.links.some((string) => cleanMessage.contains(string))) {
+        if (this.links.some(string => cleanMessage.includes(string))) {
             const warningMessage = await messageToActUpon.reply(
-                'This link is not allowed to be posted as it\'s a mod repost/virus/unofficial site. Please only use ' +
-                'Minecraft Forums or Curse for mod downloads.'
+                "This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use " +
+                    'Minecraft Forums or Curse for mod downloads.',
             );
 
             this.addWarningToUser(messageToActUpon);

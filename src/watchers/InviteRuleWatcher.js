@@ -52,8 +52,8 @@ class InviteRuleWatcher extends BaseWatcher {
 
         if (messageToActUpon.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {
             const warningMessage = await messageToActUpon.reply(
-                `Discord invite links are not allowed due to constant spam. ` +
-                    `If you must share Discord invite links with someone, please do it privately.`
+                'Discord invite links are not allowed due to constant spam. ' +
+                    'If you must share Discord invite links with someone, please do it privately.',
             );
 
             this.addWarningToUser(messageToActUpon);

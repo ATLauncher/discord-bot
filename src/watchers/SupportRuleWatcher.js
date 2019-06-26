@@ -50,15 +50,15 @@ class SupportRuleWatcher extends BaseWatcher {
 
         const supportChannel = this.bot.channels.find(({ name }) => name === config.get('bot.support_channel'));
         const nonSupportChannels = this.bot.channels.filter(({ name }) =>
-            config.get('bot.non_support_channels').includes(name)
+            config.get('bot.non_support_channels').includes(name),
         );
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
 
-        if (this.strings.some((string) => cleanMessage.contains(string))) {
+        if (this.strings.some(string => cleanMessage.includes(string))) {
             if (nonSupportChannels.some(({ name }) => name === messageToActUpon.channel.name)) {
                 const warningMessage = await messageToActUpon.reply(
-                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`
+                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`,
                 );
 
                 this.addWarningToUser(messageToActUpon);
