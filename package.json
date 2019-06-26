@@ -1,0 +1,60 @@
+{
+    "name": "@atlauncher/discord-bot",
+    "version": "0.1.0",
+    "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
+    "main": "dist",
+    "scripts": {
+        "build": "atlauncher-scripts build",
+        "clean": "atlauncher-scripts clean",
+        "config:base64": "atlauncher-scripts babel:run utils/base64Config.js",
+        "dev": "cross-env NODE_ENV=development nodemon -w src -e js,json --exec \"atlauncher-scripts babel:run src\"",
+        "lint": "atlauncher-scripts lint:js",
+        "lint:watch": "npm run lint -- --watch",
+        "oauth:url": "atlauncher-scripts babel:run utils/getOAuthUrl.js",
+        "start": "node dist"
+    },
+    "husky": {
+        "hooks": {
+            "pre-push": "npm run lint"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/ATLauncher/Discord-Bot.git"
+    },
+    "keywords": [
+        "discord",
+        "atlauncher",
+        "bot"
+    ],
+    "author": "Ryan Dowling <ryan.dowling@atlauncher.com>",
+    "license": "MIT",
+    "bugs": {
+        "url": "https://github.com/ATLauncher/Discord-Bot/issues"
+    },
+    "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
+    "dependencies": {
+        "@atlauncher/atlauncher-scripts": "0.2.4",
+        "@sentry/node": "^5.0.5",
+        "aws-sdk": "^2.350.0",
+        "config": "^3.0.1",
+        "date-fns": "^1.29.0",
+        "discord.js": "^11.4.2",
+        "download-file": "^0.1.5",
+        "nedb": "^1.8.0",
+        "nedb-promise": "^2.0.1",
+        "winston": "^3.2.1",
+        "winston-logzio": "^4.0.2"
+    },
+    "devDependencies": {
+        "cross-env": "^5.2.0",
+        "husky": "^1.1.3",
+        "nodemon": "^1.18.10",
+        "rimraf": "^2.6.2"
+    },
+    "engineStrict": true,
+    "engines": {
+        "node": ">= 8",
+        "npm": ">=5"
+    }
+}
