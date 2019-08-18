@@ -1,4 +1,4 @@
-const plugins = ['@babel/plugin-syntax-class-properties'];
+const plugins = ['@babel/plugin-proposal-class-properties'];
 
 const presets = [
     [
