@@ -44,7 +44,9 @@ class DeleteWatcher extends BaseWatcher {
             message.cleanContent.toLowerCase().startsWith('!log') ||
             message.cleanContent.toLowerCase().startsWith('!idbans') ||
             message.cleanContent.toLowerCase().startsWith('!working') ||
-            message.cleanContent.toLowerCase().startsWith('!clean')
+            message.cleanContent.toLowerCase().startsWith('!clean') ||
+            message.cleanContent.toLowerCase().startsWith('!delete') ||
+            message.cleanContent.toLowerCase().startsWith('!ask')
         ) {
             return false;
         }
