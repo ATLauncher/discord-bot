@@ -10,7 +10,7 @@ WORKDIR /app
 COPY package-lock.json /app
 COPY package.json /app
 
-RUN /usr/local/bin/npm install --production
+RUN /usr/local/bin/npm install
 
 COPY . /app
 
