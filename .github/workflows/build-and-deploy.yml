@@ -31,7 +31,7 @@ jobs:
         working-directory: ./deploy/terraform
       - run: terraform init
         working-directory: ./deploy/terraform
-      - run: terraform plan -detailed-exitcode -out tf.plan > /dev/null
+      - run: terraform plan -out tf.plan > /dev/null
         working-directory: ./deploy/terraform
         env:
           TF_VAR_do_token: ${{secrets.DO_TOKEN}}
