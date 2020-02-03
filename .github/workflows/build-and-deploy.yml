@@ -1,0 +1,40 @@
+name: Build and Deploy
+
+on:
+  push:
+    # branches:
+    #   - master
+    paths-ignore:
+      - "deploy/terraform/**/*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12.x
+      - name: Install node modiles
+        run: npm install
+      - name: Build files
+        run: npm run build
+      - name: Deploy to server
+        uses: easingthemes/ssh-deploy@v2.0.8
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          ARGS: "-rltgoDzvO"
+          SOURCE: "dist/"
+          REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
+          REMOTE_USER: "node"
+          TARGET: "/home/node/discord-bot"
+      - name: Start PM2 process
+        uses: JimCronqvist/action-ssh@0.1.1
+        with:
+          command: |
+            cd /home/node/discord-bot
+            pm2 start index.js
+          hosts: "node@${{ secrets.REMOTE_HOST }}:22"
+          privateKey: ${{ secrets.SERVER_SSH_KEY }}

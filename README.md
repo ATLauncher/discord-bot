@@ -38,6 +38,43 @@ to use.
 Alternatively we have an automated build running on our Docker Hub repo at
 https://hub.docker.com/r/atlauncher/discord-bot/ accessed with identifier `atlauncher/discord-bot`.
 
+## Deployment
+
+This repository is automatically set to deploy a Digital Ocean droplet, set it up and then deploy
+the built code to the droplet and keep running using nodemon.
+
+This is achieved using the following:
+
+- [Terraform](https://www.terraform.io) to create and maintain the droplets in Digital Ocean
+- [PM2](https://pm2.keymetrics.io/) to keep the application up and running
+
+These steps are not expected to be run manually, and are setup as part of the CI/CD pipeline.
+
+But if you do wish to run it locally, or in another CI/CD pipeline, the instructions are below.
+
+### Manual Deployment Setup
+
+First install Terraform on your machine. Once done, setup some environment variables as follows:
+
+- `TF_VAR_do_token`: your DigitalOcean token
+- `TF_VAR_ssh_fingerprint`: a SSH key fingerprint from your DigitalOcean account
+
+If you don't set these environment variables, you'll have to enter them everytime you make your
+Terraform plan.
+
+**NOTE**: We use [Terraform Cloud](https://app.terraform.io/) to manage state and locking. If you
+do not wish to use that, you'll need to remove the `backend.tf` file before running the below
+commands.
+
+Now you can deploy the droplet with:
+
+```sh
+cd build/terraform
+terraform init
+terraform plan -out tf.plan
+terraform apply tf.plan
+```
+
 ## Config
 
 Configuration is handled through a NPM package called `config`. You can see all the ways to change

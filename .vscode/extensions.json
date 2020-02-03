@@ -1,5 +1,8 @@
 {
     "recommendations": [
-        "esbenp.prettier-vscode"
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "mauve.terraform",
+        "vscoss.vscode-ansible"
     ]
 }

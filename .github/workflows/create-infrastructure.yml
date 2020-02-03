@@ -1,0 +1,29 @@
+name: Create Infrastructure
+
+on:
+  push:
+    # branches:
+    #   - master
+    paths:
+      - "deploy/terraform/**/*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@master
+      - name: Terraform Login
+        uses: volcano-coffee-company/terraform-login@v1.0.1
+        with:
+          token: ${{secrets.TERRAFORM_API_KEY}}
+      - uses: marocchino/setup-terraform@v1
+        with:
+          version: "0.12.20"
+      - run: terraform fmt -check=true -write=false -diff -recursive
+      - run: terraform init
+      - run: terraform plan -detailed-exitcode -out tf.plan > /dev/null
+        env:
+          TF_VAR_do_token: ${{secrets.DO_TOKEN}}
+          TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
+      - run: terraform apply tf.plan > /dev/null
