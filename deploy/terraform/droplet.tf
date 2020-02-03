@@ -12,5 +12,11 @@ resource "digitalocean_droplet" "discord-bot" {
     inline = [
       "cloud-init status --wait"
     ]
+
+    connection {
+      host  = "${digitalocean_droplet.discord-bot.ipv4_address}"
+      user  = "root"
+      agent = true
+    }
   }
 }
