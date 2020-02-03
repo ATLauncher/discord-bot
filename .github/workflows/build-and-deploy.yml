@@ -17,7 +17,7 @@ jobs:
       - name: Install SSH key
         uses: shimataro/ssh-key-action@v1
         with:
-          private-key: ${{ secrets.SERVER_SSH_KEY }}
+          private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # Deploy our infrastructure (if needed)
       - name: Terraform Login
@@ -49,7 +49,7 @@ jobs:
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v2.0.8
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SERVER_SSH_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           ARGS: "-rltgoDzvO"
           SOURCE: "dist/"
           REMOTE_HOST: ${{ secrets.REMOTE_HOST }}
@@ -62,4 +62,4 @@ jobs:
             cd /home/node/discord-bot
             pm2 start index.js
           hosts: "node@${{ secrets.REMOTE_HOST }}:22"
-          privateKey: ${{ secrets.SERVER_SSH_KEY }}
+          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
