@@ -2,10 +2,9 @@ name: Build and Deploy
 
 on:
   push:
-    # branches:
-    #   - master
-    paths-ignore:
-      - "deploy/terraform/**/*"
+    branches:
+      - master
+      - ts-and-deploy-uplift
 
 jobs:
   build:
@@ -13,6 +12,30 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+
+      # Install the ssh key
+      - name: Install SSH key
+        uses: shimataro/ssh-key-action@v1
+        with:
+          private-key: ${{ secrets.SERVER_SSH_KEY }}
+
+      # Deploy our infrastructure (if needed)
+      - name: Terraform Login
+        uses: volcano-coffee-company/terraform-login@v1.0.1
+        with:
+          token: ${{secrets.TERRAFORM_API_KEY}}
+      - uses: marocchino/setup-terraform@v1
+        with:
+          version: "0.12.20"
+      - run: terraform fmt -check=true -write=false -diff -recursive
+      - run: terraform init
+      - run: terraform plan -detailed-exitcode -out tf.plan > /dev/null
+        env:
+          TF_VAR_do_token: ${{secrets.DO_TOKEN}}
+          TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
+      - run: terraform apply tf.plan > /dev/null
+
+      # Build the app
       - name: Use Node.js 12.x
         uses: actions/setup-node@v1
         with:
@@ -21,6 +44,8 @@ jobs:
         run: npm install
       - name: Build files
         run: npm run build
+
+      # Rsync the dist folder to the server
       - name: Deploy to server
         uses: easingthemes/ssh-deploy@v2.0.8
         env:

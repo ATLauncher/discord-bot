@@ -58,6 +58,7 @@ First install Terraform on your machine. Once done, setup some environment varia
 
 - `TF_VAR_do_token`: your DigitalOcean token
 - `TF_VAR_ssh_fingerprint`: a SSH key fingerprint from your DigitalOcean account
+- `TF_VAR_ssh_private_key`: private key contents matching the above fingerprint
 
 If you don't set these environment variables, you'll have to enter them everytime you make your
 Terraform plan.

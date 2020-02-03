@@ -7,5 +7,10 @@ resource "digitalocean_droplet" "discord-bot" {
   monitoring         = true
   user_data          = "${file("droplet.conf")}"
   ssh_keys           = [var.ssh_fingerprint]
-}
 
+  provisioner "remote-exec" {
+    inline = [
+      "cloud-init status --wait"
+    ]
+  }
+}
