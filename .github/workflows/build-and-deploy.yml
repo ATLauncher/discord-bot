@@ -66,8 +66,6 @@ jobs:
       - name: Start PM2 process
         uses: JimCronqvist/action-ssh@0.1.1
         with:
-          command: |
-            cd /home/node/discord-bot
-            pm2 start index.js
+          command: cd /home/node/discord-bot && pm2 startOrRestart index.js --name discord-bot
           hosts: "node@${{ env.BOX_IP }}:22"
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
