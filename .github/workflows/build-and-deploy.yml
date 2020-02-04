@@ -38,7 +38,7 @@ jobs:
           TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
       - run: terraform apply tf.plan > /dev/null
         working-directory: ./deploy/terraform
-      - run: echo "::set-env name=BOX_IP::`terraform output -no-color ip`"
+      - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
         working-directory: ./deploy/terraform
 
       # Build the app
