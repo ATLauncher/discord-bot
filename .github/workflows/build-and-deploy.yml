@@ -1,71 +1,68 @@
 name: Build and Deploy
 
 on:
-  push:
-    branches:
-      - master
-      - ts-and-deploy-uplift
+    push:
+        branches:
+            - master
+            - ts-and-deploy-uplift
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+    build:
+        runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+        steps:
+            - uses: actions/checkout@v2
 
-      # Install the ssh key
-      - name: Install SSH key and start agent
-        uses: webfactory/ssh-agent@v0.2.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+            # Install the ssh key
+            - name: Install SSH key and start agent
+              uses: webfactory/ssh-agent@v0.2.0
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      # Deploy our infrastructure (if needed)
-      - name: Terraform Login
-        uses: volcano-coffee-company/terraform-login@v1.0.1
-        with:
-          token: ${{secrets.TERRAFORM_API_KEY}}
-      - uses: marocchino/setup-terraform@v1
-        with:
-          version: "0.12.20"
-      - run: terraform fmt -check=true -write=false -diff -recursive
-        working-directory: ./deploy/terraform
-      - run: terraform init
-        working-directory: ./deploy/terraform
-      - run: terraform plan -out tf.plan > /dev/null
-        working-directory: ./deploy/terraform
-        env:
-          TF_VAR_do_token: ${{secrets.DO_TOKEN}}
-          TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
-      - run: terraform apply tf.plan > /dev/null
-        working-directory: ./deploy/terraform
-      - run: echo "::add-mask::$(terraform output -no-color ip)"
-        working-directory: ./deploy/terraform
-      - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
-        working-directory: ./deploy/terraform
+            # Deploy our infrastructure (if needed)
+            - name: Terraform Login
+              uses: volcano-coffee-company/terraform-login@v1.0.1
+              with:
+                  token: ${{secrets.TERRAFORM_API_KEY}}
+            - uses: marocchino/setup-terraform@v1
+              with:
+                  version: '0.12.20'
+            - run: terraform fmt -check=true -write=false -diff -recursive
+              working-directory: ./deploy/terraform
+            - run: terraform init
+              working-directory: ./deploy/terraform
+            - run: terraform plan -out tf.plan > /dev/null
+              working-directory: ./deploy/terraform
+              env:
+                  TF_VAR_do_token: ${{secrets.DO_TOKEN}}
+                  TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
+            - run: terraform apply tf.plan > /dev/null
+              working-directory: ./deploy/terraform
+            - run: echo "::add-mask::$(terraform output -no-color ip)"
+              working-directory: ./deploy/terraform
+            - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
+              working-directory: ./deploy/terraform
+            - run: ssh-keyscan -t rsa ${{env.BOX_IP}} >> ~/.ssh/known_hosts
+            - name: Add SSH Key to box
+              uses: shimataro/ssh-key-action@v1.6.4
+              with:
+                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+                  name: id_rsa
+                  config: |
+                      Host github.com
+                        IdentityFile ~/.ssh/id_rsa
 
-      # Build the app
-      - name: Use Node.js 12.x
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: Install node modules
-        run: npm install
-      - name: Build files
-        run: npm run build
+            # Build the app
+            - name: Use Node.js 12.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12.x
+            - name: Install node modules
+              run: npm install
+            - name: Build files
+              run: npm run build
 
-      # Rsync the dist folder to the server
-      - name: Deploy to server
-        uses: easingthemes/ssh-deploy@v2.0.8
-        env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ARGS: "-rltgoDzvO"
-          SOURCE: "dist/"
-          REMOTE_HOST: ${{ env.BOX_IP }}
-          REMOTE_USER: "node"
-          TARGET: "/home/node/discord-bot"
-      - name: Start PM2 process
-        uses: JimCronqvist/action-ssh@0.1.1
-        with:
-          command: cd /home/node/discord-bot && pm2 startOrRestart index.js --name discord-bot
-          hosts: "node@${{ env.BOX_IP }}:22"
-          privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
+            - name: Deploy Setup (can fail)
+              run: npx pm2 deploy production setup || true
+            - name: Deploy
+              run: npx pm2 deploy production
