@@ -40,6 +40,8 @@ jobs:
         working-directory: ./deploy/terraform
       - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
         working-directory: ./deploy/terraform
+      - run: echo "::add-mask::$BOX_IP"
+        working-directory: ./deploy/terraform
 
       # Build the app
       - name: Use Node.js 12.x
@@ -67,5 +69,5 @@ jobs:
           command: |
             cd /home/node/discord-bot
             pm2 start index.js
-          hosts: "node@${{ secrets.BOX_IP }}:22"
+          hosts: "node@${{ env.BOX_IP }}:22"
           privateKey: ${{ secrets.SSH_PRIVATE_KEY }}
