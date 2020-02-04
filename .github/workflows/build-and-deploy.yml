@@ -36,6 +36,7 @@ jobs:
               env:
                   TF_VAR_do_token: ${{secrets.DO_TOKEN}}
                   TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
+                  TF_VAR_ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
             - run: terraform apply tf.plan > /dev/null
               working-directory: ./deploy/terraform
             - run: echo "::add-mask::$(terraform output -no-color ip)"
@@ -43,14 +44,6 @@ jobs:
             - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
               working-directory: ./deploy/terraform
             - run: ssh-keyscan -t rsa ${{env.BOX_IP}} >> ~/.ssh/known_hosts
-            - name: Add SSH Key to box
-              uses: shimataro/ssh-key-action@v1.6.4
-              with:
-                  private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-                  name: id_rsa
-                  config: |
-                      Host github.com
-                        IdentityFile ~/.ssh/id_rsa
 
             # Build the app
             - name: Use Node.js 12.x

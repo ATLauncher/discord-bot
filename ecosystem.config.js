@@ -22,7 +22,7 @@ module.exports = {
             ref: 'origin/ts-and-deploy-uplift',
             repo: 'git@github.com:ATLauncher/discord-bot.git',
             path: '/home/node/discord-bot',
-            'post-deploy': 'npm install; npm run build; pm2 startOrRestart ecosystem.config.js',
+            'post-deploy': 'npm install; npm run build',
         },
     },
 };
