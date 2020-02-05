@@ -2,6 +2,7 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_shield)
 [![Discord](https://discordapp.com/api/guilds/117047818136322057/embed.png?style=shield)](https://atl.pw/discordfromgithub)
+![Build and Deploy](https://github.com/ATLauncher/discord-bot/workflows/Build%20and%20Deploy/badge.svg?branch=master)
 
 This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord.
 
@@ -9,7 +10,7 @@ This is the code for our Discord bot which runs on our official Discord server a
 
 To get setup you will need to make sure you have the following installed on your machine:
 
--   [NodeJS 10](https://nodejs.org/en/download/)
+-   [NodeJS 12](https://nodejs.org/en/download/)
     -   check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
 
 We'll assume you're a capable developer, so we won't tell you how to go about installing those on your machine :)
@@ -41,7 +42,7 @@ https://hub.docker.com/r/atlauncher/discord-bot/ accessed with identifier `atlau
 ## Deployment
 
 This repository is automatically set to deploy a Digital Ocean droplet, set it up and then deploy
-the built code to the droplet and keep running using nodemon.
+the built code to the droplet.
 
 This is achieved using the following:
 
@@ -75,6 +76,10 @@ terraform init
 terraform plan -out tf.plan
 terraform apply tf.plan
 ```
+
+Now you can run `pm2 deploy production setup` to setup the droplet ready for deployments, and then
+to deploy new changes to the code, run `pm2 deploy production`. Note that you will need to change
+the `ecosystem.config.js` file in order to point to the correct repository, if it's not this one.
 
 ## Config
 

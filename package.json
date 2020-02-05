@@ -25,7 +25,8 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "format": "prettier --write \"src/**/*.js\"",
     "oauth:url": "babel-node utils/getOAuthUrl.js",
-    "start": "node dist"
+    "start": "node dist",
+    "test": "echo 'Error: no tests written :( bad dev'"
   },
   "husky": {
     "hooks": {
