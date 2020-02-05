@@ -3,6 +3,7 @@
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_shield)
 [![Discord](https://discordapp.com/api/guilds/117047818136322057/embed.png?style=shield)](https://atl.pw/discordfromgithub)
 ![Build and Deploy](https://github.com/ATLauncher/discord-bot/workflows/Build%20and%20Deploy/badge.svg?branch=master)
+![Test and Build](https://github.com/ATLauncher/discord-bot/workflows/Test%20and%20Build/badge.svg?branch=master)
 
 This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord.
 

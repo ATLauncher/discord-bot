@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Deploy
 
 on:
     push:
@@ -7,9 +7,9 @@ on:
             - ts-and-deploy-uplift
 
 jobs:
-    build:
+    setup-infrastructure:
+        name: Setup Infrastructure
         runs-on: ubuntu-latest
-
         steps:
             - uses: actions/checkout@v2
 
@@ -44,6 +44,34 @@ jobs:
             - run: echo "::set-env name=BOX_IP::$(terraform output -no-color ip)"
               working-directory: ./deploy/terraform
             - run: ssh-keyscan -t rsa ${{env.BOX_IP}} >> ~/.ssh/known_hosts
+
+            # Build the app
+            - name: Use Node.js 12.x
+              uses: actions/setup-node@v1
+              with:
+                  node-version: 12.x
+            - name: Install node modules
+              run: npm install
+            - name: Build files
+              run: npm run build
+
+            - name: Deploy Setup (can fail)
+              run: npx pm2 deploy production setup || true
+            - name: Deploy
+              run: npx pm2 deploy production
+
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        needs: setup-infrastructure
+        steps:
+            - uses: actions/checkout@v2
+
+            # Install the ssh key
+            - name: Install SSH key and start agent
+              uses: webfactory/ssh-agent@v0.2.0
+              with:
+                  ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
             # Build the app
             - name: Use Node.js 12.x
