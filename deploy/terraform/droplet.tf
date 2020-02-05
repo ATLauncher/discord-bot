@@ -64,6 +64,11 @@ resource "digitalocean_droplet" "discord-bot" {
     - su -c "npm install pm2 -g"
     - env PATH=$PATH:/usr/bin /home/node/.npm-global/bin/pm2 startup systemd -u node --hp /home/node
 
+    # Setup git global config
+    - echo "[user]" > /home/node/.gitconfig
+    - echo "        name = ATLauncher Bot" >> /home/node/.gitconfig
+    - echo "        email = atlauncher-bot@atlauncher.com" >> /home/node/.gitconfig
+
     # Fix permissions
     - chown -R node:node /home/node
   EOT
