@@ -57,7 +57,7 @@ resource "digitalocean_droplet" "discord-bot" {
     # Use local path for global NPM modules
     - su -c "mkdir /home/node/.npm-global"
     - su -c "npm config set prefix '/home/node/.npm-global'"
-    - su -c "echo 'export PATH=/home/node/.npm-global/bin:$PATH' >> /home/node/.profile"
+    - su -c "sed -i '1i PATH=/home/node/.npm-global/bin:\$PATH' /home/node/.bashrc"
     - su -c "source /home/node/.profile"
 
     # Install PM2 and add to systemd
