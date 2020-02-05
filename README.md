@@ -81,7 +81,10 @@ terraform apply tf.plan
 Now you can run `pm2 deploy production setup` to setup the droplet ready for deployments.
 
 Once done, you'll also need to copy over a `production.json` file with your config in it to
-`/home/node/discord-bot/source/config/production.json`.
+`/home/node/discord-bot/source/config/production.json`. You can do this easily with the following
+command:
+
+`scp path/to/production.json node@${BOX_IP}:/home/node/discord-bot/source/config/production.json`
 
 And then to deploy new changes to the code, run `pm2 deploy production`. Note that you will need to
 change the `ecosystem.config.js` file in order to point to the correct repository, if it's not this
