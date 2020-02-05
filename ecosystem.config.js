@@ -25,7 +25,7 @@ module.exports = {
             repo: 'git@github.com:ATLauncher/discord-bot.git',
             path: '/home/node/discord-bot',
             'post-deploy':
-                'npm install; npm run build; ln -s ../shared/production.json config/production.json; pm2 startOrRestart ecosystem.config.js --env production',
+                'npm install; npm run build; pm2 startOrRestart ecosystem.config.js --env production',
         },
     },
 };
