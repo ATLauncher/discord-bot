@@ -200,6 +200,60 @@ class BaseModule {
     }
 
     /**
+     * Checks to see if the user has seen the TLauncher warning message.
+     *
+     * @param {Message} message
+     * @memberof BaseModule
+     */
+    async hasUserSeenTLauncherMessage(message) {
+        if (message.author) {
+            let user = (await database.findUserByID(message.author.id)) || {
+                id: message.author.id,
+                hasSeenTLauncherMessage: false,
+            };
+
+            return user.hasSeenTLauncherMessage;
+        }
+
+        return false;
+    }
+
+    /**
+     * This adds a flag to a user that they've seen the message regarding support for TLauncher. This is so we don't
+     * show it more than once, just incase the bot is not understanding correctly.
+     *
+     * @param {Message} message
+     * @memberof BaseModule
+     */
+    async addHasSeenTLauncherMessageToUser(message) {
+        if (message.author) {
+            let user = (await database.findUserByID(message.author.id)) || {
+                id: message.author.id,
+                hasSeenTLauncherMessage: false,
+            };
+
+            user.hasSeenTLauncherMessage = true;
+            user.username = message.author.username;
+            user.discriminator = message.author.discriminator;
+
+            database.updateUserByID(message.author.id, user);
+
+            const embed = new Discord.RichEmbed()
+                .setTitle('TLauncher warning shown to user')
+                .setColor(COLOURS.YELLOW)
+                .setTimestamp(new Date().toISOString())
+                .addField(
+                    'User',
+                    `${message.author} (${message.author.username}#${message.author.discriminator})`,
+                    true,
+                )
+                .addField('Message', `\`\`\`${message.cleanContent.replace(/`/g, '\\`')}\`\`\``);
+
+            this.sendEmbedToModeratorLogsChannel(embed);
+        }
+    }
+
+    /**
      * This will send the given message to the moderator logs channel.
      *
      * @param {string} message
@@ -234,7 +288,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find(channel => channel.name === config.get('bot.moderator_channel'));
+        return this.bot.channels.find((channel) => channel.name === config.get('bot.moderator_channel'));
     }
 
     /**
@@ -311,7 +365,7 @@ class BaseModule {
         const filteredRoles = config
             .get('bot.bypass.roles')
             .some(
-                roleName =>
+                (roleName) =>
                     message.member &&
                     message.member.roles &&
                     message.member.roles.some(({ name }) => name === roleName),
