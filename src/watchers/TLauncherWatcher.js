@@ -21,7 +21,7 @@ class TLauncherWatcher extends BaseWatcher {
      * @type {boolean}
      * @memberof TLauncherWatcher
      */
-    usesBypassRules = false;
+    usesBypassRules = true;
 
     /**
      * The method this watcher should listen on.
@@ -46,9 +46,9 @@ class TLauncherWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        // if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
-        //     return;
-        // }
+        if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
+            return;
+        }
 
         if (
             messageToActUpon.cleanContent.match(/[^a]t ?launcher/i) !== null ||
