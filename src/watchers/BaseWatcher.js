@@ -14,6 +14,37 @@ class BaseWatcher extends BaseModule {
      * @memberof BaseWatcher
      */
     respondToAll = true;
+
+    /**
+     * If this watcher should only run on moderated channels.
+     *
+     * @type {boolean}
+     * @memberof TLauncherWatcher
+     */
+    onlyModeratedChannels = false;
+
+    /**
+     * This checks to see if this module should run for this message.
+     *
+     * @param {string} method
+     * @param {Message} message
+     * @param {Message|object} [updatedMessage={}]
+     * @returns {boolean}
+     * @memberof BaseModule
+     */
+    async shouldRun(method, message, updatedMessage = {}) {
+        let messageToActUpon = message;
+
+        if (method === 'messageUpdate') {
+            messageToActUpon = updatedMessage;
+        }
+
+        if (this.onlyModeratedChannels && !this.isAModeratedChannel(messageToActUpon.channel.name)) {
+            return false;
+        }
+
+        return super.shouldRun(method, message, updatedMessage);
+    }
 }
 
 export default BaseWatcher;

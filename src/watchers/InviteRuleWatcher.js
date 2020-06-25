@@ -24,6 +24,14 @@ class InviteRuleWatcher extends BaseWatcher {
     usesBypassRules = true;
 
     /**
+     * If this watcher should only run on moderated channels.
+     *
+     * @type {boolean}
+     * @memberof TLauncherWatcher
+     */
+    onlyModeratedChannels = true;
+
+    /**
      * The method this watcher should listen on.
      *
      * @type {string|string[]}
@@ -44,10 +52,6 @@ class InviteRuleWatcher extends BaseWatcher {
 
         if (method === 'messageUpdate') {
             messageToActUpon = updatedMessage;
-        }
-
-        if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
-            return;
         }
 
         if (messageToActUpon.cleanContent.match(/discord(?:\.gg|app\.com\/invite)\//i) !== null) {

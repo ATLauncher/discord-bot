@@ -28,6 +28,14 @@ class SameMessageSpamWatcher extends BaseWatcher {
     usesBypassRules = true;
 
     /**
+     * If this watcher should only run on moderated channels.
+     *
+     * @type {boolean}
+     * @memberof TLauncherWatcher
+     */
+    onlyModeratedChannels = true;
+
+    /**
      * The method this watcher should listen on.
      *
      * @type {string|string[]}
@@ -48,10 +56,6 @@ class SameMessageSpamWatcher extends BaseWatcher {
 
         if (method === 'messageUpdate') {
             messageToActUpon = updatedMessage;
-        }
-
-        if (!this.isAModeratedChannel(messageToActUpon.channel.name)) {
-            return;
         }
 
         const count = await database.countMessagesInLast(messageToActUpon.cleanContent, 30);
