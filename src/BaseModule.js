@@ -362,7 +362,7 @@ class BaseModule {
             return false;
         }
 
-        const filteredRoles = config
+        return config
             .get('bot.bypass.roles')
             .some(
                 (roleName) =>
@@ -370,8 +370,6 @@ class BaseModule {
                     message.member.roles &&
                     message.member.roles.some(({ name }) => name === roleName),
             );
-
-        return filteredRoles.length !== 0;
     }
 }
 
