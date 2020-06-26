@@ -55,7 +55,7 @@ class TLauncherWatcher extends BaseWatcher {
         }
 
         if (
-            messageToActUpon.cleanContent.match(/[^a]t ?launcher/i) !== null ||
+            messageToActUpon.cleanContent.match(/ t ?launcher/i) !== null ||
             messageToActUpon.cleanContent.match(/^t ?launcher/i) !== null
         ) {
             if (await this.hasUserSeenTLauncherMessage(messageToActUpon)) {
