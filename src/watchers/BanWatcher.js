@@ -35,7 +35,7 @@ class BanWatcher extends BaseWatcher {
             userToLog = `${user} (${user.username}#${user.discriminator})`;
         }
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle(`User ${unbanned ? 'unbanned' : 'banned'}`)
             .setColor(unbanned ? COLOURS.GREEN : COLOURS.RED)
             .setTimestamp(new Date().toISOString())

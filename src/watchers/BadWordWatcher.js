@@ -40,12 +40,14 @@ class BadWordWatcher extends BaseWatcher {
             messageToActUpon = updatedMessage;
         }
 
-        const rulesChannel = this.bot.channels.find(channel => channel.name === config.get('bot.rules_channel'));
+        const rulesChannel = this.bot.channels.cache.find(
+            (channel) => channel.name === config.get('bot.rules_channel'),
+        );
 
         const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
         const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
 
-        if (messageParts.some(word => config.get('bot.bad_words').includes(word))) {
+        if (messageParts.some((word) => config.get('bot.bad_words').includes(word))) {
             const warningMessage = await messageToActUpon.reply(
                 `Please read the ${rulesChannel} channel and don't be vulgar.`,
             );

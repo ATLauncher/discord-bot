@@ -23,8 +23,8 @@ class Bot {
         this.bot.on('ready', () => {
             logger.info('Bot started');
 
-            const botTestingChannel = this.bot.channels.find(
-                channel => channel.name === config.get('bot.bot_testing_channel'),
+            const botTestingChannel = this.bot.channels.cache.find(
+                (channel) => channel.name === config.get('bot.bot_testing_channel'),
             );
 
             if (botTestingChannel) {

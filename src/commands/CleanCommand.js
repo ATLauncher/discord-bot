@@ -59,7 +59,7 @@ class CleanCommand extends BaseCommand {
                     user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
                 }
 
-                const embed = new Discord.RichEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setTitle('Clean command run')
                     .setColor(COLOURS.YELLOW)
                     .setTimestamp(new Date().toISOString())

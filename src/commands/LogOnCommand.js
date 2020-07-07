@@ -53,7 +53,7 @@ class LogOnCommand extends BaseCommand {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle('Message deletion logging turned on')
             .setColor(COLOURS.GREEN)
             .setTimestamp(new Date().toISOString())

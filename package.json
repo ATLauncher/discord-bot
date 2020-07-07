@@ -41,29 +41,29 @@
     ]
   },
   "dependencies": {
-    "@sentry/node": "^5.6.1",
-    "aws-sdk": "^2.512.0",
-    "config": "^3.2.2",
-    "date-fns": "^1.30.1",
-    "discord.js": "^11.5.1",
+    "@sentry/node": "^5.19.0",
+    "aws-sdk": "^2.710.0",
+    "config": "^3.3.1",
+    "date-fns": "^2.14.0",
+    "discord.js": "^12.2.0",
     "nedb": "^1.8.0",
     "nedb-promise": "^2.0.1",
-    "winston": "^3.2.1",
-    "winston-logzio": "^5.0.1"
+    "winston": "^3.3.3",
+    "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.5.5",
-    "@babel/core": "^7.5.5",
-    "@babel/node": "^7.5.5",
-    "@babel/plugin-proposal-class-properties": "^7.5.5",
-    "@babel/preset-env": "^7.5.5",
-    "@commitlint/cli": "^8.1.0",
-    "@commitlint/config-conventional": "^8.1.0",
-    "cross-env": "^5.2.0",
-    "husky": "^3.0.4",
-    "lint-staged": "^9.2.3",
-    "nodemon": "^1.19.1",
-    "prettier": "^1.18.2",
-    "rimraf": "^3.0.0"
+    "@babel/cli": "^7.10.4",
+    "@babel/core": "^7.10.4",
+    "@babel/node": "^7.10.4",
+    "@babel/plugin-proposal-class-properties": "^7.10.4",
+    "@babel/preset-env": "^7.10.4",
+    "@commitlint/cli": "^9.0.1",
+    "@commitlint/config-conventional": "^9.0.1",
+    "cross-env": "^7.0.2",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.2.11",
+    "nodemon": "^2.0.4",
+    "prettier": "^2.0.5",
+    "rimraf": "^3.0.2"
   }
 }

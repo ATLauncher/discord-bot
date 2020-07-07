@@ -66,7 +66,7 @@ class DeleteWatcher extends BaseWatcher {
     action(method, message) {
         // check if we're getting a collection of messages or not
         if (method === 'messageDeleteBulk') {
-            message.forEach(value => {
+            message.forEach((value) => {
                 this.logMessage(value);
             });
         } else {
@@ -88,7 +88,7 @@ class DeleteWatcher extends BaseWatcher {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle('Message deleted')
             .setColor(COLOURS.RED)
             .setTimestamp(new Date().toISOString())

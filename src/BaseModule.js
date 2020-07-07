@@ -165,7 +165,7 @@ class BaseModule {
 
             database.updateUserByID(message.author.id, user);
 
-            const embed = new Discord.RichEmbed()
+            const embed = new Discord.MessageEmbed()
                 .setTitle('Warning added')
                 .setColor(COLOURS.YELLOW)
                 .setTimestamp(new Date().toISOString())
@@ -188,7 +188,7 @@ class BaseModule {
             } else if (user.warnings >= 3) {
                 message.member.kick('Not following the rules and accumulating 3 warnings');
 
-                const embed = new Discord.RichEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setTitle('User kicked')
                     .setColor(COLOURS.RED)
                     .setTimestamp(new Date().toISOString())
@@ -238,7 +238,7 @@ class BaseModule {
 
             database.updateUserByID(message.author.id, user);
 
-            const embed = new Discord.RichEmbed()
+            const embed = new Discord.MessageEmbed()
                 .setTitle('TLauncher warning shown to user')
                 .setColor(COLOURS.YELLOW)
                 .setTimestamp(new Date().toISOString())
@@ -288,7 +288,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     getModerationLogsChannel() {
-        return this.bot.channels.find((channel) => channel.name === config.get('bot.moderator_channel'));
+        return this.bot.channels.cache.find((channel) => channel.name === config.get('bot.moderator_channel'));
     }
 
     /**
@@ -300,7 +300,7 @@ class BaseModule {
     getModeratedChannels() {
         const moderatedChannels = config.get('bot.moderated_channels');
 
-        return this.bot.channels.filter(({ name }) => moderatedChannels.includes(name));
+        return this.bot.channels.cache.filter(({ name }) => moderatedChannels.includes(name));
     }
 
     /**
@@ -329,7 +329,7 @@ class BaseModule {
      * @memberof BaseModule
      */
     isFromChannel(message, channelName) {
-        const wantedChannel = this.bot.channels.find(({ name }) => name === channelName);
+        const wantedChannel = this.bot.channels.cache.find(({ name }) => name === channelName);
 
         if (!wantedChannel) {
             return false;
@@ -368,7 +368,7 @@ class BaseModule {
                 (roleName) =>
                     message.member &&
                     message.member.roles &&
-                    message.member.roles.some(({ name }) => name === roleName),
+                    message.member.roles.cache.some(({ name }) => name === roleName),
             );
     }
 }

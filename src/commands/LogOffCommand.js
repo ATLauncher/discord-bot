@@ -56,7 +56,7 @@ class LogOffCommand extends BaseCommand {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        const embed = new Discord.RichEmbed()
+        const embed = new Discord.MessageEmbed()
             .setTitle('Message deletion logging turned off')
             .setColor(COLOURS.RED)
             .setTimestamp(new Date().toISOString())
@@ -68,7 +68,7 @@ class LogOffCommand extends BaseCommand {
             setTimeout(async () => {
                 await database.updateSetting('logMessageDeletions', true);
 
-                const embed = new Discord.RichEmbed()
+                const embed = new Discord.MessageEmbed()
                     .setTitle('Message deletion logging turned on')
                     .setColor(COLOURS.GREEN)
                     .setTimestamp(new Date().toISOString())
