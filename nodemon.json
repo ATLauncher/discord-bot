@@ -4,5 +4,5 @@
     "src"
   ],
   "ext": "js,json",
-  "exec": "babel-node src"
+  "exec": "ts-node src"
 }

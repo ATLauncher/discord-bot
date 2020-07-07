@@ -39,7 +39,7 @@ class BaseWatcher extends BaseModule {
             messageToActUpon = updatedMessage;
         }
 
-        if (this.onlyModeratedChannels && !this.isAModeratedChannel(messageToActUpon.channel.name)) {
+        if (this.onlyModeratedChannels && !this.isAModeratedChannel(messageToActUpon.channel)) {
             return false;
         }
 

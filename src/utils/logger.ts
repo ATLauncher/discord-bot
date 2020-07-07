@@ -1,25 +1,27 @@
-import path from 'path';
-import config from 'config';
-import winston from 'winston';
+import * as path from 'path';
+import * as config from 'config';
+import * as winston from 'winston';
+import type Transport from 'winston-transport';
 import LogzioWinstonTransport from 'winston-logzio';
 
-import { isProductionEnvironment } from './utils';
+import { isProductionEnvironment } from './env';
 
 const hasLogzIoConfig = config.has('logging.logz_io_token');
+const isProduction = isProductionEnvironment();
 
 const logger = winston.createLogger({
     transports: [
-        !isProductionEnvironment() && new winston.transports.Console(),
+        !isProduction && new winston.transports.Console(),
         !hasLogzIoConfig &&
-            isProductionEnvironment() &&
+            isProduction &&
             new winston.transports.File({ filename: path.resolve(__dirname, '../logs/server.log') }),
         hasLogzIoConfig &&
-            isProductionEnvironment() &&
+            isProduction &&
             new LogzioWinstonTransport({
-                level: config.get('logging.level'),
-                token: config.get('logging.logz_io_token'),
+                level: config.get<string>('logging.level'),
+                token: config.get<string>('logging.logz_io_token'),
                 format: winston.format.combine(
-                    winston.format(info => ({
+                    winston.format((info) => ({
                         ...info,
 
                         nodejs: {
@@ -31,11 +33,11 @@ const logger = winston.createLogger({
                     winston.format.json(),
                 ),
             }),
-    ].filter(Boolean),
-    level: config.get('logging.level'),
+    ].filter(Boolean) as Transport[],
+    level: config.get<string>('logging.level'),
 });
 
-if (hasLogzIoConfig && isProductionEnvironment()) {
+if (hasLogzIoConfig && isProduction) {
     winston.remove(winston.transports.Console);
 }
 

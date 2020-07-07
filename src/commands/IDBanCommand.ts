@@ -53,7 +53,7 @@ class IDBanCommand extends BaseCommand {
 
         const splitIDs = ids.split(' ');
 
-        splitIDs.forEach(id => {
+        splitIDs.forEach((id) => {
             message.guild.ban(id, 1);
 
             message.channel.send(`User with ID of '${id}' has been banned.`);

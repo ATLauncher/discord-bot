@@ -1,4 +1,4 @@
-import fs from 'fs';
+import * as fs from 'fs';
 
 /**
  * The watcher bus loads all the watchers and sets up the listeners and any configuration.
@@ -15,7 +15,7 @@ class WatcherBus {
     constructor(bot) {
         this.bot = bot;
         this.watchers = {};
-        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter(file => file !== 'BaseWatcher.js');
+        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => file !== 'BaseWatcher.js');
 
         this.loadWatchers();
         this.setupWatcherListeners();
@@ -30,14 +30,14 @@ class WatcherBus {
         let loadedWatchers = [];
 
         // instantiate all the commands
-        loadedWatchers = this.watcherFiles.map(watcherFile => {
+        loadedWatchers = this.watcherFiles.map((watcherFile) => {
             const watcherClass = require(`${__dirname}/watchers/${watcherFile}`);
 
             return new watcherClass.default(this.bot);
         });
 
         // remove any non active commands
-        loadedWatchers = loadedWatchers.filter(watcher => watcher.enabled);
+        loadedWatchers = loadedWatchers.filter((watcher) => watcher.enabled);
 
         // sort by priority
         loadedWatchers.sort((a, b) => {
@@ -53,14 +53,14 @@ class WatcherBus {
         });
 
         // group the commands by method
-        loadedWatchers.forEach(watcher => {
+        loadedWatchers.forEach((watcher) => {
             let watcherMethods = [watcher.method];
 
             if (Array.isArray(watcher.method)) {
                 watcherMethods = watcher.method;
             }
 
-            watcherMethods.forEach(watcherMethod => {
+            watcherMethods.forEach((watcherMethod) => {
                 if (!this.watchers.hasOwnProperty(watcherMethod)) {
                     this.watchers[watcherMethod] = [];
                 }
@@ -76,9 +76,9 @@ class WatcherBus {
      * @memberof WatcherBus
      */
     setupWatcherListeners() {
-        Object.keys(this.watchers).forEach(method => {
+        Object.keys(this.watchers).forEach((method) => {
             this.bot.on(method, (...args) => {
-                this.watchers[method].forEach(async watcher => {
+                this.watchers[method].forEach(async (watcher) => {
                     if (await watcher.shouldRun(method, ...args)) {
                         watcher.action(method, ...args);
                     }

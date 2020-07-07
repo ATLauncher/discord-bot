@@ -1,10 +1,12 @@
-export const COLOURS = {
+import type { PermissionString, ColorResolvable } from 'discord.js';
+
+export const COLOURS: { [name: string]: ColorResolvable } = {
     GREEN: 4289797,
     RED: 13632027,
     YELLOW: 16098851,
 };
 
-export const PERMISSIONS = {
+export const PERMISSIONS: { [name: string]: PermissionString } = {
     CREATE_INSTANT_INVITE: 'CREATE_INSTANT_INVITE',
     KICK_MEMBERS: 'KICK_MEMBERS',
     BAN_MEMBERS: 'BAN_MEMBERS',
@@ -16,7 +18,7 @@ export const PERMISSIONS = {
     PRIORITY_SPEAKER: 'PRIORITY_SPEAKER',
 
     VIEW_CHANNEL: 'VIEW_CHANNEL',
-    READ_MESSAGES: 'READ_MESSAGES',
+    READ_MESSAGE_HISTORY: 'READ_MESSAGE_HISTORY',
     SEND_MESSAGES: 'SEND_MESSAGES',
     SEND_TTS_MESSAGES: 'SEND_TTS_MESSAGES',
     MANAGE_MESSAGES: 'MANAGE_MESSAGES',

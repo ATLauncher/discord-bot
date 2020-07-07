@@ -19,12 +19,12 @@
   },
   "homepage": "https://github.com/ATLauncher/Discord-Bot#readme",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "tsc",
     "clean": "rimraf dist",
-    "config:base64": "babel-node utils/stringifyConfig.js",
+    "config:base64": "ts-node utils/stringifyConfig.ts",
     "dev": "cross-env NODE_ENV=development nodemon",
-    "format": "prettier --write \"src/**/*.js\"",
-    "oauth:url": "babel-node utils/getOAuthUrl.js",
+    "oauth:url": "ts-node utils/getOAuthUrl.ts",
+    "postinstall": "patch-package",
     "start": "node dist",
     "test": "echo 'Error: no tests written :( bad dev'"
   },
@@ -35,35 +35,34 @@
     }
   },
   "lint-staged": {
-    "src/**/*.js": [
+    "{src,utils}/**/*.ts": [
       "prettier --write",
       "git add"
     ]
   },
   "dependencies": {
     "@sentry/node": "^5.19.0",
-    "aws-sdk": "^2.710.0",
     "config": "^3.3.1",
     "date-fns": "^2.14.0",
     "discord.js": "^12.2.0",
     "nedb": "^1.8.0",
-    "nedb-promise": "^2.0.1",
+    "nedb-promises": "^4.0.3",
     "winston": "^3.3.3",
     "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.10.4",
-    "@babel/core": "^7.10.4",
-    "@babel/node": "^7.10.4",
-    "@babel/plugin-proposal-class-properties": "^7.10.4",
-    "@babel/preset-env": "^7.10.4",
     "@commitlint/cli": "^9.0.1",
     "@commitlint/config-conventional": "^9.0.1",
+    "@types/config": "0.0.36",
+    "@types/node": "^14.0.18",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
     "lint-staged": "^10.2.11",
     "nodemon": "^2.0.4",
+    "patch-package": "^6.2.2",
     "prettier": "^2.0.5",
-    "rimraf": "^3.0.2"
+    "rimraf": "^3.0.2",
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.6"
   }
 }

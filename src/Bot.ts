@@ -1,12 +1,17 @@
-import config from 'config';
-import Discord from 'discord.js';
+import * as config from 'config';
+import * as Discord from 'discord.js';
 
 import CommandBus from './CommandBus';
 import WatcherBus from './WatcherBus';
 
-import logger from './logger';
+import logger from './utils/logger';
 
 class Bot {
+    public bot: Discord.Client;
+
+    private commandBus: CommandBus | undefined;
+    private watcherBus: WatcherBus | undefined;
+
     constructor() {
         this.bot = new Discord.Client();
 
@@ -20,22 +25,25 @@ class Bot {
      */
     setupBot() {
         logger.debug('Setting bot up');
+
         this.bot.on('ready', () => {
             logger.info('Bot started');
 
             const botTestingChannel = this.bot.channels.cache.find(
-                (channel) => channel.name === config.get('bot.bot_testing_channel'),
+                ({ id }) => id === config.get<string>('channels.moderationLogs'),
             );
 
             if (botTestingChannel) {
-                botTestingChannel.send("I've restarted, just FYI");
+                (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
             }
         });
     }
 
     reloadCommandBus() {
         logger.debug('Reloading command bus');
+
         delete this.commandBus;
+
         this.setupCommandBus();
     }
 
@@ -44,6 +52,7 @@ class Bot {
      */
     setupCommandBus() {
         logger.debug('Setting command bus up');
+
         this.commandBus = new CommandBus(this.bot);
     }
 
@@ -52,6 +61,7 @@ class Bot {
      */
     setupWatcherBus() {
         logger.debug('Setting watcher bus up');
+
         this.watcherBus = new WatcherBus(this.bot);
     }
 
@@ -60,7 +70,8 @@ class Bot {
      */
     async start() {
         logger.debug('Starting bot');
-        await this.bot.login(config.get('discord.client_token'));
+
+        await this.bot.login(config.get<string>('discord.client_token'));
     }
 }
 

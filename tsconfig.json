@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "lib": [
+            "es2020"
+        ],
+        "module": "commonjs",
+        "target": "es2019",
+        "outDir": "dist",
+        "moduleResolution": "node",
+        "noImplicitAny": true,
+        "alwaysStrict": true,
+        "strict": true,
+        "sourceMap": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "declaration": true,
+        "importHelpers": true,
+        "forceConsistentCasingInFileNames": true,
+        "esModuleInterop": true
+    },
+    "exclude": [
+        "dist",
+        "node_modules"
+    ]
+}
