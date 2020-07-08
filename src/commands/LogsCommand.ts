@@ -1,3 +1,5 @@
+import * as Discord from 'discord.js';
+
 import BaseCommand from './BaseCommand';
 
 /**
@@ -5,30 +7,15 @@ import BaseCommand from './BaseCommand';
  */
 class LogsCommand extends BaseCommand {
     /**
-     * This event method we should listen for.
-     *
-     * @type {string}
-     * @memberof LogsCommand
-     */
-    method = 'message';
-
-    /**
      * The pattern to match against. If the message matches this pattern then we will respond to it with the action
      * method.
-     *
-     * @type {RegExp}
-     * @memberof LogsCommand
      */
     pattern = /^!logs\s/;
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} action
-     * @param {Message} message
-     * @memberof LogsCommand
      */
-    async action(action, message) {
+    async execute(message: Discord.Message) {
         const user = message.mentions.users.first() || '';
 
         const userPre = user ? ' ' : '';
@@ -44,7 +31,7 @@ class LogsCommand extends BaseCommand {
         message.delete();
 
         // delete message after 24 hours
-        sentMessage.delete(60 * 60 * 24 * 1000);
+        sentMessage.delete({ timeout: 60 * 60 * 24 * 1000 });
 
         await sentMessage.react('🇱');
         await sentMessage.react('🇴');

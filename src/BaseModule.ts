@@ -1,4 +1,4 @@
-import * as config from 'config';
+import config from 'config';
 import * as Discord from 'discord.js';
 
 import * as database from './utils/db';
@@ -9,23 +9,21 @@ import type { User as DBUser } from './utils/db';
 /**
  * This is the base module class. A module is either a command or a watcher.
  */
-class BaseModule {
+abstract class BaseModule {
     /**
-     * The instance of the main Bot.
+     * The instance of the Discord client.
      */
-    bot: Discord.Client;
+    client: Discord.Client;
+
+    /**
+     * The events that this module should react to.
+     */
+    abstract methods: Array<keyof Discord.ClientEvents>;
 
     /**
      * The pattern that a command responds to.
      */
-    pattern: RegExp | undefined;
-
-    /**
-     * Creates an instance of BaseModule.
-     */
-    constructor(bot: Discord.Client) {
-        this.bot = bot;
-    }
+    pattern?: RegExp;
 
     /**
      * If this module is enabled or not.
@@ -56,6 +54,21 @@ class BaseModule {
      * The permissions the user requires in order to use this command.
      */
     permissions: Discord.PermissionResolvable[] = [];
+
+    /**
+     * Creates an instance of BaseModule.
+     */
+    constructor(client: Discord.Client) {
+        this.client = client;
+    }
+
+    /**
+     * The action to take when this module is invoked.
+     */
+    abstract async action(
+        action: keyof Discord.ClientEvents,
+        ...args: Discord.ClientEvents[keyof Discord.ClientEvents]
+    ): Promise<void>;
 
     /**
      * Checks to see if this message matches or not. If it returns true then we should act upon this message.
@@ -114,7 +127,7 @@ class BaseModule {
     /**
      * This adds a warning to a user. 3rd and 4th warning will result in a kick, 5th warning will result in a ban.
      */
-    async addWarningToUser(message: Discord.Message): Promise<void> {
+    async addWarningToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
         if (message.author) {
             let user: DBUser = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
@@ -149,7 +162,7 @@ class BaseModule {
                 message.member?.ban({
                     days: 1,
                     reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.get<string>(
-                        'bot.appeal_url',
+                        'appealUrl',
                     )}`,
                 });
             } else if (user.warnings >= 3) {
@@ -172,7 +185,7 @@ class BaseModule {
     /**
      * Checks to see if the user has seen the TLauncher warning message.
      */
-    async hasUserSeenTLauncherMessage(message: Discord.Message): Promise<boolean> {
+    async hasUserSeenTLauncherMessage(message: Discord.Message | Discord.PartialMessage): Promise<boolean> {
         if (message.author) {
             let user: DBUser = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
@@ -189,7 +202,7 @@ class BaseModule {
      * This adds a flag to a user that they've seen the message regarding support for TLauncher. This is so we don't
      * show it more than once, just incase the bot is not understanding correctly.
      */
-    async addHasSeenTLauncherMessageToUser(message: Discord.Message): Promise<void> {
+    async addHasSeenTLauncherMessageToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
         if (message.author) {
             let user = (await database.findUserByID(message.author.id)) || {
                 id: message.author.id,
@@ -212,7 +225,7 @@ class BaseModule {
                         `${message.author} (${message.author.username}#${message.author.discriminator})`,
                         true,
                     )
-                    .addField('Message', `\`\`\`${message.cleanContent.replace(/`/g, '\\`')}\`\`\``),
+                    .addField('Message', `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``),
             );
         }
     }
@@ -243,7 +256,7 @@ class BaseModule {
      * This gets the channel object for the moderator channel in the config.
      */
     getModerationLogsChannel(): Discord.TextChannel | undefined {
-        return this.bot.channels.cache.find(
+        return this.client.channels.cache.find(
             ({ id }) => id === config.get<string>('channels.moderationLogs'),
         ) as Discord.TextChannel;
     }
@@ -252,14 +265,14 @@ class BaseModule {
      * Checks to see if the given channel is a moderated channel.
      */
     isAModeratedChannel(channel: Discord.Channel): boolean {
-        return config.get<string[]>('bot.moderatedChannels')?.some((id) => id === channel.id);
+        return config.get<string[]>('moderatedChannels')?.some((id) => id === channel.id);
     }
 
     /**
      * This will check the message to see if the author has one of the bypass roles.
      */
     hasBypassRole(message: Discord.Message) {
-        const roles = config.get<string[]>('bot.bypass.roles');
+        const roles = config.get<string[]>('bypass.roles');
 
         if (roles?.length) {
             return message.member?.roles.cache.some(({ id }) => roles.some((roleId) => roleId === id));

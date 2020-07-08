@@ -1,33 +1,23 @@
+import * as Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people spamming links.
- *
- * @class LinkSpamWatcher
- * @extends {BaseWatcher}
  */
 class LinkSpamWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof LinkSpamWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof LinkSpamWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The links that this watcher should remove.
-     *
-     * @type {string[]}
-     * @memberof LinkSpamWatcher
      */
     links = [
         'giftsofsteam.com',
@@ -56,30 +46,23 @@ class LinkSpamWatcher extends BaseWatcher {
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof LinkSpamWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+            if (this.links.some((string) => cleanMessage.includes(string))) {
+                const warningMessage = await message.reply(
+                    'This link is not allowed to be posted as it is a known hoax/spam/scam.',
+                );
 
-        if (this.links.some((string) => cleanMessage.includes(string))) {
-            const warningMessage = await messageToActUpon.reply(
-                'This link is not allowed to be posted as it is a known hoax/spam/scam.',
-            );
+                this.addWarningToUser(message);
 
-            this.addWarningToUser(messageToActUpon);
-
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+                message.delete({ reason: 'Posting spam link' });
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

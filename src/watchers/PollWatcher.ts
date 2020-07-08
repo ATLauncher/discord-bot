@@ -1,63 +1,48 @@
 import config from 'config';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people spamming links.
- *
- * @class PollWatcher
- * @extends {BaseWatcher}
  */
 class PollWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof PollWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof PollWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof PollWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+            if (
+                cleanMessage.toLowerCase().includes('strawpoll.me') ||
+                cleanMessage.toLowerCase().includes('strawpoll.com')
+            ) {
+                const rulesChannel = this.client.channels.cache.find(
+                    (channel) => channel.id === config.get('channels.rules'),
+                );
 
-        if (
-            cleanMessage.toLowerCase().includes('strawpoll.me') ||
-            cleanMessage.toLowerCase().includes('strawpoll.com')
-        ) {
-            const rulesChannel = this.bot.channels.cache.find(
-                (channel) => channel.name === config.get('bot.rules_channel'),
-            );
+                const warningMessage = await message.reply(
+                    `Please read the ${rulesChannel}. Polls are not allowed without permission.`,
+                );
 
-            const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel}. Polls are not allowed without permission.`,
-            );
+                this.addWarningToUser(message);
 
-            this.addWarningToUser(messageToActUpon);
-
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+                message.delete({ reason: 'Posting poll' });
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

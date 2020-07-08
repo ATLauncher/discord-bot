@@ -1,21 +1,35 @@
 import fs from 'fs';
+import * as Discord from 'discord.js';
+
+import BaseCommand from './commands/BaseCommand';
+import logger from './utils/logger';
 
 /**
  * The command bus loads all the commands and sets up the listeners and any configuration.
- *
- * @class CommandBus
  */
 class CommandBus {
     /**
-     * Creates an instance of CommandBus.
-     *
-     * @param {Client} bot
-     * @memberof CommandBus
+     * The instance of the Discord client.
      */
-    constructor(bot) {
-        this.bot = bot;
+    client: Discord.Client;
+
+    /**
+     * List of commands and the client events they respond to.
+     */
+    commands: { [action in keyof Discord.ClientEvents]?: BaseCommand[] };
+
+    /**
+     * List of command filenames.
+     */
+    commandFiles: string[];
+
+    /**
+     * Creates an instance of CommandBus.
+     */
+    constructor(client: Discord.Client) {
+        this.client = client;
         this.commands = {};
-        this.commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => file !== 'BaseCommand.js');
+        this.commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => !file.startsWith('BaseCommand.'));
 
         this.loadCommands();
         this.setupCommandListeners();
@@ -23,17 +37,16 @@ class CommandBus {
 
     /**
      * This will load all the commands in the commands directory.
-     *
-     * @memberof CommandBus
      */
     loadCommands() {
-        let loadedCommands = [];
+        let loadedCommands: BaseCommand[] = [];
 
         // instantiate all the commands
         loadedCommands = this.commandFiles.map((commandFile) => {
-            const commandClass = require(`${__dirname}/commands/${commandFile}`);
+            logger.debug(`Loading command ${commandFile}`);
+            const CommandClass = require(`${__dirname}/commands/${commandFile}`).default;
 
-            return new commandClass.default(this.bot);
+            return new CommandClass(this.client);
         });
 
         // remove any non active commands
@@ -41,25 +54,28 @@ class CommandBus {
 
         // group the commands by method
         loadedCommands.forEach((command) => {
-            if (!this.commands.hasOwnProperty(command.method)) {
-                this.commands[command.method] = [];
-            }
+            command.methods.forEach((method) => {
+                if (!this.commands[method]) {
+                    this.commands[method] = [command];
+                }
 
-            this.commands[command.method].push(command);
+                this.commands[method]?.push(command);
+            });
         });
     }
 
     /**
      * This will setup all the command listeners and register them with the bot.
-     *
-     * @memberof CommandBus
      */
     setupCommandListeners() {
         Object.keys(this.commands).forEach((method) => {
-            this.bot.on(method, (...args) => {
-                const command = this.commands[method].find((c) => c.matches(...args));
+            this.client.on(method as keyof Discord.ClientEvents, (...args) => {
+                // @ts-ignore different ClientEvents have different args layout, so this type isn't safe
+                const command = this.commands[method as keyof Discord.ClientEvents]?.find((c) => c.matches(...args));
 
+                // @ts-ignore
                 if (command && command.shouldRun(method, ...args)) {
+                    // @ts-ignore
                     command.action(method, ...args);
                 }
             });

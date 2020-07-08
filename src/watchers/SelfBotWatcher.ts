@@ -1,60 +1,45 @@
 import config from 'config';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people using self bots.
- *
- * @class SelfBotWatcher
- * @extends {BaseWatcher}
  */
 class SelfBotWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof SelfBotWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof SelfBotWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof SelfBotWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
-
-        const rulesChannel = this.bot.channels.cache.find(
-            (channel) => channel.name === config.get('bot.rules_channel'),
-        );
-
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
-
-        if (cleanMessage.toLowerCase().startsWith('self.')) {
-            const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`,
+        if (message.cleanContent) {
+            const rulesChannel = this.client.channels.cache.find(
+                (channel) => channel.id === config.get('channels.rules'),
             );
 
-            this.addWarningToUser(messageToActUpon);
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+            if (cleanMessage.toLowerCase().startsWith('self.')) {
+                const warningMessage = await message.reply(
+                    `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`,
+                );
+
+                this.addWarningToUser(message);
+
+                message.delete({ reason: 'Selfbots not allowed' });
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

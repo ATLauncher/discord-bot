@@ -1,3 +1,5 @@
+import * as Discord from 'discord.js';
+
 import BaseCommand from './BaseCommand';
 
 /**
@@ -5,30 +7,15 @@ import BaseCommand from './BaseCommand';
  */
 class UpdateCommand extends BaseCommand {
     /**
-     * This event method we should listen for.
-     *
-     * @type {string}
-     * @memberof UpdateCommand
-     */
-    method = 'message';
-
-    /**
      * The pattern to match against. If the message matches this pattern then we will respond to it with the action
      * method.
-     *
-     * @type {RegExp}
-     * @memberof UpdateCommand
      */
     pattern = /^!update\s/;
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} action
-     * @param {Message} message
-     * @memberof UpdateCommand
      */
-    async action(action, message) {
+    async execute(message: Discord.Message) {
         const user = message.mentions.users.first() || '';
 
         const userPre = user ? ' ' : '';

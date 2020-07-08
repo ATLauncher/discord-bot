@@ -1,62 +1,42 @@
 import config from 'config';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people saying bad words.
- *
- * @class BadWordWatcher
- * @extends {BaseWatcher}
  */
 class BadWordWatcher extends BaseWatcher {
     /**
-     * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof BadWordWatcher
+     * The methoda this watcher should listen on.
      */
-    usesBypassRules = false;
-
-    /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof BadWordWatcher
-     */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * Run the watcher with the given parameters.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof BadWordWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const cleanMessage = message.cleanContent.toLowerCase();
+            const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
 
-        const rulesChannel = this.bot.channels.cache.find(
-            (channel) => channel.name === config.get('bot.rules_channel'),
-        );
+            if (messageParts.some((word) => config.get<string[]>('badWords').includes(word))) {
+                const rulesChannel = this.client.channels.cache.find(
+                    (channel) => channel.id === config.get<string>('channels.rules'),
+                );
 
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
-        const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
+                const warningMessage = await message.reply(
+                    `Please read the ${rulesChannel} channel and don't be vulgar.`,
+                );
 
-        if (messageParts.some((word) => config.get('bot.bad_words').includes(word))) {
-            const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel} channel and don't be vulgar.`,
-            );
+                this.addWarningToUser(message);
 
-            this.addWarningToUser(messageToActUpon);
+                message.delete({ reason: 'Being vulgar' });
 
-            messageToActUpon.delete();
-
-            warningMessage.delete(60000);
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

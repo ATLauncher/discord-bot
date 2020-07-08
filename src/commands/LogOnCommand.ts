@@ -1,49 +1,28 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
-import { COLOURS, PERMISSIONS } from '../constants';
-import * as database from '../db';
+import { COLOURS, PERMISSIONS } from '../constants/discord';
+import * as database from '../utils/db';
 
 /**
  * This will turn message deletion logging on.
- *
- * @class LogOnCommand
- * @extends {BaseCommand}
  */
 class LogOnCommand extends BaseCommand {
     /**
-     * This event method we should listen for.
-     *
-     * @type {string}
-     * @memberof LogOnCommand
-     */
-    method = 'message';
-
-    /**
      * The pattern to match against. If the message matches this pattern then we will respond to it with the action
      * method.
-     *
-     * @type {RegExp}
-     * @memberof LogOnCommand
      */
     pattern = /^!logon/;
 
     /**
      * The permissions the user requires in order to use this command.
-     *
-     * @type {String[]}
-     * @memberof LogOnCommand
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} action
-     * @param {Message} message
-     * @memberof LogOnCommand
      */
-    async action(action, message) {
+    async execute(message: Discord.Message) {
         await message.delete();
         await database.updateSetting('logMessageDeletions', true);
 
@@ -56,7 +35,7 @@ class LogOnCommand extends BaseCommand {
         const embed = new Discord.MessageEmbed()
             .setTitle('Message deletion logging turned on')
             .setColor(COLOURS.GREEN)
-            .setTimestamp(new Date().toISOString())
+            .setTimestamp(new Date())
             .addField('User', user, true);
 
         this.sendEmbedToModeratorLogsChannel(embed);

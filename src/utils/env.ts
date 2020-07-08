@@ -1,4 +1,4 @@
-import * as config from 'config';
+import config from 'config';
 
 const nodeEnv = config.util.getEnv('NODE_ENV');
 

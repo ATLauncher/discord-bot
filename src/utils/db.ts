@@ -18,9 +18,9 @@ export interface Message {
     timestamp: string;
 }
 
-export interface Setting {
-    name: string;
-    value: string;
+export interface Setting<T> {
+    name: T;
+    value: T;
 }
 
 export interface User {
@@ -89,12 +89,12 @@ export const countMessagesInLast = async (message: string, seconds = 30): Promis
 /**
  * This will get a setting by the given name.
  */
-export const getSetting = async (name: string, defaultValue: string): Promise<string> => {
+export const getSetting = async <T = string>(name: string, defaultValue: T): Promise<T> => {
     if (!(await databases.settings.count({ name }))) {
         return defaultValue;
     }
 
-    const setting = await databases.settings.findOne<Setting>({ name });
+    const setting = await databases.settings.findOne<Setting<T>>({ name });
 
     return setting.value;
 };
@@ -102,7 +102,7 @@ export const getSetting = async (name: string, defaultValue: string): Promise<st
 /**
  * This will update a setting in the DB, upserting it if it doesn't exist.
  */
-export const updateSetting = (name: string, value: string): Promise<Setting> => {
+export const updateSetting = <T = string>(name: string, value: T): Promise<Setting<T>> => {
     return databases.settings.update(
         { name },
         {

@@ -1,76 +1,56 @@
+import * as Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watches for people posting Discord invite links.
- *
- * @class TLauncherWatcher
- * @extends {BaseWatcher}
  */
 class TLauncherWatcher extends BaseWatcher {
     /**
      * If this watcher should run on bots or not.
-     *
-     * @type {boolean}
-     * @memberof TLauncherWatcher
      */
     shouldRunOnBots = false;
 
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof TLauncherWatcher
      */
     usesBypassRules = true;
 
     /**
      * If this watcher should only run on moderated channels.
-     *
-     * @type {boolean}
-     * @memberof TLauncherWatcher
      */
     onlyModeratedChannels = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof TLauncherWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof TLauncherWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            if (
+                message.cleanContent.match(/ t ?launcher/i) !== null ||
+                message.cleanContent.match(/^t ?launcher/i) !== null
+            ) {
+                if (await this.hasUserSeenTLauncherMessage(message)) {
+                    return;
+                }
 
-        if (
-            messageToActUpon.cleanContent.match(/ t ?launcher/i) !== null ||
-            messageToActUpon.cleanContent.match(/^t ?launcher/i) !== null
-        ) {
-            if (await this.hasUserSeenTLauncherMessage(messageToActUpon)) {
-                return;
+                const warningMessage = await message.reply(
+                    'This is the Discord for ATLauncher. We only support ATLauncher here and no other launchers or cracked accounts. If you need support with another launcher, please visit their support channels.',
+                );
+
+                this.addWarningToUser(message);
+                this.addHasSeenTLauncherMessageToUser(message);
+
+                message.delete({ reason: 'Asking for TLauncher help' });
+                warningMessage.delete({ timeout: 60000 });
             }
-
-            const warningMessage = await messageToActUpon.reply(
-                'This is the Discord for ATLauncher. We only support ATLauncher here and no other launchers or cracked accounts. If you need support with another launcher, please visit their support channels.',
-            );
-
-            this.addWarningToUser(messageToActUpon);
-            this.addHasSeenTLauncherMessageToUser(messageToActUpon);
-
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
         }
     }
 }

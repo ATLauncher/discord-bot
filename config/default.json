@@ -2,22 +2,24 @@
   "logging": {
     "level": "info"
   },
-  "bot": {
-    "moderator_channel": "moderation-logs",
-    "support_channel": "support",
-    "rules_channel": "rules",
-    "bot_testing_channel": "bot-testing",
-    "non_support_channels": [],
-    "moderated_channels": [],
-    "appeal_url": "https://google.com",
-    "bypass": {
-      "roles": [],
-      "users": []
-    },
-    "bad_words": []
-  },
   "discord": {
-    "client_id": "",
-    "client_token": ""
-  }
+    "clientId": "",
+    "clientToken": ""
+  },
+  "channels": {
+    "rules": "123456789012345678"
+  },
+  "noSupportChannels": [
+    "123456789012345678"
+  ],
+  "moderatedChannels": [
+    "123456789012345678"
+  ],
+  "appealUrl": "https://google.com",
+  "bypass": {
+    "roles": [
+      "123456789012345678"
+    ]
+  },
+  "badWords": []
 }

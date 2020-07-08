@@ -1,7 +1,7 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
-import { COLOURS, PERMISSIONS } from '../constants';
+import { COLOURS, PERMISSIONS } from '../constants/discord';
 
 /**
  * This will clean the last x messages from the current channel.
@@ -11,38 +11,20 @@ import { COLOURS, PERMISSIONS } from '../constants';
  */
 class CleanCommand extends BaseCommand {
     /**
-     * This event method we should listen for.
-     *
-     * @type {string}
-     * @memberof CleanCommand
-     */
-    method = 'message';
-
-    /**
      * The pattern to match against. If the message matches this pattern then we will respond to it with the action
      * method.
-     *
-     * @type {RegExp}
-     * @memberof CleanCommand
      */
     pattern = /^!clean/;
 
     /**
      * The permissions the user requires in order to use this command.
-     *
-     * @type {String[]}
-     * @memberof CleanCommand
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} action
-     * @param {Message} message
-     * @memberof CleanCommand
      */
-    async action(action, message) {
+    async execute(message: Discord.Message) {
         await message.delete();
 
         const input = message.cleanContent.substr(7);
@@ -62,7 +44,7 @@ class CleanCommand extends BaseCommand {
                 const embed = new Discord.MessageEmbed()
                     .setTitle('Clean command run')
                     .setColor(COLOURS.YELLOW)
-                    .setTimestamp(new Date().toISOString())
+                    .setTimestamp(new Date())
                     .addField('User', user, true)
                     .addField('Channel', message.channel, true)
                     .addField('Lines', linesToClean, true);

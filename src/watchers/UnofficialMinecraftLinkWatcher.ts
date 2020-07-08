@@ -1,33 +1,23 @@
+import * as Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people using links to unofficial Minecraft links.
- *
- * @class UnofficialMinecraftLinkWatcher
- * @extends {BaseWatcher}
  */
 class UnofficialMinecraftLinkWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof UnofficialMinecraftLinkWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof UnofficialMinecraftLinkWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The links that this watcher should remove.
-     *
-     * @type {string[]}
-     * @memberof UnofficialMinecraftLinkWatcher
      */
     links = [
         '0x10c-zone.ru',
@@ -379,31 +369,24 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof UnofficialMinecraftLinkWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+            if (this.links.some((string) => cleanMessage.includes(string))) {
+                const warningMessage = await message.reply(
+                    "This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use " +
+                        'Minecraft Forums or Curse for mod downloads.',
+                );
 
-        if (this.links.some((string) => cleanMessage.includes(string))) {
-            const warningMessage = await messageToActUpon.reply(
-                "This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use " +
-                    'Minecraft Forums or Curse for mod downloads.',
-            );
+                this.addWarningToUser(message);
 
-            this.addWarningToUser(messageToActUpon);
-
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+                message.delete({ reason: 'Posting link to known bad Minecraft site' });
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

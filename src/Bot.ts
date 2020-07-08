@@ -1,4 +1,4 @@
-import * as config from 'config';
+import config from 'config';
 import * as Discord from 'discord.js';
 
 import CommandBus from './CommandBus';
@@ -71,7 +71,7 @@ class Bot {
     async start() {
         logger.debug('Starting bot');
 
-        await this.bot.login(config.get<string>('discord.client_token'));
+        await this.bot.login(config.get<string>('discord.clientToken'));
     }
 }
 

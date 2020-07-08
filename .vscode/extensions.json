@@ -2,7 +2,7 @@
     "recommendations": [
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
-        "mauve.terraform",
+        "hashicorp.terraform",
         "vscoss.vscode-ansible"
     ]
 }

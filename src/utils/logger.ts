@@ -1,12 +1,12 @@
 import * as path from 'path';
-import * as config from 'config';
+import config from 'config';
 import * as winston from 'winston';
 import type Transport from 'winston-transport';
 import LogzioWinstonTransport from 'winston-logzio';
 
 import { isProductionEnvironment } from './env';
 
-const hasLogzIoConfig = config.has('logging.logz_io_token');
+const hasLogzIoConfig = config.has('logging.logzIoToken');
 const isProduction = isProductionEnvironment();
 
 const logger = winston.createLogger({
@@ -19,7 +19,7 @@ const logger = winston.createLogger({
             isProduction &&
             new LogzioWinstonTransport({
                 level: config.get<string>('logging.level'),
-                token: config.get<string>('logging.logz_io_token'),
+                token: config.get<string>('logging.logzIoToken'),
                 format: winston.format.combine(
                     winston.format((info) => ({
                         ...info,

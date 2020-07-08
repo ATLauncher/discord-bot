@@ -1,33 +1,23 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
-import { COLOURS } from '../constants';
+import { COLOURS } from '../constants/discord';
 
 /**
  * Watcher to detect when bans have been added or removed
- *
- * @class BanWatcher
- * @extends {BaseWatcher}
  */
 class BanWatcher extends BaseWatcher {
     /**
-     * The method/s this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof BanWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['guildBanAdd', 'guildBanRemove'];
+    methods: Array<keyof Discord.ClientEvents> = ['guildBanAdd', 'guildBanRemove'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Guild} guild
-     * @param {User} user
-     * @memberof BanWatcher
      */
-    action(method, guild, user) {
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['guildBanAdd' | 'guildBanRemove']) {
         const unbanned = method === 'guildBanRemove';
+        const [guild, user] = args;
 
         let userToLog = 'Unknown';
 
@@ -38,7 +28,7 @@ class BanWatcher extends BaseWatcher {
         const embed = new Discord.MessageEmbed()
             .setTitle(`User ${unbanned ? 'unbanned' : 'banned'}`)
             .setColor(unbanned ? COLOURS.GREEN : COLOURS.RED)
-            .setTimestamp(new Date().toISOString())
+            .setTimestamp(new Date())
             .addField('User', userToLog);
 
         this.sendEmbedToModeratorLogsChannel(embed);

@@ -1,21 +1,35 @@
 import * as fs from 'fs';
+import * as Discord from 'discord.js';
+
+import BaseWatcher from './watchers/BaseWatcher';
+import logger from './utils/logger';
 
 /**
  * The watcher bus loads all the watchers and sets up the listeners and any configuration.
- *
- * @class WatcherBus
  */
 class WatcherBus {
     /**
-     * Creates an instance of WatcherBus.
-     *
-     * @param {Client} bot
-     * @memberof WatcherBus
+     * The instance of the Discord client.
      */
-    constructor(bot) {
-        this.bot = bot;
+    client: Discord.Client;
+
+    /**
+     * List of watchers and the client events they respond to.
+     */
+    watchers: { [action in keyof Discord.ClientEvents]?: BaseWatcher[] };
+
+    /**
+     * List of watcher filenames.
+     */
+    watcherFiles: string[];
+
+    /**
+     * Creates an instance of WatcherBus.
+     */
+    constructor(client: Discord.Client) {
+        this.client = client;
         this.watchers = {};
-        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => file !== 'BaseWatcher.js');
+        this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => !file.startsWith('BaseWatcher.'));
 
         this.loadWatchers();
         this.setupWatcherListeners();
@@ -23,24 +37,23 @@ class WatcherBus {
 
     /**
      * This will load all the watchers in the watchers directory.
-     *
-     * @memberof WatcherBus
      */
     loadWatchers() {
-        let loadedWatchers = [];
+        let loadedWatchers: BaseWatcher[] = [];
 
-        // instantiate all the commands
+        // instantiate all the watchers
         loadedWatchers = this.watcherFiles.map((watcherFile) => {
-            const watcherClass = require(`${__dirname}/watchers/${watcherFile}`);
+            logger.debug(`Loading watcher ${watcherFile}`);
+            const WatcherClass = require(`${__dirname}/watchers/${watcherFile}`).default;
 
-            return new watcherClass.default(this.bot);
+            return new WatcherClass(this.client);
         });
 
-        // remove any non active commands
+        // remove any non active watchers
         loadedWatchers = loadedWatchers.filter((watcher) => watcher.enabled);
 
-        // sort by priority
-        loadedWatchers.sort((a, b) => {
+        // sort watchers by priority
+        loadedWatchers = loadedWatchers.sort((a, b) => {
             if (a.priority < b.priority) {
                 return -1;
             }
@@ -52,34 +65,29 @@ class WatcherBus {
             return 0;
         });
 
-        // group the commands by method
+        // group the watchers by method
         loadedWatchers.forEach((watcher) => {
-            let watcherMethods = [watcher.method];
-
-            if (Array.isArray(watcher.method)) {
-                watcherMethods = watcher.method;
-            }
-
-            watcherMethods.forEach((watcherMethod) => {
-                if (!this.watchers.hasOwnProperty(watcherMethod)) {
-                    this.watchers[watcherMethod] = [];
+            watcher.methods.forEach((method) => {
+                if (!this.watchers[method]) {
+                    this.watchers[method] = [watcher];
                 }
 
-                this.watchers[watcherMethod].push(watcher);
+                this.watchers[method]?.push(watcher);
             });
         });
     }
 
     /**
      * This will setup all the watcher listeners and register them with the bot.
-     *
-     * @memberof WatcherBus
      */
     setupWatcherListeners() {
         Object.keys(this.watchers).forEach((method) => {
-            this.bot.on(method, (...args) => {
-                this.watchers[method].forEach(async (watcher) => {
+            this.client.on(method as keyof Discord.ClientEvents, (...args) => {
+                // @ts-ignore different ClientEvents have different args layout, so this type isn't safe
+                this.watchers[method as keyof Discord.ClientEvents].forEach(async (watcher) => {
+                    // @ts-ignore
                     if (await watcher.shouldRun(method, ...args)) {
+                        // @ts-ignore
                         watcher.action(method, ...args);
                     }
                 });

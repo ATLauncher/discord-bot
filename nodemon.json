@@ -3,6 +3,6 @@
     "config",
     "src"
   ],
-  "ext": "js,json",
+  "ext": "ts,json",
   "exec": "ts-node src"
 }

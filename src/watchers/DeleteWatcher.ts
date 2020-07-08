@@ -1,34 +1,23 @@
-import Discord from 'discord.js';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
-import { COLOURS } from '../constants';
-import * as database from '../db';
+import { COLOURS } from '../constants/discord';
+import * as database from '../utils/db';
 
 /**
  * A watcher that listens for message/s being deleted. This can occur from either a user deleting it themselves or a
  * moderator deleting them. There is no way to distinguish them.
- *
- * @class DeleteWatcher
- * @extends {BaseWatcher}
  */
 class DeleteWatcher extends BaseWatcher {
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string[]}
-     * @memberof DeleteWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['messageDelete', 'messageDeleteBulk'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageDelete', 'messageDeleteBulk'];
 
     /**
      * If this watcher should run on the given method and message.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @returns {boolean}
-     * @memberof DeleteWatcher
      */
-    async shouldRun(method, message) {
+    async shouldRun(method: keyof Discord.ClientEvents, message: Discord.Message) {
         if (!(await super.shouldRun(method, message))) {
             return false;
         }
@@ -38,7 +27,11 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
-        // don't log deletions of commands
+        // cleanContent not available so something wrong
+        if (!message.cleanContent) {
+            return false;
+        }
+
         if (
             message.cleanContent.toLowerCase().startsWith('!cyt') ||
             message.cleanContent.toLowerCase().startsWith('!log') ||
@@ -46,42 +39,37 @@ class DeleteWatcher extends BaseWatcher {
             message.cleanContent.toLowerCase().startsWith('!working') ||
             message.cleanContent.toLowerCase().startsWith('!clean') ||
             message.cleanContent.toLowerCase().startsWith('!delete') ||
-            message.cleanContent.toLowerCase().startsWith('!ask')
+            message.cleanContent.toLowerCase().startsWith('!ask') ||
+            message.cleanContent.toLowerCase().startsWith('!update')
         ) {
+            // don't log deletions of commands
             return false;
         }
 
-        const logMessageDeletions = await database.getSetting('logMessageDeletions', true);
-
-        return logMessageDeletions;
+        return await database.getSetting<boolean>('logMessageDeletions', true);
     }
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @memberof DeleteWatcher
      */
-    action(method, message) {
+    async action(
+        method: keyof Discord.ClientEvents,
+        ...args: Discord.ClientEvents['messageDelete' | 'messageDeleteBulk']
+    ) {
         // check if we're getting a collection of messages or not
         if (method === 'messageDeleteBulk') {
-            message.forEach((value) => {
+            (args as Discord.ClientEvents['messageDeleteBulk'])[0].forEach((value) => {
                 this.logMessage(value);
             });
         } else {
-            this.logMessage(message);
+            this.logMessage((args as Discord.ClientEvents['messageDelete'])[0]);
         }
     }
 
     /**
      * Logs the given message to the moderator logs channel.
-     *
-     * @param {Message} message
-     * @returns {void}
-     * @memberof DeleteWatcher
      */
-    logMessage(message) {
+    logMessage(message: Discord.Message | Discord.PartialMessage) {
         let user = 'Unknown';
 
         if (message.author) {
@@ -91,10 +79,10 @@ class DeleteWatcher extends BaseWatcher {
         const embed = new Discord.MessageEmbed()
             .setTitle('Message deleted')
             .setColor(COLOURS.RED)
-            .setTimestamp(new Date().toISOString())
+            .setTimestamp(new Date())
             .addField('User', user, true)
             .addField('Channel', message.channel, true)
-            .addField('Message', `\`\`\`${message.cleanContent.replace(/`/g, '\\`')}\`\`\``);
+            .addField('Message', `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``);
 
         this.sendEmbedToModeratorLogsChannel(embed);
     }

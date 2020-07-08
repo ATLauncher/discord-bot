@@ -1,4 +1,4 @@
-import * as config from 'config';
+import config from 'config';
 import * as Sentry from '@sentry/node';
 
 import Bot from './Bot';

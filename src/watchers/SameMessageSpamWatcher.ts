@@ -1,72 +1,52 @@
+import * as Discord from 'discord.js';
+
 import BaseWatcher from './BaseWatcher';
 
-import * as database from '../db';
+import * as database from '../utils/db';
 
 /**
  * This watcher checks for people spamming the same message multiple times.
  *
  * It will trigger when the same message is sent 3 times within 30 seconds.
- *
- * @class SameMessageSpamWatcher
- * @extends {BaseWatcher}
  */
 class SameMessageSpamWatcher extends BaseWatcher {
     /**
      * If this watcher should run on bots or not.
-     *
-     * @type {boolean}
-     * @memberof SameMessageSpamWatcher
      */
     shouldRunOnBots = false;
 
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof SameMessageSpamWatcher
      */
     usesBypassRules = true;
 
     /**
      * If this watcher should only run on moderated channels.
-     *
-     * @type {boolean}
-     * @memberof TLauncherWatcher
      */
     onlyModeratedChannels = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof SameMessageSpamWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof SameMessageSpamWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const count = await database.countMessagesInLast(message.cleanContent, 30);
 
-        const count = await database.countMessagesInLast(messageToActUpon.cleanContent, 30);
+            if (count >= 3) {
+                const warningMessage = await message.reply('Please do not spam the same message.');
 
-        if (count >= 3) {
-            const warningMessage = await messageToActUpon.reply('Please do not spam the same message.');
+                this.addWarningToUser(message);
 
-            this.addWarningToUser(messageToActUpon);
-
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+                message.delete();
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

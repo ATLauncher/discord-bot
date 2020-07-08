@@ -1,35 +1,24 @@
 import config from 'config';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people spamming text stuff.
- *
- * @class TextSpamWatcher
- * @extends {BaseWatcher}
  */
 class TextSpamWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof TextSpamWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof TextSpamWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The strings that this watcher should remove.
-     *
-     * @type {string[]}
-     * @memberof LinkSpamWatcher
      */
     strings = [
         'this is cooldog',
@@ -52,34 +41,27 @@ class TextSpamWatcher extends BaseWatcher {
 
     /**
      * Run the watcher with the given parameters.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof TextSpamWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
-
-        const rulesChannel = this.bot.channels.cache.find(
-            (channel) => channel.name === config.get('bot.rules_channel'),
-        );
-
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
-
-        if (this.strings.some((string) => cleanMessage.includes(string))) {
-            const warningMessage = await messageToActUpon.reply(
-                `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`,
+        if (message.cleanContent) {
+            const rulesChannel = this.client.channels.cache.find(
+                (channel) => channel.id === config.get('channels.rules'),
             );
 
-            this.addWarningToUser(messageToActUpon);
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-            messageToActUpon.delete();
-            warningMessage.delete(60000);
+            if (this.strings.some((string) => cleanMessage.includes(string))) {
+                const warningMessage = await message.reply(
+                    `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`,
+                );
+
+                this.addWarningToUser(message);
+
+                message.delete({ reason: 'Posting spam text' });
+                warningMessage.delete({ timeout: 60000 });
+            }
         }
     }
 }

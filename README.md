@@ -121,7 +121,7 @@ By default the logging level is set to `error` level, but can be set to:
 
 ### Logz.io Logging
 
-To log to a Logz.io account, simply add a config value in `logging.logz_io_token` with a string containing your api
+To log to a Logz.io account, simply add a config value in `logging.logzIoToken` with a string containing your api
 token.
 
 ## Sentry error reporting

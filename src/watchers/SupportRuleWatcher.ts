@@ -1,70 +1,59 @@
 import config from 'config';
+import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
 /**
  * This watcher checks for people asking for support in non support channels.
- *
- * @class SupportRuleWatcher
- * @extends {BaseWatcher}
  */
 class SupportRuleWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
-     *
-     * @type {boolean}
-     * @memberof TagRuleWatcher
      */
     usesBypassRules = true;
 
     /**
-     * The method this watcher should listen on.
-     *
-     * @type {string|string[]}
-     * @memberof SupportRuleWatcher
+     * The methods this watcher should listen on.
      */
-    method = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 
     /**
      * The strings that this watcher should remove.
-     *
-     * @type {string[]}
-     * @memberof SupportRuleWatcher
      */
     strings = ['paste.atlauncher.com', 'USERSDIR\\Instances', 'USERSDIR/Instances'];
 
     /**
      * The function that should be called when the event is fired.
-     *
-     * @param {string} method
-     * @param {Message} message
-     * @param {Message} updatedMessage
-     * @memberof SupportRuleWatcher
      */
-    async action(method, message, updatedMessage) {
-        let messageToActUpon = message;
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+        const message = args[1] || args[0];
 
-        if (method === 'messageUpdate') {
-            messageToActUpon = updatedMessage;
-        }
+        if (message.cleanContent) {
+            const launcherSupport = this.client.channels.cache.find(
+                ({ id }) => id === config.get('channels.launcherSupport'),
+            );
 
-        const supportChannel = this.bot.channels.cache.find(({ name }) => name === config.get('bot.support_channel'));
-        const nonSupportChannels = this.bot.channels.cache.filter(({ name }) =>
-            config.get('bot.non_support_channels').includes(name),
-        );
+            const minecraftSupport = this.client.channels.cache.find(
+                ({ id }) => id === config.get('channels.minecraftSupport'),
+            );
 
-        const cleanMessage = messageToActUpon.cleanContent.toLowerCase();
+            const nonSupportChannels = this.client.channels.cache.filter(({ id }) =>
+                config.get<string[]>('noSupportChannels').includes(id),
+            );
 
-        if (this.strings.some((string) => cleanMessage.includes(string))) {
-            if (nonSupportChannels.some(({ name }) => name === messageToActUpon.channel.name)) {
-                const warningMessage = await messageToActUpon.reply(
-                    `It looks like you're asking for support. Please use ${supportChannel} for launcher/pack issues.`,
-                );
+            const cleanMessage = message.cleanContent.toLowerCase();
 
-                this.addWarningToUser(messageToActUpon);
+            if (this.strings.some((string) => cleanMessage.includes(string))) {
+                if (nonSupportChannels.some(({ id }) => id === message.channel.id)) {
+                    const warningMessage = await message.reply(
+                        `It looks like you're asking for support. Please use ${launcherSupport} for launcher issues and ${minecraftSupport} for issues with Minecraft.`,
+                    );
 
-                messageToActUpon.delete();
-                warningMessage.delete(60000);
+                    this.addWarningToUser(message);
+
+                    message.delete({ reason: 'Asking for support outside of support channels' });
+                    warningMessage.delete({ timeout: 60000 });
+                }
             }
         }
     }
