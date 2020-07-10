@@ -30,7 +30,7 @@ class Bot {
             logger.info('Bot started');
 
             const botTestingChannel = this.bot.channels.cache.find(
-                ({ id }) => id === config.get<string>('channels.moderationLogs'),
+                ({ id }) => id === config.get<string>('channels.botTesting'),
             );
 
             if (botTestingChannel) {

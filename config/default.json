@@ -7,7 +7,9 @@
     "clientToken": ""
   },
   "channels": {
-    "rules": "123456789012345678"
+    "rules": "123456789012345678",
+    "moderationLogs": "123456789012345678",
+    "botTesting": "123456789012345678"
   },
   "noSupportChannels": [
     "123456789012345678"
