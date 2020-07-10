@@ -5,15 +5,16 @@ import * as database from './utils/db';
 import { COLOURS } from './constants/discord';
 
 import type { User as DBUser } from './utils/db';
+import Bot from './Bot';
 
 /**
  * This is the base module class. A module is either a command or a watcher.
  */
 abstract class BaseModule {
     /**
-     * The instance of the Discord client.
+     * The instance of the Bot client.
      */
-    client: Discord.Client;
+    bot: Bot;
 
     /**
      * The events that this module should react to.
@@ -58,8 +59,8 @@ abstract class BaseModule {
     /**
      * Creates an instance of BaseModule.
      */
-    constructor(client: Discord.Client) {
-        this.client = client;
+    constructor(bot: Bot) {
+        this.bot = bot;
     }
 
     /**
@@ -256,7 +257,7 @@ abstract class BaseModule {
      * This gets the channel object for the moderator channel in the config.
      */
     getModerationLogsChannel(): Discord.TextChannel | undefined {
-        return this.client.channels.cache.find(
+        return this.bot.client.channels.cache.find(
             ({ id }) => id === config.get<string>('channels.moderationLogs'),
         ) as Discord.TextChannel;
     }

@@ -3,15 +3,16 @@ import * as Discord from 'discord.js';
 
 import BaseWatcher from './watchers/BaseWatcher';
 import logger from './utils/logger';
+import Bot from './Bot';
 
 /**
  * The watcher bus loads all the watchers and sets up the listeners and any configuration.
  */
 class WatcherBus {
     /**
-     * The instance of the Discord client.
+     * The instance of the Bot.
      */
-    client: Discord.Client;
+    bot: Bot;
 
     /**
      * List of watchers and the client events they respond to.
@@ -26,8 +27,8 @@ class WatcherBus {
     /**
      * Creates an instance of WatcherBus.
      */
-    constructor(client: Discord.Client) {
-        this.client = client;
+    constructor(bot: Bot) {
+        this.bot = bot;
         this.watchers = {};
         this.watcherFiles = fs.readdirSync(`${__dirname}/watchers`).filter((file) => !file.startsWith('BaseWatcher.'));
 
@@ -46,7 +47,7 @@ class WatcherBus {
             logger.debug(`Loading watcher ${watcherFile}`);
             const WatcherClass = require(`${__dirname}/watchers/${watcherFile}`).default;
 
-            return new WatcherClass(this.client);
+            return new WatcherClass(this.bot);
         });
 
         // remove any non active watchers
@@ -82,7 +83,7 @@ class WatcherBus {
      */
     setupWatcherListeners() {
         Object.keys(this.watchers).forEach((method) => {
-            this.client.on(method as keyof Discord.ClientEvents, (...args) => {
+            this.bot.client.on(method as keyof Discord.ClientEvents, (...args) => {
                 // @ts-ignore different ClientEvents have different args layout, so this type isn't safe
                 this.watchers[method as keyof Discord.ClientEvents].forEach(async (watcher) => {
                     // @ts-ignore

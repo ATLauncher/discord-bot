@@ -23,7 +23,7 @@ class BadWordWatcher extends BaseWatcher {
             const messageParts = cleanMessage.includes(' ') ? cleanMessage.split(' ') : [cleanMessage];
 
             if (messageParts.some((word) => config.get<string[]>('badWords').includes(word))) {
-                const rulesChannel = this.client.channels.cache.find(
+                const rulesChannel = this.bot.client.channels.cache.find(
                     (channel) => channel.id === config.get<string>('channels.rules'),
                 );
 

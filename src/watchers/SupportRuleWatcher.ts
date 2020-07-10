@@ -29,15 +29,15 @@ class SupportRuleWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const launcherSupport = this.client.channels.cache.find(
+            const launcherSupport = this.bot.client.channels.cache.find(
                 ({ id }) => id === config.get('channels.launcherSupport'),
             );
 
-            const minecraftSupport = this.client.channels.cache.find(
+            const minecraftSupport = this.bot.client.channels.cache.find(
                 ({ id }) => id === config.get('channels.minecraftSupport'),
             );
 
-            const nonSupportChannels = this.client.channels.cache.filter(({ id }) =>
+            const nonSupportChannels = this.bot.client.channels.cache.filter(({ id }) =>
                 config.get<string[]>('noSupportChannels').includes(id),
             );
 

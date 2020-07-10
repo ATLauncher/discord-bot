@@ -24,7 +24,7 @@ class SelfBotWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const rulesChannel = this.client.channels.cache.find(
+            const rulesChannel = this.bot.client.channels.cache.find(
                 (channel) => channel.id === config.get('channels.rules'),
             );
 

@@ -3,15 +3,16 @@ import * as Discord from 'discord.js';
 
 import BaseCommand from './commands/BaseCommand';
 import logger from './utils/logger';
+import Bot from './Bot';
 
 /**
  * The command bus loads all the commands and sets up the listeners and any configuration.
  */
 class CommandBus {
     /**
-     * The instance of the Discord client.
+     * The instance of the Bot.
      */
-    client: Discord.Client;
+    bot: Bot;
 
     /**
      * List of commands and the client events they respond to.
@@ -26,8 +27,8 @@ class CommandBus {
     /**
      * Creates an instance of CommandBus.
      */
-    constructor(client: Discord.Client) {
-        this.client = client;
+    constructor(bot: Bot) {
+        this.bot = bot;
         this.commands = {};
         this.commandFiles = fs.readdirSync(`${__dirname}/commands`).filter((file) => !file.startsWith('BaseCommand.'));
 
@@ -46,7 +47,7 @@ class CommandBus {
             logger.debug(`Loading command ${commandFile}`);
             const CommandClass = require(`${__dirname}/commands/${commandFile}`).default;
 
-            return new CommandClass(this.client);
+            return new CommandClass(this.bot);
         });
 
         // remove any non active commands
@@ -69,7 +70,7 @@ class CommandBus {
      */
     setupCommandListeners() {
         Object.keys(this.commands).forEach((method) => {
-            this.client.on(method as keyof Discord.ClientEvents, (...args) => {
+            this.bot.client.on(method as keyof Discord.ClientEvents, (...args) => {
                 // @ts-ignore different ClientEvents have different args layout, so this type isn't safe
                 const command = this.commands[method as keyof Discord.ClientEvents]?.find((c) => c.matches(...args));
 

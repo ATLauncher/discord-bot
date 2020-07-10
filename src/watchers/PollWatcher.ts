@@ -30,7 +30,7 @@ class PollWatcher extends BaseWatcher {
                 cleanMessage.toLowerCase().includes('strawpoll.me') ||
                 cleanMessage.toLowerCase().includes('strawpoll.com')
             ) {
-                const rulesChannel = this.client.channels.cache.find(
+                const rulesChannel = this.bot.client.channels.cache.find(
                     (channel) => channel.id === config.get('channels.rules'),
                 );
 

@@ -7,13 +7,13 @@ import WatcherBus from './WatcherBus';
 import logger from './utils/logger';
 
 class Bot {
-    public bot: Discord.Client;
+    public client: Discord.Client;
 
-    private commandBus: CommandBus | undefined;
-    private watcherBus: WatcherBus | undefined;
+    commandBus: CommandBus | undefined;
+    watcherBus: WatcherBus | undefined;
 
     constructor() {
-        this.bot = new Discord.Client();
+        this.client = new Discord.Client();
 
         this.setupBot();
         this.setupCommandBus();
@@ -26,10 +26,10 @@ class Bot {
     setupBot() {
         logger.debug('Setting bot up');
 
-        this.bot.on('ready', () => {
+        this.client.on('ready', () => {
             logger.info('Bot started');
 
-            const botTestingChannel = this.bot.channels.cache.find(
+            const botTestingChannel = this.client.channels.cache.find(
                 ({ id }) => id === config.get<string>('channels.botTesting'),
             );
 
@@ -53,7 +53,7 @@ class Bot {
     setupCommandBus() {
         logger.debug('Setting command bus up');
 
-        this.commandBus = new CommandBus(this.bot);
+        this.commandBus = new CommandBus(this);
     }
 
     /**
@@ -62,7 +62,7 @@ class Bot {
     setupWatcherBus() {
         logger.debug('Setting watcher bus up');
 
-        this.watcherBus = new WatcherBus(this.bot);
+        this.watcherBus = new WatcherBus(this);
     }
 
     /**
@@ -71,7 +71,7 @@ class Bot {
     async start() {
         logger.debug('Starting bot');
 
-        await this.bot.login(config.get<string>('discord.clientToken'));
+        await this.client.login(config.get<string>('discord.clientToken'));
     }
 }
 
