@@ -33,7 +33,7 @@ export interface User {
     discriminator: string;
 }
 
-const databases = {
+export const databases = {
     messages: Datastore.create({
         filename: './db/messages.db',
         timestampData: true,
