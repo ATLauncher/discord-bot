@@ -70,7 +70,7 @@ class WatcherBus {
             logger.debug(`Loading watcher ${watcher.constructor.name}`);
             watcher.methods.forEach((method) => {
                 if (!this.watchers[method]) {
-                    this.watchers[method] = [watcher];
+                    this.watchers[method] = [];
                 }
 
                 this.watchers[method]?.push(watcher);

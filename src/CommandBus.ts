@@ -57,7 +57,7 @@ class CommandBus {
             logger.debug(`Loading command ${command.constructor.name}`);
             command.methods.forEach((method) => {
                 if (!this.commands[method]) {
-                    this.commands[method] = [command];
+                    this.commands[method] = [];
                 }
 
                 this.commands[method]?.push(command);
