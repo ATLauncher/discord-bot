@@ -48,7 +48,7 @@ Below are some helpful links that you should look over to become familiar with t
                     fields: [
                         {
                             name: 'Find the rules here',
-                            value: `[#rules](https://discord.com/channels/${message.guild?.id}/${rulesChannel?.id})`,
+                            value: `[#rules](https://discord.com/channels/${member.guild.id}/${rulesChannel?.id})`,
                         },
                     ],
                 }),
@@ -67,7 +67,7 @@ Below are some helpful links that you should look over to become familiar with t
                     fields: [
                         {
                             name: 'Check them out here',
-                            value: `[#announcements](https://discord.com/channels/${message.guild?.id}/${announcementsChannel?.id})`,
+                            value: `[#announcements](https://discord.com/channels/${member.guild.id}/${announcementsChannel?.id})`,
                         },
                     ],
                 }),
@@ -90,12 +90,12 @@ Below are some helpful links that you should look over to become familiar with t
                     fields: [
                         {
                             name: 'For Help With Minecraft',
-                            value: `[#minecraft-support](https://discord.com/channels/${message.guild?.id}/${minecraftSupportChannel?.id})`,
+                            value: `[#minecraft-support](https://discord.com/channels/${member.guild.id}/${minecraftSupportChannel?.id})`,
                             inline: true,
                         },
                         {
                             name: 'For Help With The Launcher',
-                            value: `[#launcher-support](https://discord.com/channels/${message.guild?.id}/${launcherSupportChannel?.id})`,
+                            value: `[#launcher-support](https://discord.com/channels/${member.guild.id}/${launcherSupportChannel?.id})`,
                             inline: true,
                         },
                     ],
