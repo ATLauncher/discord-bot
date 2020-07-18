@@ -41,7 +41,7 @@
     ]
   },
   "dependencies": {
-    "@sentry/node": "^5.19.0",
+    "@sentry/node": "^5.19.2",
     "config": "^3.3.1",
     "date-fns": "^2.15.0",
     "discord.js": "^12.2.0",
@@ -51,10 +51,10 @@
     "winston-logzio": "^5.1.2"
   },
   "devDependencies": {
-    "@commitlint/cli": "^9.0.1",
-    "@commitlint/config-conventional": "^9.0.1",
+    "@commitlint/cli": "^9.1.1",
+    "@commitlint/config-conventional": "^9.1.1",
     "@types/config": "0.0.36",
-    "@types/node": "^14.0.18",
+    "@types/node": "^14.0.23",
     "@types/ws": "^7.2.6",
     "cross-env": "^7.0.2",
     "husky": "^4.2.5",
@@ -64,6 +64,6 @@
     "prettier": "^2.0.5",
     "rimraf": "^3.0.2",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   }
 }
