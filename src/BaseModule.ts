@@ -232,6 +232,38 @@ abstract class BaseModule {
     }
 
     /**
+     * This adds a flag to a user that they've been sent the join message.
+     */
+    async addHasBeenSentJoinMessage(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<void> {
+        if (member.user) {
+            let user = (await database.findUserByID(member.id)) || {
+                id: member.id,
+                hasBeenSentJoinMessage: false,
+            };
+
+            user.hasBeenSentJoinMessage = true;
+            user.username = member.user.username;
+            user.discriminator = member.user.discriminator;
+
+            database.updateUserByID(member.id, user);
+        }
+    }
+
+    /**
+     * Checks to see if the user has sent the join message.
+     */
+    async hasUserBeenSentJoinMessage(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<boolean> {
+        let user: DBUser = (await database.findUserByID(member.id)) || {
+            id: member.id,
+            hasBeenSentJoinMessage: false,
+        };
+
+        console.log(user);
+
+        return user.hasBeenSentJoinMessage;
+    }
+
+    /**
      * This will send the given message to the moderator logs channel.
      */
     sendMessageToModeratorLogsChannel(message: Discord.Message): void {

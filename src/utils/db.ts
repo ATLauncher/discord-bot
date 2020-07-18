@@ -26,6 +26,7 @@ export interface Setting<T> {
 export interface User {
     id: string;
     hasSeenTLauncherMessage: boolean;
+    hasBeenSentJoinMessage: boolean;
     username: string;
     warnings?: number;
     discriminator: string;

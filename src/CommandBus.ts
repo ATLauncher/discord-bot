@@ -44,7 +44,6 @@ class CommandBus {
 
         // instantiate all the commands
         loadedCommands = this.commandFiles.map((commandFile) => {
-            logger.debug(`Loading command ${commandFile}`);
             const CommandClass = require(`${__dirname}/commands/${commandFile}`).default;
 
             return new CommandClass(this.bot);
@@ -55,6 +54,7 @@ class CommandBus {
 
         // group the commands by method
         loadedCommands.forEach((command) => {
+            logger.debug(`Loading command ${command.constructor.name}`);
             command.methods.forEach((method) => {
                 if (!this.commands[method]) {
                     this.commands[method] = [command];

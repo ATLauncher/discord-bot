@@ -44,7 +44,6 @@ class WatcherBus {
 
         // instantiate all the watchers
         loadedWatchers = this.watcherFiles.map((watcherFile) => {
-            logger.debug(`Loading watcher ${watcherFile}`);
             const WatcherClass = require(`${__dirname}/watchers/${watcherFile}`).default;
 
             return new WatcherClass(this.bot);
@@ -68,6 +67,7 @@ class WatcherBus {
 
         // group the watchers by method
         loadedWatchers.forEach((watcher) => {
+            logger.debug(`Loading watcher ${watcher.constructor.name}`);
             watcher.methods.forEach((method) => {
                 if (!this.watchers[method]) {
                     this.watchers[method] = [watcher];

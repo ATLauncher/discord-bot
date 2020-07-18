@@ -41,7 +41,8 @@ class DeleteWatcher extends BaseWatcher {
             message.cleanContent.toLowerCase().startsWith('!delete') ||
             message.cleanContent.toLowerCase().startsWith('!ask') ||
             message.cleanContent.toLowerCase().startsWith('!update') ||
-            message.cleanContent.toLowerCase().startsWith('!curselag')
+            message.cleanContent.toLowerCase().startsWith('!curselag') ||
+            message.cleanContent.toLowerCase().startsWith('!testjoin')
         ) {
             // don't log deletions of commands
             return false;
