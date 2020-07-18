@@ -1,3 +1,4 @@
+import { sub } from 'date-fns';
 import Datastore from 'nedb-promises';
 
 export interface Message {
@@ -76,14 +77,10 @@ export const updateMessageByID = (id: string, data: Partial<Message>): Promise<M
 /**
  * This will count the number of messages matching provided message in the last x seconds.
  */
-export const countMessagesInLast = async (message: string, seconds = 30): Promise<number> => {
-    let timeAgo = new Date();
-
-    timeAgo.setSeconds(timeAgo.getSeconds() - seconds);
-
+export const countMessagesInLast = (message: string, seconds = 30): Promise<number> => {
     return databases.messages.count({
         content: message,
-        createdAt: { $gt: timeAgo },
+        createdAt: { $gt: sub(new Date(), { seconds }) },
     });
 };
 
