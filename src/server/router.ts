@@ -5,7 +5,7 @@ import type { TextChannel } from 'discord.js';
 import type { Context, ServerState, ServerContext } from './';
 
 import * as database from '../utils/db';
-import { getGuild, getMember } from './utils';
+import { getGuild, getMember, getChannel } from './utils';
 
 const router = new Router<ServerState, ServerContext>();
 
@@ -27,6 +27,48 @@ router.get('/stats', async (ctx: Context) => {
         premiumTier: guild.premiumTier,
         premiumSubscriptionCount: guild.premiumSubscriptionCount,
     };
+});
+
+router.get('/channel/:channel', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const channel = await getChannel(guild, ctx.params.channel);
+
+    if (!channel) {
+        ctx.throw(404, 'no channel found');
+    }
+
+    ctx.body = channel;
+});
+
+router.post('/channel/:channel/send', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const channel = (await getChannel(guild, ctx.params.channel)) as TextChannel;
+
+    if (!channel) {
+        ctx.throw(404, 'no channel found');
+    }
+
+    if (ctx.request.body.message) {
+        await channel.send(ctx.request.body.message);
+    }
+
+    if (ctx.request.body.embeds) {
+        for (const embed of ctx.request.body.embeds) {
+            await channel.send(new Discord.MessageEmbed(embed as Discord.MessageEmbedOptions));
+        }
+    }
+
+    ctx.status = 201;
 });
 
 router.get('/user/:user', async (ctx: Context) => {
@@ -74,7 +116,7 @@ router.post('/user/:user/roles', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
-    const { role, announce } = ctx.request.body;
+    const { role } = ctx.request.body;
 
     if (member.roles.cache.has(role)) {
         ctx.status = 204;
@@ -82,16 +124,6 @@ router.post('/user/:user/roles', async (ctx: Context) => {
     }
 
     await member.roles.add(role);
-
-    if (announce) {
-        const broadcastChannel = ctx.bot.client.channels.cache.find(
-            (channel) => channel.id === announce,
-        ) as TextChannel;
-
-        if (broadcastChannel) {
-            await broadcastChannel.send(`Welcome ${member}!`);
-        }
-    }
 
     ctx.status = 201;
 });
