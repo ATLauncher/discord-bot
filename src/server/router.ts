@@ -1,4 +1,5 @@
 import Router from '@koa/router';
+import * as Discord from 'discord.js';
 import type { TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
@@ -174,6 +175,32 @@ router.post('/user/:user/ban', async (ctx: Context) => {
     });
 
     ctx.status = 204;
+});
+
+router.post('/user/:user/send', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const member = await getMember(guild, ctx.params.user);
+
+    if (!member) {
+        ctx.throw(404, 'no user found');
+    }
+
+    if (ctx.request.body.message) {
+        await member.send(ctx.request.body.message);
+    }
+
+    if (ctx.request.body.embeds) {
+        for (const embed of ctx.request.body.embeds) {
+            await member.send(new Discord.MessageEmbed(embed as Discord.MessageEmbedOptions));
+        }
+    }
+
+    ctx.status = 201;
 });
 
 router.get('/db/users', async (ctx: Context) => {
