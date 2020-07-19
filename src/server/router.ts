@@ -141,6 +141,11 @@ router.delete('/user/:user/roles/:role', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
+    if (!member.roles.cache.has(ctx.params.role)) {
+        ctx.status = 204;
+        return;
+    }
+
     await member.roles.remove(ctx.params.role);
 
     ctx.status = 204;
