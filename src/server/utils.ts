@@ -19,8 +19,6 @@ export const getGuild = async (ctx: Context): Promise<Guild | undefined> => {
 export const getMember = (guild: Guild, user: string): GuildMember | undefined => {
     let member;
 
-    console.log(user);
-
     if (user.includes('#')) {
         const [username, discriminator] = user.split('#');
 

@@ -75,6 +75,11 @@ router.post('/user/:user/roles', async (ctx: Context) => {
 
     const { role, announce } = ctx.request.body;
 
+    if (member.roles.cache.has(role)) {
+        ctx.status = 204;
+        return;
+    }
+
     await member.roles.add(role);
 
     if (announce) {
@@ -87,7 +92,7 @@ router.post('/user/:user/roles', async (ctx: Context) => {
         }
     }
 
-    ctx.status = 202;
+    ctx.status = 201;
 });
 
 router.delete('/user/:user/roles/:role', async (ctx: Context) => {
@@ -105,7 +110,7 @@ router.delete('/user/:user/roles/:role', async (ctx: Context) => {
 
     await member.roles.remove(ctx.params.role);
 
-    ctx.status = 202;
+    ctx.status = 204;
 });
 
 router.get('/db/users', async (ctx: Context) => {
