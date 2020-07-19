@@ -128,6 +128,17 @@ token.
 
 If you wish to enable sentry error reporting, simply add your DSN as config value `sentry.dsn`.
 
+## Caveats
+
+This bot was made specifically for the [ATLauncher Discord server](https://atl.pw/discord) and as such if it's used for
+any other purpose outside of that Discord server, there are some caveats to note:
+
+- Some things are hard coded to expect the layout and setup of the server in the same way as the ATLauncher one
+  - This inncludes the notion of having a `rules` channel, a `moderation-logs` channel as well as the concept of support
+    and non support channels
+- The `JoinWatcher` is again very specific to ATLauncher's needs
+- The bot was made to be run only on one server, so if it's connected to multiple servers, it may not act correctly
+
 ## Contributing
 
 If you wish to contribute, please see the `CONTRIBUTING.md` file in the root of this repository.
