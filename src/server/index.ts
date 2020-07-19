@@ -40,5 +40,5 @@ export const startServer = (bot: Bot) => {
     app.use(router.routes()).use(router.allowedMethods());
     app.listen(config.get<number>('server.port'));
 
-    logger.debug(`Server running on port ${config.get<number>('server.port')}`);
+    logger.info(`Server running on port ${config.get<number>('server.port')}`);
 };

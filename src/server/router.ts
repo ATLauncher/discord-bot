@@ -1,9 +1,10 @@
 import Router from '@koa/router';
+import type { TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
 
 import * as database from '../utils/db';
-import { TextChannel } from 'discord.js';
+import { getGuild, getMember } from './utils';
 
 const router = new Router<ServerState, ServerContext>();
 
@@ -12,15 +13,10 @@ router.get('/', (ctx: Context) => {
 });
 
 router.get('/stats', async (ctx: Context) => {
-    let guild = ctx.bot.client.guilds.cache.first();
+    const guild = await getGuild(ctx);
 
     if (!guild) {
         ctx.throw(500, 'failed to get the guild');
-        return;
-    }
-
-    if (!guild.available) {
-        guild = await guild.fetch();
     }
 
     ctx.body = {
@@ -32,86 +28,58 @@ router.get('/stats', async (ctx: Context) => {
     };
 });
 
-router.get('/user/by-id/:id', async (ctx: Context) => {
-    let guild = ctx.bot.client.guilds.cache.first();
+router.get('/user/:user', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
 
     if (!guild) {
         ctx.throw(500, 'failed to get the guild');
-        return;
     }
 
-    if (!guild.available) {
-        guild = await guild.fetch();
-    }
-
-    const member = guild.members.cache.find((member) => member.id === ctx.params.id);
+    const member = await getMember(guild, ctx.params.user);
 
     if (!member) {
-        ctx.throw(404, 'no user found with that id');
-        return;
+        ctx.throw(404, 'no user found');
     }
 
-    ctx.body = {
-        ...member,
-    };
+    ctx.body = member;
 });
 
-router.get('/user/by-name/:name', async (ctx: Context) => {
-    let guild = ctx.bot.client.guilds.cache.first();
+router.get('/user/:user/roles', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
 
     if (!guild) {
         ctx.throw(500, 'failed to get the guild');
-        return;
     }
 
-    if (!guild.available) {
-        guild = await guild.fetch();
-    }
-
-    const [username, discriminator] = ctx.params.name.split('#');
-
-    let member = guild.members.cache.find(
-        (member) => member.user.username === username && member.user.discriminator === discriminator,
-    );
+    const member = await getMember(guild, ctx.params.user);
 
     if (!member) {
-        ctx.throw(404, 'no user found with that name');
-        return;
+        ctx.throw(404, 'no user found');
     }
 
-    ctx.body = {
-        ...member,
-    };
+    ctx.body = member.roles.cache.toJSON();
 });
 
-router.get('/user/by-name/:name/add-role/:role/:channel?', async (ctx: Context) => {
-    let guild = ctx.bot.client.guilds.cache.first();
+router.post('/user/:user/roles', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
 
     if (!guild) {
         ctx.throw(500, 'failed to get the guild');
-        return;
     }
 
-    if (!guild.available) {
-        guild = await guild.fetch();
-    }
-
-    const [username, discriminator] = ctx.params.name.split('#');
-
-    let member = guild.members.cache.find(
-        (member) => member.user.username === username && member.user.discriminator === discriminator,
-    );
+    const member = await getMember(guild, ctx.params.user);
 
     if (!member) {
-        ctx.throw(404, 'no user found with that name');
-        return;
+        ctx.throw(404, 'no user found');
     }
 
-    await member.roles.add(ctx.params.role);
+    const { role, announce } = ctx.request.body;
 
-    if (ctx.params.channel) {
+    await member.roles.add(role);
+
+    if (announce) {
         const broadcastChannel = ctx.bot.client.channels.cache.find(
-            (channel) => channel.id === ctx.params.channel,
+            (channel) => channel.id === announce,
         ) as TextChannel;
 
         if (broadcastChannel) {
@@ -122,27 +90,17 @@ router.get('/user/by-name/:name/add-role/:role/:channel?', async (ctx: Context) 
     ctx.status = 202;
 });
 
-router.get('/user/by-name/:name/remove-role/:role', async (ctx: Context) => {
-    let guild = ctx.bot.client.guilds.cache.first();
+router.delete('/user/:user/roles/:role', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
 
     if (!guild) {
         ctx.throw(500, 'failed to get the guild');
-        return;
     }
 
-    if (!guild.available) {
-        guild = await guild.fetch();
-    }
-
-    const [username, discriminator] = ctx.params.name.split('#');
-
-    let member = guild.members.cache.find(
-        (member) => member.user.username === username && member.user.discriminator === discriminator,
-    );
+    const member = await getMember(guild, ctx.params.user);
 
     if (!member) {
-        ctx.throw(404, 'no user found with that name');
-        return;
+        ctx.throw(404, 'no user found');
     }
 
     await member.roles.remove(ctx.params.role);
@@ -150,11 +108,11 @@ router.get('/user/by-name/:name/remove-role/:role', async (ctx: Context) => {
     ctx.status = 202;
 });
 
-router.get('/users', async (ctx: Context) => {
+router.get('/db/users', async (ctx: Context) => {
     ctx.body = await database.databases.users.find({}).sort({ updatedAt: -1 });
 });
 
-router.get('/messages', async (ctx: Context) => {
+router.get('/db/messages', async (ctx: Context) => {
     ctx.body = await database.databases.messages.find({}).sort({ updatedAt: -1 }).limit(100);
 });
 
