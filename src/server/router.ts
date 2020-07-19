@@ -113,6 +113,69 @@ router.delete('/user/:user/roles/:role', async (ctx: Context) => {
     ctx.status = 204;
 });
 
+router.get('/user/:user/messages', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const member = await getMember(guild, ctx.params.user);
+
+    if (!member) {
+        ctx.throw(404, 'no user found');
+    }
+
+    ctx.body = await database.databases.messages.find({ userID: member.user.id }).sort({ createdAt: -1 });
+});
+
+router.post('/user/:user/kick', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const member = await getMember(guild, ctx.params.user);
+
+    if (!member) {
+        ctx.throw(404, 'no user found');
+    }
+
+    if (!member.kickable) {
+        ctx.throw(406, 'user is not kickable');
+    }
+
+    await member.kick(ctx.request.body.reason);
+
+    ctx.status = 204;
+});
+
+router.post('/user/:user/ban', async (ctx: Context) => {
+    const guild = await getGuild(ctx);
+
+    if (!guild) {
+        ctx.throw(500, 'failed to get the guild');
+    }
+
+    const member = await getMember(guild, ctx.params.user);
+
+    if (!member) {
+        ctx.throw(404, 'no user found');
+    }
+
+    if (!member.bannable) {
+        ctx.throw(406, 'user is not bannable');
+    }
+
+    await member.ban({
+        days: ctx.request.body.days || 1,
+        reason: ctx.request.body.reason,
+    });
+
+    ctx.status = 204;
+});
+
 router.get('/db/users', async (ctx: Context) => {
     ctx.body = await database.databases.users.find({}).sort({ updatedAt: -1 });
 });
