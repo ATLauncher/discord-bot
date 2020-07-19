@@ -6,6 +6,7 @@ import WatcherBus from './WatcherBus';
 
 import { startServer } from './server';
 import logger from './utils/logger';
+import { isProductionEnvironment } from './utils/env';
 
 class Bot {
     public client: Discord.Client;
@@ -31,12 +32,15 @@ class Bot {
             logger.info('Bot started');
 
             startServer(this);
-            const botTestingChannel = this.client.channels.cache.find(
-                ({ id }) => id === config.get<string>('channels.botTesting'),
-            );
 
-            if (botTestingChannel) {
-                (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
+            if (isProductionEnvironment()) {
+                const botTestingChannel = this.client.channels.cache.find(
+                    ({ id }) => id === config.get<string>('channels.botTesting'),
+                );
+
+                if (botTestingChannel) {
+                    (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
+                }
             }
         });
     }
