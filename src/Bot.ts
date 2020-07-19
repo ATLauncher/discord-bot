@@ -4,6 +4,7 @@ import * as Discord from 'discord.js';
 import CommandBus from './CommandBus';
 import WatcherBus from './WatcherBus';
 
+import { startServer } from './server';
 import logger from './utils/logger';
 
 class Bot {
@@ -29,6 +30,7 @@ class Bot {
         this.client.on('ready', () => {
             logger.info('Bot started');
 
+            startServer(this);
             const botTestingChannel = this.client.channels.cache.find(
                 ({ id }) => id === config.get<string>('channels.botTesting'),
             );

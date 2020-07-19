@@ -2,7 +2,6 @@ import config from 'config';
 import * as Sentry from '@sentry/node';
 
 import Bot from './Bot';
-import { startServer } from './server';
 
 import logger from './utils/logger';
 import { isDevelopmentEnvironment, isProductionEnvironment } from './utils/env';
@@ -18,4 +17,3 @@ if (config.has('sentry.dsn')) {
 
 const bot = new Bot();
 bot.start();
-startServer(bot);
