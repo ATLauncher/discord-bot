@@ -58,14 +58,12 @@ router.post('/channel/:channel/send', async (ctx: Context) => {
         ctx.throw(404, 'no channel found');
     }
 
-    if (ctx.request.body.message) {
-        await channel.send(ctx.request.body.message);
-    }
+    const { message, embed } = ctx.request.body;
 
-    if (ctx.request.body.embeds) {
-        for (const embed of ctx.request.body.embeds) {
-            await channel.send(new Discord.MessageEmbed(embed as Discord.MessageEmbedOptions));
-        }
+    if (message) {
+        await channel.send(message, { embed });
+    } else {
+        await channel.send({ embed });
     }
 
     ctx.status = 201;
@@ -227,14 +225,12 @@ router.post('/user/:user/send', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
-    if (ctx.request.body.message) {
-        await member.send(ctx.request.body.message);
-    }
+    const { message, embed } = ctx.request.body;
 
-    if (ctx.request.body.embeds) {
-        for (const embed of ctx.request.body.embeds) {
-            await member.send(new Discord.MessageEmbed(embed as Discord.MessageEmbedOptions));
-        }
+    if (message) {
+        await member.send(message, { embed });
+    } else {
+        await member.send({ embed });
     }
 
     ctx.status = 201;
