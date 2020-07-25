@@ -1,6 +1,10 @@
 import { sub } from 'date-fns';
 import Datastore from 'nedb-promises';
 
+export interface Log {
+    url: string;
+}
+
 export interface Message {
     id: string;
     userID: string;
@@ -34,6 +38,12 @@ export interface User {
 }
 
 export const databases = {
+    logs: Datastore.create({
+        filename: './db/logs.db',
+        timestampData: true,
+        autoload: true,
+    }),
+
     messages: Datastore.create({
         filename: './db/messages.db',
         timestampData: true,
@@ -51,6 +61,20 @@ export const databases = {
         timestampData: true,
         autoload: true,
     }),
+};
+
+/**
+ * This will return if the log has been scanned or not.
+ */
+export const hasLogBeenScanned = async (url: string): Promise<boolean> => {
+    return (await databases.logs.count({ url })) !== 0;
+};
+
+/**
+ * This will mark the given log as scanned.
+ */
+export const markLogAsScanned = (url: string): Promise<Log> => {
+    return databases.logs.insert<Log>({ url });
 };
 
 /**

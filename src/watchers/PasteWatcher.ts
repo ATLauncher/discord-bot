@@ -5,6 +5,7 @@ import * as Discord from 'discord.js';
 import BaseWatcher from './BaseWatcher';
 
 import { COLOURS } from '../constants/discord';
+import { hasLogBeenScanned, markLogAsScanned } from '../utils/db';
 
 /**
  * This watcher checks for people saying bad words.
@@ -25,7 +26,7 @@ class PasteWatcher extends BaseWatcher {
             if (message.cleanContent.includes('https://paste.atlauncher.com/view')) {
                 const matches = message.cleanContent.match(/(https:\/\/paste.atlauncher.com\/view\/\w{8})/gm);
 
-                if (matches?.length) {
+                if (matches?.length && !(await hasLogBeenScanned(matches[0]))) {
                     const pasteUrl = matches[0].replace('/view/', '/view/raw/');
 
                     try {
@@ -77,7 +78,7 @@ class PasteWatcher extends BaseWatcher {
                             errors.push({
                                 name: 'Minecraft crashed',
                                 value:
-                                    'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://pastebin.com',
+                                    'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://pastebin.com and post the link here (if you haven\'t already.',
                             });
                         }
 
@@ -111,6 +112,8 @@ class PasteWatcher extends BaseWatcher {
                                 }),
                             );
                         }
+
+                        markLogAsScanned(matches[0]);
                     } catch (e) {
                         // ignored
                     }
