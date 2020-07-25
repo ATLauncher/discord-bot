@@ -33,7 +33,6 @@ class PasteWatcher extends BaseWatcher {
 
                         const errors = [];
 
-                        // https://paste.atlauncher.com/view/447ab1db
                         if (
                             response.body.match(/Error trying to download/) ||
                             response.body.match(/Error downloading.*?\. Expected hash of/)
@@ -45,7 +44,6 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        // https://paste.atlauncher.com/view/c3e9fa17
                         if (
                             response.body.match(/java\.net\.URLClassLoader are in module java\.base of loader/) ||
                             response.body.match(
@@ -59,7 +57,6 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        // https://paste.atlauncher.com/view/51a22be4
                         if (response.body.match(/hashes\.json returned response code 404 with message of Not Found/)) {
                             errors.push({
                                 name: 'Using outdated launcher',
@@ -68,7 +65,6 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        // https://paste.atlauncher.com/view/73acb05b
                         if (response.body.match(/ClassNotFoundException: cpw.mods.fml.common.launcher.FMLTweaker/)) {
                             errors.push({
                                 name: 'Instance not installed correctly',
@@ -77,7 +73,6 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        // https://paste.atlauncher.com/view/175d70f3
                         if (response.body.match(/Game crashed! Crash report saved to/)) {
                             errors.push({
                                 name: 'Minecraft crashed',
@@ -86,12 +81,19 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        // https://paste.atlauncher.com/view/c1db82e1
                         if (response.body.match(/Pixel format not accelerated/)) {
                             errors.push({
                                 name: 'Graphics issue',
                                 value:
                                     'There was an issue between your graphics card/drivers and Minecraft. To find a potential fix, please see [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/596335242575478805).',
+                            });
+                        }
+
+                        if (response.body.match(/java\.lang\.OutOfMemoryError/)) {
+                            errors.push({
+                                name: 'Out of memory',
+                                value:
+                                    'Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/603918060750897173) for more information on how to do that.',
                             });
                         }
 
