@@ -37,6 +37,7 @@ class TextSpamWatcher extends BaseWatcher {
         'become part of the ugandan squad',
         'discord is supposed to be closing down',
         'with the tag #1828',
+        'copy and paste him in every discord server',
     ];
 
     /**
