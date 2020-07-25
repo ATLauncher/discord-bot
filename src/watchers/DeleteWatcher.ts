@@ -1,3 +1,4 @@
+import config from 'config';
 import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
@@ -29,6 +30,11 @@ class DeleteWatcher extends BaseWatcher {
 
         // cleanContent not available so something wrong
         if (!message.cleanContent) {
+            return false;
+        }
+
+        if (message.channel.id === config.get<string>('channels.botTesting')) {
+            // don't log deletions in the bot testing channel
             return false;
         }
 

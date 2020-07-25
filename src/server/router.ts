@@ -1,5 +1,4 @@
 import Router from '@koa/router';
-import * as Discord from 'discord.js';
 import type { TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
