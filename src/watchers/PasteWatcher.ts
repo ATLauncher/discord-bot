@@ -36,12 +36,15 @@ class PasteWatcher extends BaseWatcher {
 
                         if (
                             response.body.match(/Error trying to download/) ||
-                            response.body.match(/Error downloading.*?\. Expected hash of/)
+                            response.body.match(/Error downloading.*?\. Expected hash of/) ||
+                            response.body.match(
+                                /javax\.net\.ssl\.SSLException: Unrecognized SSL message, plaintext connection\?/,
+                            )
                         ) {
                             errors.push({
                                 name: 'Cannot download files',
                                 value:
-                                    "The launcher is having issues downloading files necessary to install and play modpacks. This is usually due to a firewall or antivirus software blocking the connections on your computer/network.\n\nIf you have a firewall/antivirus, disable it temporarily to see if it's the cause. If that works, see [this page](https://atlauncher.com/help/whitelist) for whitelisting domains in your firewall/antivirus.\n\nIf that's not the case, you may have luck restarting your computer as well as your modem and/or router.",
+                                    "The launcher is having issues downloading files necessary to install and play modpacks. This is usually due to a firewall or antivirus software blocking the connections on your computer/network.\n\nIf you have a firewall/antivirus, disable it temporarily to see if it's the cause. If that works, see [this page](https://atlauncher.com/help/whitelist) for whitelisting domains in your firewall/antivirus.\n\nIf that's not the case, you may have luck restarting your computer as well as your modem and/or router. In some cases uninstalling Java, restarting your computer, then installing Java fresh can sometimes fix the issue.",
                             });
                         }
 
