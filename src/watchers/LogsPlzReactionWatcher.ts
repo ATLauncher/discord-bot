@@ -17,8 +17,14 @@ class LogsPlzReactionWatcher extends BaseWatcher {
      */
     async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageReactionAdd']) {
         const reaction = args[0];
+        const user = args[1];
 
-        if (reaction.emoji.id === config.get<string>('logsEmoji')) {
+        if (
+            reaction.emoji.id === config.get<string>('logsEmoji') &&
+            (!reaction.message.member?.roles.cache.has(config.get<string>('roles.moderators')) ||
+                reaction.message.member?.roles.cache.has(config.get<string>('roles.helpers')) ||
+                reaction.message.member?.roles.cache.has(config.get<string>('roles.packDeveloper')))
+        ) {
             await reaction.remove();
 
             const sentMessage = await reaction.message.reply(
