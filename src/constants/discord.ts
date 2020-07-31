@@ -4,6 +4,7 @@ export const COLOURS: { [name: string]: ColorResolvable } = {
     GREEN: 4289797,
     RED: 13632027,
     YELLOW: 16098851,
+    PRIMARY: 9028150,
 };
 
 export const PERMISSIONS: { [name: string]: PermissionString } = {
