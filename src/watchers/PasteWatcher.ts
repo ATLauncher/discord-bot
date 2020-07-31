@@ -77,7 +77,10 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        if (response.body.match(/Game crashed! Crash report saved to/)) {
+                        if (
+                            response.body.match(/Game crashed! Crash report saved to/) ||
+                            response.body.match(/Minecraft ran into a problem! Report saved to/)
+                        ) {
                             errors.push({
                                 name: 'Minecraft crashed',
                                 value:
