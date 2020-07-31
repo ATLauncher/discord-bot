@@ -33,7 +33,7 @@ class HowCommand extends BaseCommand {
         const replyWith = this.topics.find((t) => t.command === topic);
 
         if (replyWith) {
-            message.reply(
+            await message.channel.send(
                 new Discord.MessageEmbed({
                     ...replyWith,
                     color: COLOURS.PRIMARY,
