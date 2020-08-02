@@ -6,6 +6,7 @@ import { COLOURS } from './constants/discord';
 
 import type { User as DBUser } from './utils/db';
 import Bot from './Bot';
+import { addMinutes } from 'date-fns';
 
 /**
  * This is the base module class. A module is either a command or a watcher.
@@ -112,7 +113,10 @@ abstract class BaseModule {
             return false;
         }
 
-        if (this.permissions.length && !messageToActUpon.member?.hasPermission(this.permissions)) {
+        if (
+            this.permissions.length &&
+            !this.permissions.every((perm) => messageToActUpon.member?.hasPermission(perm))
+        ) {
             await messageToActUpon.delete();
 
             return false;
@@ -162,12 +166,10 @@ abstract class BaseModule {
             if (user.warnings >= 5) {
                 message.member?.ban({
                     days: 1,
-                    reason: `Not following the rules and accumulating 5 warnings. Appeal at ${config.get<string>(
-                        'appealUrl',
-                    )}`,
+                    reason: 'Not following the rules and accumulating 5 warnings',
                 });
             } else if (user.warnings >= 3) {
-                message.member?.kick('Not following the rules and accumulating 3 warnings');
+                message.member?.kick('Not following the rules and accumulating 3 warnings.');
 
                 this.sendEmbedToModeratorLogsChannel(
                     new Discord.MessageEmbed()
@@ -179,8 +181,37 @@ abstract class BaseModule {
                             `${message.author} (${message.author.username}#${message.author.discriminator})`,
                         ),
                 );
+            } else if (user.warnings >= 2) {
+                if (message.member) {
+                    this.addUserToJail(message.member);
+                }
             }
         }
+    }
+
+    /**
+     * This adds a the user to the jail role.
+     */
+    async addUserToJail(member: Discord.GuildMember): Promise<void> {
+        let user: DBUser = (await database.findUserByID(member.user.id)) || {
+            id: member.user.id,
+        };
+
+        user.jailedUntil = addMinutes(new Date(), 5);
+        user.username = member.user.username;
+        user.discriminator = member.user.discriminator;
+
+        database.updateUserByID(member.user.id, user);
+
+        member.roles.add(config.get<string>('roles.jailed'));
+
+        this.sendEmbedToModeratorLogsChannel(
+            new Discord.MessageEmbed()
+                .setTitle('User jailed')
+                .setColor(COLOURS.YELLOW)
+                .setTimestamp(new Date())
+                .addField('User', `${member.user} (${member.user.username}#${member.user.discriminator})`, true),
+        );
     }
 
     /**
@@ -257,8 +288,6 @@ abstract class BaseModule {
             id: member.id,
             hasBeenSentJoinMessage: false,
         };
-
-        console.log(user);
 
         return user.hasBeenSentJoinMessage;
     }

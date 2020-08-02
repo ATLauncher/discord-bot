@@ -70,12 +70,12 @@ class CommandBus {
      */
     setupCommandListeners() {
         Object.keys(this.commands).forEach((method) => {
-            this.bot.client.on(method as keyof Discord.ClientEvents, (...args) => {
+            this.bot.client.on(method as keyof Discord.ClientEvents, async (...args) => {
                 // @ts-ignore different ClientEvents have different args layout, so this type isn't safe
                 const command = this.commands[method as keyof Discord.ClientEvents]?.find((c) => c.matches(...args));
 
                 // @ts-ignore
-                if (command && command.shouldRun(method, ...args)) {
+                if (command && (await command.shouldRun(method, ...args))) {
                     // @ts-ignore
                     command.action(method, ...args);
                 }

@@ -4,6 +4,7 @@ import * as Discord from 'discord.js';
 import CommandBus from './CommandBus';
 import WatcherBus from './WatcherBus';
 
+import { startScheduler } from './schedule';
 import { startServer } from './server';
 import logger from './utils/logger';
 import { isProductionEnvironment } from './utils/env';
@@ -32,6 +33,8 @@ class Bot {
             logger.info('Bot started');
 
             startServer(this);
+
+            startScheduler(this);
 
             if (isProductionEnvironment()) {
                 const botTestingChannel = this.client.channels.cache.find(

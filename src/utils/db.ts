@@ -35,6 +35,7 @@ export interface User {
     username: string;
     warnings?: number;
     discriminator: string;
+    jailedUntil?: Date;
 }
 
 export const databases = {
