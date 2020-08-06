@@ -57,7 +57,7 @@ class PasteWatcher extends BaseWatcher {
                             errors.push({
                                 name: 'Using newer Java version',
                                 value:
-                                    "You're using a newer version of Java which is not compatible with modded Minecraft.\n\nInstall Java 8 to fix the issue. You can get Java 8 from [here](https://atl.pw/java8download).",
+                                    "You're using a newer version of Java which is not compatible with modded Minecraft.\n\nInstall Java 8 to fix the issue. You can get Java 8 from [here](https://atl.pw/java8download)\n\nOnce installed, be sure to restart your computer to make sure the newly installed Java version has installed correctly.",
                             });
                         }
 
@@ -112,7 +112,7 @@ class PasteWatcher extends BaseWatcher {
                                         errors.length,
                                     )}:`,
                                     description:
-                                        "**NOTE**: This is an automated scan and may not be 100% accurate. Please attempt the fixes mentioned below and let us know if they do or don't fix your issue.",
+                                        "**NOTE**: This is an automated scan and may not be 100% accurate. Please attempt the fixes mentioned below and if they don't help, please close and reopen the launcher, try again and provide us with new logs without clearing the console after restarting it.",
                                     color: COLOURS.RED,
                                     fields: errors,
                                 }),
