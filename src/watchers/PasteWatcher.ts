@@ -96,11 +96,18 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        if (response.body.match(/java\.lang\.OutOfMemoryError/)) {
+                        if (
+                            response.body.match(/java\.lang\.OutOfMemoryError/) ||
+                            response.body.match(/Failed to allocate CM marking stack/) ||
+                            response.body.match(
+                                /There is insufficient memory for the Java Runtime Environment to continue/,
+                            ) ||
+                            response.body.match(/Native memory allocation \(mmap\) failed/)
+                        ) {
                             errors.push({
                                 name: 'Out of memory',
                                 value:
-                                    'Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/603918060750897173) for more information on how to do that.',
+                                    "Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/603918060750897173) for more information on how to do that.\n\nIf changing ram allocation didn't help, then you may need to close some applications on your computer in order to free up available memory for Minecraft to run.",
                             });
                         }
 
