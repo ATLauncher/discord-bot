@@ -96,6 +96,22 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
+                        if (response.body.match(/64 Bit Java: false/)) {
+                            errors.push({
+                                name: 'Using 32 bit Java',
+                                value:
+                                    "You're using 32 bit Java. This will limit you to 1GB maximum of ram and most modpacks will not play at all.\n\nTo fix this please see [this link](https://atlauncher.com/help/32bit). Note that if that doesn't work for you, you may need to uninstall all Java from your computer, restart it, and then install Java as directed on that link.",
+                            });
+                        }
+
+                        if (response.body.match(/The specified size exceeds the maximum representable size/)) {
+                            errors.push({
+                                name: 'Allocating too much ram',
+                                value:
+                                    "You're allocating more ram to Minecraft than you have available on your system. Please lower your ram settings in the launcher's settings by following [this page](https://atlauncher.com/help/change-ram).",
+                            });
+                        }
+
                         if (
                             response.body.match(/java\.lang\.OutOfMemoryError/) ||
                             response.body.match(/Failed to allocate CM marking stack/) ||
