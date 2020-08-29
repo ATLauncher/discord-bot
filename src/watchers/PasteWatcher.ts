@@ -36,6 +36,7 @@ class PasteWatcher extends BaseWatcher {
 
                         if (
                             response.body.match(/Error trying to download/) ||
+                            response.body.match(/Failed to connect to files\.minecraftforge\.net/) ||
                             response.body.match(/Error downloading.*?\. Expected hash of/) ||
                             response.body.match(
                                 /javax\.net\.ssl\.SSLException: Unrecognized SSL message, plaintext connection\?/,
