@@ -105,7 +105,10 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        if (response.body.match(/The specified size exceeds the maximum representable size/)) {
+                        if (
+                            response.body.match(/The specified size exceeds the maximum representable size/) ||
+                            response.body.match(/Could not reserve enough space for object heap/)
+                        ) {
                             errors.push({
                                 name: 'Allocating too much ram',
                                 value:
