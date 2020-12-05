@@ -20,6 +20,11 @@ class CommandBus {
     commands: { [action in keyof Discord.ClientEvents]?: BaseCommand[] };
 
     /**
+     * List of commands.
+     */
+    commandList: BaseCommand[] = [];
+
+    /**
      * List of command filenames.
      */
     commandFiles: string[];
@@ -60,6 +65,7 @@ class CommandBus {
                     this.commands[method] = [];
                 }
 
+                this.commandList.push(command);
                 this.commands[method]?.push(command);
             });
         });

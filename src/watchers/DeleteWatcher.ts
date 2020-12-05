@@ -38,18 +38,7 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
-        if (
-            message.cleanContent.toLowerCase().startsWith('!cyt') ||
-            message.cleanContent.toLowerCase().startsWith('!log') ||
-            message.cleanContent.toLowerCase().startsWith('!idbans') ||
-            message.cleanContent.toLowerCase().startsWith('!working') ||
-            message.cleanContent.toLowerCase().startsWith('!clean') ||
-            message.cleanContent.toLowerCase().startsWith('!delete') ||
-            message.cleanContent.toLowerCase().startsWith('!ask') ||
-            message.cleanContent.toLowerCase().startsWith('!update') ||
-            message.cleanContent.toLowerCase().startsWith('!curselag') ||
-            message.cleanContent.toLowerCase().startsWith('!testjoin')
-        ) {
+        if (this.bot.commandBus?.commandList.some(({ pattern }) => message.cleanContent.match(pattern) !== null)) {
             // don't log deletions of commands
             return false;
         }

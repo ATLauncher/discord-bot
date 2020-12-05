@@ -7,6 +7,11 @@ import BaseModule from '../BaseModule';
  */
 abstract class BaseCommand extends BaseModule {
     /**
+     * The pattern that a command responds to.
+     */
+    pattern: RegExp = /^!$/;
+
+    /**
      * The events that this module should react to.
      */
     methods: Array<keyof Discord.ClientEvents> = ['message'];
@@ -16,6 +21,25 @@ abstract class BaseCommand extends BaseModule {
      */
     async action(action: keyof Discord.ClientEvents, message: Discord.Message): Promise<void> {
         return this.execute(message);
+    }
+
+    /**
+     * Checks to see if this message matches or not. If it returns true then we should act upon this message.
+     */
+    matches(message: Discord.Message): boolean {
+        if (this.respondToAll) {
+            return true;
+        }
+
+        if (message.system) {
+            return false; // don't match system messages
+        }
+
+        if (message.author.bot) {
+            return false; // don't respond to bot users
+        }
+
+        return message.cleanContent.match(this.pattern) !== null;
     }
 
     abstract async execute(message: Discord.Message): Promise<void>;

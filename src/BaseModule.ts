@@ -23,11 +23,6 @@ abstract class BaseModule {
     abstract methods: Array<keyof Discord.ClientEvents>;
 
     /**
-     * The pattern that a command responds to.
-     */
-    pattern?: RegExp;
-
-    /**
      * If this module is enabled or not.
      */
     enabled = true;
@@ -71,25 +66,6 @@ abstract class BaseModule {
         action: keyof Discord.ClientEvents,
         ...args: Discord.ClientEvents[keyof Discord.ClientEvents]
     ): Promise<void>;
-
-    /**
-     * Checks to see if this message matches or not. If it returns true then we should act upon this message.
-     */
-    matches(message: Discord.Message): boolean {
-        if (this.respondToAll) {
-            return true;
-        }
-
-        if (message.system) {
-            return false; // don't match system messages
-        }
-
-        if (message.author.bot) {
-            return false; // don't respond to bot users
-        }
-
-        return !!this.pattern && message.cleanContent.match(this.pattern) !== null;
-    }
 
     /**
      * This checks to see if this module should run for this message.
