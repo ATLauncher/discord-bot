@@ -17,6 +17,12 @@ class CleanCommand extends BaseCommand {
     pattern = /^!clean/;
 
     /**
+     * The description of what the command does.
+     */
+    description =
+        'This will clean between 1 and 100 latest messages from a channel. Pass in the number of messages to remove after the command, for instance `!clean 10`.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];

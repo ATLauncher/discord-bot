@@ -12,6 +12,11 @@ abstract class BaseCommand extends BaseModule {
     pattern: RegExp = /^!$/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'I have no description :(';
+
+    /**
      * The events that this module should react to.
      */
     methods: Array<keyof Discord.ClientEvents> = ['message'];

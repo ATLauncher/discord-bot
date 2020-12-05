@@ -14,6 +14,11 @@ class IDBanCommand extends BaseCommand {
     pattern = /^!idban/;
 
     /**
+     * The description of what the command does.
+     */
+    description = "This will ban a list of Discord user id's given after the command separated by a space.";
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.BAN_MEMBERS];

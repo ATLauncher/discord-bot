@@ -14,6 +14,11 @@ class FreeSupportCommand extends BaseCommand {
     pattern = /^!freesupport/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will post a message about how this is free support and to be patient when asking for help.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];

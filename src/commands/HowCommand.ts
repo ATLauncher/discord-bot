@@ -16,6 +16,11 @@ class HowCommand extends BaseCommand {
      */
     pattern = /^!how (\w+)/;
 
+    /**
+     * The description of what the command does.
+     */
+    description = 'This will post a message with how to do something. Currently only works with `!how portforward`.';
+
     topics: Topic[] = [
         {
             command: 'portforward',

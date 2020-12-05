@@ -10,6 +10,11 @@ class MicrosoftAccountCommand extends BaseCommand {
     pattern = /^!microsoftaccount/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will post a message about the Microsoft account migration.';
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {

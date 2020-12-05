@@ -15,6 +15,11 @@ class LogStatusCommand extends BaseCommand {
     pattern = /^!logstatus$/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will DM you with the status of deleted message logging.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];

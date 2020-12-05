@@ -13,6 +13,12 @@ class LogsCommand extends BaseCommand {
     pattern = /^!logs/;
 
     /**
+     * The description of what the command does.
+     */
+    description =
+        'This will post a message asking and showing how to provide logs. A user can be mentioned for it to reply back to that person.';
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {
@@ -23,7 +29,7 @@ class LogsCommand extends BaseCommand {
         const sentMessage = await message.channel.send(
             `In order to help you${userPre}${user}, we need some logs. Please see ` +
                 'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. Please make sure that you ' +
-                'press the button after the error/issue occurs.  Once done please paste the link here. If the logs ' +
+                'press the button after the error/issue occurs. Once done please paste the link here. If the logs ' +
                 "don't upload or this is an issue with a server, please upload your logs to https://pastebin.com/ " +
                 'and give us the link.',
         );

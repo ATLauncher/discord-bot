@@ -15,6 +15,11 @@ class JailCommand extends BaseCommand {
     pattern = /^!jail/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will jail the mentioned user for 5 minutes.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];

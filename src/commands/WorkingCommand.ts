@@ -13,6 +13,11 @@ class WorkingCommand extends BaseCommand {
     pattern = /^!working/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will post a message to test if the bot is working.';
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {

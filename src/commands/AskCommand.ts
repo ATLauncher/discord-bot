@@ -10,6 +10,11 @@ class AskCommand extends BaseCommand {
     pattern = /^!ask/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will post a message saying not to ask to ask and just to ask your question.';
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {

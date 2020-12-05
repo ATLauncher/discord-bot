@@ -10,7 +10,13 @@ class UpdateCommand extends BaseCommand {
      * The pattern to match against. If the message matches this pattern then we will respond to it with the action
      * method.
      */
-    pattern = /^!update\s/;
+    pattern = /^!update/;
+
+    /**
+     * The description of what the command does.
+     */
+    description =
+        'This will post a message saying to update the launcher if the user is in offline mode. A user can be optionally mentioned in the command.';
 
     /**
      * The function that should be called when the event is fired.

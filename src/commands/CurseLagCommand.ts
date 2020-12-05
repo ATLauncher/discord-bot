@@ -10,6 +10,12 @@ class CurseLagCommand extends BaseCommand {
     pattern = /^!curselag/;
 
     /**
+     * The description of what the command does.
+     */
+    description =
+        'This will post a message about the lag between CurseForge showing latest Minecraft version mods and the latest Forge coming out of beta.';
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {

@@ -15,6 +15,11 @@ class LogOnCommand extends BaseCommand {
     pattern = /^!logon/;
 
     /**
+     * The description of what the command does.
+     */
+    description = 'This will turn message deletion logging in #moderation-logs back on.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];

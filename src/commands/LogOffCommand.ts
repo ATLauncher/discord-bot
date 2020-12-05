@@ -15,6 +15,12 @@ class LogOffCommand extends BaseCommand {
     pattern = /^!logoff/;
 
     /**
+     * The description of what the command does.
+     */
+    description =
+        'This will temporarily disable logging deletion messages in the #moderation-logs channel for 10 minutes bt default. Can provide a different time in minutes like `!logoff 2`.';
+
+    /**
      * The permissions the user requires in order to use this command.
      */
     permissions = [PERMISSIONS.MANAGE_MESSAGES];
