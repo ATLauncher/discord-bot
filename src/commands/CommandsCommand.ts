@@ -33,14 +33,13 @@ class CommandsCommand extends BaseCommand {
             return;
         }
 
-        await message.reply(
+        await message.channel.send(
             new Discord.MessageEmbed({
                 title: 'Commands',
-                description:
-                    'This is a list of all the commands the bot understands with a short description of each and the regex pattern which it responds to.',
+                description: 'This is a list of all the commands the bot understands with a short description of each.',
                 color: COLOURS.PRIMARY,
                 fields: this.bot.commandBus?.commandList.map((command) => ({
-                    name: command.pattern,
+                    name: command.pattern.toString().match(/^.*?(!.*?)\$?\/$/i)?.[1] || command.pattern,
                     value: command.description,
                     inline: true,
                 })),
