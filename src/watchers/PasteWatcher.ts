@@ -78,17 +78,6 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        if (
-                            response.body.match(/Game crashed! Crash report saved to/) ||
-                            response.body.match(/Minecraft ran into a problem! Report saved to/)
-                        ) {
-                            errors.push({
-                                name: 'Minecraft crashed',
-                                value:
-                                    'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://pastebin.com and post the link here (if you haven\'t already.',
-                            });
-                        }
-
                         if (response.body.match(/Pixel format not accelerated/)) {
                             errors.push({
                                 name: 'Graphics issue',
@@ -129,6 +118,32 @@ class PasteWatcher extends BaseWatcher {
                                 value:
                                     "Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/603918060750897173) for more information on how to do that.\n\nIf changing ram allocation didn't help, then you may need to close some applications on your computer in order to free up available memory for Minecraft to run.",
                             });
+                        }
+
+                        if (
+                            response.body.match(
+                                /at bspkrs\.util\.ModVersionChecker\.<init>\(ModVersionChecker\.java:57\)/,
+                            )
+                        ) {
+                            errors.push({
+                                name: 'Update check failure',
+                                value:
+                                    'Go into the config folder of the instance and open up `bspkrsCore.cfg` in notepad. Change the line `B:allowUpdateCheck=true` to `B:allowUpdateCheck=false` and save the file.',
+                            });
+                        }
+
+                        // only ask about crash report if no other errors found
+                        if (!errors.length) {
+                            if (
+                                response.body.match(/Game crashed! Crash report saved to/) ||
+                                response.body.match(/Minecraft ran into a problem! Report saved to/)
+                            ) {
+                                errors.push({
+                                    name: 'Minecraft crashed',
+                                    value:
+                                        'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://pastebin.com and post the link here (if you haven\'t already.',
+                                });
+                            }
                         }
 
                         if (errors.length) {
