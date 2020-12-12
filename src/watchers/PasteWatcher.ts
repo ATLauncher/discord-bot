@@ -12,7 +12,7 @@ import { hasLogBeenScanned, markLogAsScanned } from '../utils/db';
  */
 class PasteWatcher extends BaseWatcher {
     /**
-     * The methoda this watcher should listen on.
+     * The method this watcher should listen on.
      */
     methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 

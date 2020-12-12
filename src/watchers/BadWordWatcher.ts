@@ -8,7 +8,7 @@ import BaseWatcher from './BaseWatcher';
  */
 class BadWordWatcher extends BaseWatcher {
     /**
-     * The methoda this watcher should listen on.
+     * The method this watcher should listen on.
      */
     methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
 

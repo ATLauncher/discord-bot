@@ -3,12 +3,9 @@ import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
-/**
- * This watcher checks for people saying bad words.
- */
 class LogsPlzReactionWatcher extends BaseWatcher {
     /**
-     * The methoda this watcher should listen on.
+     * The method this watcher should listen on.
      */
     methods: Array<keyof Discord.ClientEvents> = ['messageReactionAdd'];
 
@@ -20,7 +17,7 @@ class LogsPlzReactionWatcher extends BaseWatcher {
         const user = args[1];
 
         if (
-            reaction.emoji.id === config.get<string>('logsEmoji') &&
+            reaction.emoji.id === config.get<string>('reactionEmoji.logsPlz') &&
             (!reaction.message.member?.roles.cache.has(config.get<string>('roles.moderators')) ||
                 reaction.message.member?.roles.cache.has(config.get<string>('roles.helpers')) ||
                 reaction.message.member?.roles.cache.has(config.get<string>('roles.packDeveloper')))
