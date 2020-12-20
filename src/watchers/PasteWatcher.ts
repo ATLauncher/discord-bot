@@ -132,6 +132,16 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
+                        if (
+                            response.body.match(/NSWindow drag regions should only be invalidated on the Main Thread/)
+                        ) {
+                            errors.push({
+                                name: 'OptiFine incompatability',
+                                value:
+                                    'OptiFine is causing issues with your version of OSX. Please click on "Edit Mods" button on the instance, select OptiFine and then click the "Disable Selected" button to disable it. Your instance should now start correctly.',
+                            });
+                        }
+
                         // only ask about crash report if no other errors found
                         if (!errors.length) {
                             if (
