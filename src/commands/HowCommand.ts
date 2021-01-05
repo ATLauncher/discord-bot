@@ -20,7 +20,7 @@ class HowCommand extends BaseCommand {
      * The description of what the command does.
      */
     description =
-        'This will post a message with how to do something. Currently only works with `!how portforward` and `!how debugbat`.';
+        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward` and `!how debugbat`.';
 
     topics: Topic[] = [
         {
@@ -45,12 +45,17 @@ class HowCommand extends BaseCommand {
         const replyWith = this.topics.find((t) => t.command === topic);
 
         if (replyWith) {
-            await message.channel.send(
-                new Discord.MessageEmbed({
-                    ...replyWith,
-                    color: COLOURS.PRIMARY,
-                }),
-            );
+            const user = message.mentions.users.first();
+            const embed = new Discord.MessageEmbed({
+                ...replyWith,
+                color: COLOURS.PRIMARY,
+            });
+
+            if (user) {
+                await message.channel.send(`${user}:`, embed);
+            } else {
+                await message.channel.send(embed);
+            }
         }
 
         message.delete();
