@@ -121,9 +121,7 @@ class PasteWatcher extends BaseWatcher {
                         }
 
                         if (
-                            response.body.match(
-                                /Caught exception from bspkrsCore.*?java\.lang\.ArrayIndexOutOfBoundsException: 0.*?at bspkrs\.util\.ModVersionChecker\.<init>/s,
-                            )
+                            response.body.match(/at bspkrs\.util\.ModVersionChecker\.<init>/)
                         ) {
                             errors.push({
                                 name: 'Update check failure',
