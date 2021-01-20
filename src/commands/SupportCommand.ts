@@ -43,7 +43,6 @@ class SupportCommand extends BaseCommand {
             },
             responseType: 'json',
         });
-        console.log(body);
 
         const packInfo = body?.data?.packsSearchName?.data?.[0];
 
