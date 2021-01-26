@@ -20,7 +20,7 @@ class HowCommand extends BaseCommand {
      * The description of what the command does.
      */
     description =
-        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward` and `!how debugbat`.';
+        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward`, `!how skins` and `!how debugbat`.';
 
     topics: Topic[] = [
         {
@@ -34,6 +34,12 @@ class HowCommand extends BaseCommand {
             title: 'Debugging ATLauncher not starting',
             description:
                 'Download [this file](https://cdn.atlcdn.net/Debug.bat) to the same folder that ATLauncher is in, then double click it to run it and leave it for a minute and it should then create and open a Debug.txt file in the same folder. Copy paste that into https://pastebin.com/ and then share the link.',
+        },
+        {
+            command: 'skins',
+            title: 'Minecraft skins not showing on older Minecraft versions',
+            description:
+                'Mojang removed the servers hosting the skin images for 1.7 and earlier. You need to download [Skin Fixer](https://www.curseforge.com/minecraft/mc-mods/skin-fixer) and add it to your clients (not the server) which will fix it.',
         },
     ];
 
