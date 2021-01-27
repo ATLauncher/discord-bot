@@ -120,9 +120,7 @@ class PasteWatcher extends BaseWatcher {
                             });
                         }
 
-                        if (
-                            response.body.match(/at bspkrs\.util\.ModVersionChecker\.<init>/)
-                        ) {
+                        if (response.body.match(/at bspkrs\.util\.ModVersionChecker\.<init>/)) {
                             errors.push({
                                 name: 'Update check failure',
                                 value:
@@ -137,6 +135,14 @@ class PasteWatcher extends BaseWatcher {
                                 name: 'OptiFine incompatability',
                                 value:
                                     'OptiFine is causing issues with your version of OSX. Please click on "Edit Mods" button on the instance, select OptiFine and then click the "Disable Selected" button to disable it. Your instance should now start correctly.',
+                            });
+                        }
+
+                        if (response.body.match(/Server requested we change our client token/)) {
+                            errors.push({
+                                name: 'Login issue',
+                                value:
+                                    'There was an issue logging into your account. To fix, go to the accounts tab within the launcher, delete the account, then add it in again.',
                             });
                         }
 
