@@ -42,7 +42,7 @@ resource "digitalocean_droplet" "discord-bot" {
     - export HOME=/home/node
 
     # Install Node.js
-    - curl -sL https://deb.nodesource.com/setup_12.x | bash
+    - curl -sL https://deb.nodesource.com/setup_14.x | bash
     - apt -y install nodejs
 
     # Copy over ssh key

@@ -11,7 +11,7 @@ This is the code for our Discord bot which runs on our official Discord server a
 
 To get setup you will need to make sure you have the following installed on your machine:
 
-- [NodeJS 12](https://nodejs.org/en/download/)
+- [NodeJS 14](https://nodejs.org/en/download/)
   - check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
 
 We'll assume you're a capable developer, so we won't tell you how to go about installing those on your machine :)
