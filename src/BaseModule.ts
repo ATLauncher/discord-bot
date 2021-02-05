@@ -62,7 +62,7 @@ abstract class BaseModule {
     /**
      * The action to take when this module is invoked.
      */
-    abstract async action(
+    abstract action(
         action: keyof Discord.ClientEvents,
         ...args: Discord.ClientEvents[keyof Discord.ClientEvents]
     ): Promise<void>;
@@ -271,7 +271,7 @@ abstract class BaseModule {
     /**
      * This will send the given message to the moderator logs channel.
      */
-    sendMessageToModeratorLogsChannel(message: Discord.Message): void {
+    sendMessageToModeratorLogsChannel(message: Discord.StringResolvable): void {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {

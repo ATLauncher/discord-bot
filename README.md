@@ -2,8 +2,8 @@
 
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FATLauncher%2Fdiscord-bot?ref=badge_shield)
 [![Discord](https://discordapp.com/api/guilds/117047818136322057/embed.png?style=shield)](https://atl.pw/discordfromgithub)
-![Build and Deploy](https://github.com/ATLauncher/discord-bot/workflows/Build%20and%20Deploy/badge.svg?branch=master)
 ![Test and Build](https://github.com/ATLauncher/discord-bot/workflows/Test%20and%20Build/badge.svg?branch=master)
+![Deploy](https://github.com/ATLauncher/discord-bot/workflows/Deploy/badge.svg?branch=master)
 
 This is the code for our Discord bot which runs on our official Discord server at <https://atl.pw/discord>.
 
@@ -31,7 +31,8 @@ Once built simply run `npm run start` which will run the `index.js` file in the 
 
 ## Docker
 
-This repository contains support for Docker. Simply run `docker build -t atlauncher/discord-bot` to build a Docker image ready to use.
+This repository contains support for Docker. Simply run `docker build -t atlauncher/discord-bot` to build a Docker image
+ready to use.
 
 Alternatively we have an automated build running on our Docker Hub repo at
 <https://hub.docker.com/r/atlauncher/discord-bot/> accessed with identifier `atlauncher/discord-bot`.
@@ -134,7 +135,7 @@ This bot was made specifically for the [ATLauncher Discord server](https://atl.p
 any other purpose outside of that Discord server, there are some caveats to note:
 
 - Some things are hard coded to expect the layout and setup of the server in the same way as the ATLauncher one
-  - This inncludes the notion of having a `rules` channel, a `moderation-logs` channel as well as the concept of support
+  - This includes the notion of having a `rules` channel, a `moderation-logs` channel as well as the concept of support
     and non support channels
 - The `JoinWatcher` is again very specific to ATLauncher's needs
 - The bot was made to be run only on one server, so if it's connected to multiple servers, it may not act correctly

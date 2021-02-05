@@ -39,23 +39,25 @@ class CleanCommand extends BaseCommand {
             const linesToClean = parseInt(input, 10);
 
             if (linesToClean > 0 && linesToClean <= 100) {
-                await message.channel.bulkDelete(linesToClean);
+                if (message.channel instanceof Discord.TextChannel) {
+                    await message.channel.bulkDelete(linesToClean);
 
-                let user = 'Unknown';
+                    let user = 'Unknown';
 
-                if (message.author) {
-                    user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
+                    if (message.author) {
+                        user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
+                    }
+
+                    const embed = new Discord.MessageEmbed()
+                        .setTitle('Clean command run')
+                        .setColor(COLOURS.YELLOW)
+                        .setTimestamp(new Date())
+                        .addField('User', user, true)
+                        .addField('Channel', message.channel, true)
+                        .addField('Lines', linesToClean, true);
+
+                    this.sendEmbedToModeratorLogsChannel(embed);
                 }
-
-                const embed = new Discord.MessageEmbed()
-                    .setTitle('Clean command run')
-                    .setColor(COLOURS.YELLOW)
-                    .setTimestamp(new Date())
-                    .addField('User', user, true)
-                    .addField('Channel', message.channel, true)
-                    .addField('Lines', linesToClean, true);
-
-                this.sendEmbedToModeratorLogsChannel(embed);
             }
         }
     }

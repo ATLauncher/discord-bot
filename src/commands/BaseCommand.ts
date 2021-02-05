@@ -47,7 +47,7 @@ abstract class BaseCommand extends BaseModule {
         return message.cleanContent.match(this.pattern) !== null;
     }
 
-    abstract async execute(message: Discord.Message): Promise<void>;
+    abstract execute(message: Discord.Message): Promise<void>;
 }
 
 export default BaseCommand;

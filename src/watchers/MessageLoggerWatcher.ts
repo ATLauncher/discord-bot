@@ -35,7 +35,7 @@ class MessageLoggerWatcher extends BaseWatcher {
             const messageToLog = {
                 id: message.id,
                 userID: message.author.id,
-                isSystemMessage: message.system,
+                isSystemMessage: message.system ?? false,
                 isBotMessage: message.author.bot,
                 content: message.cleanContent,
                 channel: {
