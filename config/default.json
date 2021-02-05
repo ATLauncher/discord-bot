@@ -12,6 +12,7 @@
   },
   "channels": {
     "rules": "123456789012345678",
+    "faqAndHelp": "123456789012345678",
     "moderationLogs": "123456789012345678",
     "botTesting": "123456789012345678"
   },
@@ -26,5 +27,15 @@
       "123456789012345678"
     ]
   },
-  "badWords": []
+  "badWords": [],
+  "faqAndHelp": [
+    {
+      "content": "Welcome to the FAQ and Help channel. See below for frequently asked questions and guides on how to do/fix things with ATLauncher."
+    },
+    {
+      "title": "How do I type?",
+      "description": "Press keyboard!",
+      "url": "https://google.com"
+    }
+  ]
 }

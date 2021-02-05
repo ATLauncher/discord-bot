@@ -8,6 +8,8 @@ import { startScheduler } from './schedule';
 import { startServer } from './server';
 import logger from './utils/logger';
 import { isProductionEnvironment } from './utils/env';
+import { COLOURS } from './constants/discord';
+import * as database from './utils/db';
 
 class Bot {
     public client: Discord.Client;
@@ -29,12 +31,14 @@ class Bot {
     setupBot() {
         logger.debug('Setting bot up');
 
-        this.client.on('ready', () => {
+        this.client.on('ready', async () => {
             logger.info('Bot started');
 
             startServer(this);
 
             startScheduler(this);
+
+            await this.refreshFaqAndHelpChannel();
 
             if (isProductionEnvironment()) {
                 const botTestingChannel = this.client.channels.cache.find(
@@ -72,6 +76,57 @@ class Bot {
         logger.debug('Setting watcher bus up');
 
         this.watcherBus = new WatcherBus(this);
+    }
+
+    /**
+     * This will refresh all the items in FAQ and Help channel to be in line with what's defined in the config.
+     */
+    async refreshFaqAndHelpChannel() {
+        const faqAndHelpChannel = this.client.channels.cache.find(
+            ({ id }) => id === config.get<string>('channels.faqAndHelp'),
+        ) as Discord.TextChannel;
+
+        if (faqAndHelpChannel) {
+            const faqAndHelpMessages = config.get<
+                { title: string; content: string; description: string; url: string }[]
+            >('faqAndHelp');
+
+            const faqAndHelpMessagesSize = await database.getSetting('faqAndHelpMessagesSize', 0);
+            const currentSize = JSON.stringify(faqAndHelpMessages).length;
+
+            if (faqAndHelpMessagesSize != currentSize) {
+                logger.debug('Refreshing FAQ & Help channel');
+
+                // delete all messages
+                const channelMessages = await faqAndHelpChannel.messages.fetch({ limit: 100 });
+                await Promise.all(channelMessages.map((cm) => cm.delete()));
+
+                // add all of the messages
+                await Promise.all(
+                    faqAndHelpMessages
+                        .map((m) => {
+                            if (m.content) {
+                                return faqAndHelpChannel.send(m.content);
+                            }
+
+                            if (m.url) {
+                                return faqAndHelpChannel.send(
+                                    new Discord.MessageEmbed({
+                                        ...m,
+                                        color: COLOURS.PRIMARY,
+                                    }),
+                                );
+                            }
+
+                            return null;
+                        })
+                        .filter(Boolean),
+                );
+
+                // set the database the size of the messages
+                await database.updateSetting('faqAndHelpMessagesSize', currentSize);
+            }
+        }
     }
 
     /**

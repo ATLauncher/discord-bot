@@ -38,6 +38,11 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
+        if (message.channel.id === config.get<string>('channels.faqAndHelp')) {
+            // don't log deletions in the faq-and-help channel
+            return false;
+        }
+
         if (this.bot.commandBus?.commandList.some(({ pattern }) => message.cleanContent.match(pattern) !== null)) {
             // don't log deletions of commands
             return false;
