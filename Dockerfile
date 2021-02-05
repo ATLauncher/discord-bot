@@ -9,9 +9,9 @@ WORKDIR /app
 
 COPY package-lock.json /app
 COPY package.json /app
-COPY patches /app
+COPY patches /app/patches
 
-RUN /usr/local/bin/npm install
+RUN /usr/local/bin/npm install --unsafe-perm
 
 COPY . /app
 
