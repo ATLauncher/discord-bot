@@ -31,6 +31,8 @@ jobs:
               working-directory: ./deploy/terraform
               env:
                   TF_VAR_do_token: ${{secrets.DO_TOKEN}}
+                  TF_VAR_do_data_volume_id: ${{secrets.DO_DATA_VOLUME_ID}}
+                  TF_VAR_do_floating_ip: ${{secrets.BOX_IP}}
                   TF_VAR_ssh_fingerprint: ${{secrets.DO_SSH_FINGERPRINT}}
                   TF_VAR_ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
             - run: terraform apply tf.plan > /dev/null

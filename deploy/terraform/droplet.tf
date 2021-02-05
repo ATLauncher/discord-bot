@@ -6,6 +6,7 @@ resource "digitalocean_droplet" "discord-bot" {
   private_networking = false
   monitoring         = true
   ssh_keys           = [var.ssh_fingerprint]
+  volume_ids         = [var.do_data_volume_id]
   user_data          = <<-EOT
     #cloud-config
     # Set up non-root sudo account.
@@ -45,6 +46,11 @@ resource "digitalocean_droplet" "discord-bot" {
     - curl -sL https://deb.nodesource.com/setup_14.x | bash
     - apt -y install nodejs
 
+    # Mount data directory
+    - mkdir /mnt/discord_bot_data_volume
+    - mount -o defaults,nofail,discard,noatime /dev/disk/by-id/scsi-0DO_Volume_discord-bot-data-volume /mnt/discord_bot_data_volume
+    - echo "/dev/disk/by-id/scsi-0DO_Volume_discord-bot-data-volume /mnt/discord_bot_data_volume ext4 defaults,nofail,discard,noatime 0 2" >> /etc/fstab
+
     # Copy over ssh key
     - mkdir /home/node/.ssh
     - cp /root/.ssh/authorized_keys /home/node/.ssh/authorized_keys
@@ -79,9 +85,14 @@ resource "digitalocean_droplet" "discord-bot" {
     ]
 
     connection {
-      host  = "${digitalocean_droplet.discord-bot.ipv4_address}"
+      host  = digitalocean_droplet.discord-bot.ipv4_address
       user  = "root"
       agent = true
     }
   }
+}
+
+resource "digitalocean_floating_ip_assignment" "discord-bot" {
+  droplet_id = digitalocean_droplet.discord-bot.id
+  ip_address = var.do_floating_ip
 }

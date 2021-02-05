@@ -56,6 +56,8 @@ But if you do wish to run it locally, or in another CI/CD pipeline, the instruct
 First install Terraform on your machine. Once done, setup some environment variables as follows:
 
 - `TF_VAR_do_token`: your DigitalOcean token
+- `TF_VAR_do_data_volume_id`: the id of the volume on DigitalOcean named as "discord-bot-data-volume"
+- `TF_VAR_do_floating_ip`: the floating ip on DigitalOcean to assign to the droplet
 - `TF_VAR_ssh_fingerprint`: a SSH key fingerprint from your DigitalOcean account
 - `TF_VAR_ssh_private_key`: private key contents matching the above fingerprint
 
