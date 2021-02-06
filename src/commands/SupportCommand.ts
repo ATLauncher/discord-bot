@@ -10,9 +10,9 @@ interface PacksSearchQuery {
             data: [
                 {
                     name: string;
-                    website_url?: string;
-                    support_url?: string;
-                    discord_invite_url?: string;
+                    websiteUrl?: string;
+                    supportUrl?: string;
+                    discordInviteUrl?: string;
                 },
             ];
         };
@@ -51,9 +51,9 @@ class SupportCommand extends BaseCommand {
             const embed = new Discord.MessageEmbed({
                 title: `Where to get support for ${packInfo.name}`,
                 description: `For support for ${packInfo.name} please visit their website at ${
-                    packInfo.website_url
-                } or take a look at their support site at ${packInfo.support_url}.${
-                    packInfo.discord_invite_url ? ' Alternatively join their Discord below.' : ''
+                    packInfo.websiteUrl
+                } or take a look at their support site at ${packInfo.supportUrl}.${
+                    packInfo.discordInviteUrl ? ' Alternatively join their Discord below.' : ''
                 }`,
                 color: COLOURS.PRIMARY,
             });
@@ -64,8 +64,8 @@ class SupportCommand extends BaseCommand {
                 await message.channel.send(embed);
             }
 
-            if (packInfo.discord_invite_url) {
-                await message.channel.send(packInfo.discord_invite_url);
+            if (packInfo.discordInviteUrl) {
+                await message.channel.send(packInfo.discordInviteUrl);
             }
         }
 
