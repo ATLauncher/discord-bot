@@ -33,7 +33,7 @@ class HowCommand extends BaseCommand {
             command: 'debugbat',
             title: 'Debugging ATLauncher not starting',
             description:
-                'Download [this file](https://cdn.atlcdn.net/Debug.bat) to the same folder that ATLauncher is in, then double click it to run it and leave it for a minute and it should then create and open a Debug.txt file in the same folder. Copy paste that into https://pastebin.com/ and then share the link.',
+                'Download [this file](https://cdn.atlcdn.net/Debug.bat) to the same folder that ATLauncher is in, then double click it to run it and leave it for a minute and it should then create and open a Debug.txt file in the same folder. Copy paste that into https://paste.ee/ and then share the link.',
         },
         {
             command: 'skins',

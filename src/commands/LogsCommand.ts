@@ -30,7 +30,7 @@ class LogsCommand extends BaseCommand {
             `In order to help you${userPre}${user}, we need some logs. Please see ` +
                 'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. Please make sure that you ' +
                 'press the button after the error/issue occurs. Once done please paste the link here. If the logs ' +
-                "don't upload or this is an issue with a server, please upload your logs to https://pastebin.com/ " +
+                "don't upload or this is an issue with a server, please upload your logs to https://paste.ee/ " +
                 'and give us the link.',
         );
 

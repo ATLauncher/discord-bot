@@ -155,7 +155,7 @@ class PasteWatcher extends BaseWatcher {
                                 errors.push({
                                     name: 'Minecraft crashed',
                                     value:
-                                        'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://pastebin.com and post the link here (if you haven\'t already.',
+                                        'Minecraft has crashed and generated a crash report. Please click the "Open Folder" button on the instance and then grab the latest file from the "crash-reports" folder and upload the contents to https://paste.ee/ and post the link here (if you haven\'t already.',
                                 });
                             }
                         }
