@@ -82,7 +82,7 @@ class PasteWatcher extends BaseWatcher {
                             errors.push({
                                 name: 'Graphics issue',
                                 value:
-                                    'There was an issue between your graphics card/drivers and Minecraft. To find a potential fix, please see [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/596335242575478805).',
+                                    'There was an issue between your graphics card/drivers and Minecraft. If you have a dedicated GPU (AMD/Nvidia) the try updating/reinstalling your graphics card drivers. If not then try running the [runtime downloader](https://atlauncher.com/help/runtime-download) within the launchers Tools tab to see if it helps.',
                             });
                         }
 
@@ -116,7 +116,7 @@ class PasteWatcher extends BaseWatcher {
                             errors.push({
                                 name: 'Out of memory',
                                 value:
-                                    "Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [this post](https://discordapp.com/channels/117047818136322057/276161572534091776/603918060750897173) for more information on how to do that.\n\nIf changing ram allocation didn't help, then you may need to close some applications on your computer in order to free up available memory for Minecraft to run.",
+                                    "Minecraft has run out of memory. You need to increase the amount of ram used for launching Minecraft. See [thie page](https://atlauncher.com/help/change-ram) for more information on how to do that.\n\nIf changing ram allocation didn't help, then you may need to close some applications on your computer in order to free up available memory for Minecraft to run.",
                             });
                         }
 
