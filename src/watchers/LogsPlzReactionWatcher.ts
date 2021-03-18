@@ -17,6 +17,8 @@ class LogsPlzReactionWatcher extends BaseWatcher {
         const user = args[1];
 
         if (reaction.emoji.id === config.get<string>('reactionEmoji.logsPlz')) {
+            await reaction.remove();
+
             if (
                 reaction.message.member?.roles.cache.has(config.get<string>('roles.moderators')) ||
                 reaction.message.member?.roles.cache.has(config.get<string>('roles.helpers')) ||
@@ -41,8 +43,6 @@ class LogsPlzReactionWatcher extends BaseWatcher {
                     await sentMessage.react('🇬');
                     await sentMessage.react('🇸');
                 }
-
-                await reaction.remove();
             }
         }
     }
