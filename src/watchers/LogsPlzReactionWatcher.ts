@@ -14,15 +14,19 @@ class LogsPlzReactionWatcher extends BaseWatcher {
      */
     async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageReactionAdd']) {
         const reaction = args[0];
-        const user = args[1];
+        const reactingUser = args[1];
 
         if (reaction.emoji.id === config.get<string>('reactionEmoji.logsPlz')) {
             await reaction.remove();
 
+            const reactingMember = this.bot.client.guilds.cache
+                .first()
+                ?.members.cache.find((member) => member.user.id === reactingUser.id);
+
             if (
-                reaction.message.member?.roles.cache.has(config.get<string>('roles.moderators')) ||
-                reaction.message.member?.roles.cache.has(config.get<string>('roles.helpers')) ||
-                reaction.message.member?.roles.cache.has(config.get<string>('roles.packDeveloper'))
+                reactingMember?.roles.cache.has(config.get<string>('roles.moderators')) ||
+                reactingMember?.roles.cache.has(config.get<string>('roles.helpers')) ||
+                reactingMember?.roles.cache.has(config.get<string>('roles.packDeveloper'))
             ) {
                 const sentMessage = await reaction.message.reply(
                     `In order to help you, we need some logs. Please see ` +
@@ -32,7 +36,7 @@ class LogsPlzReactionWatcher extends BaseWatcher {
                         'and give us the link.',
                 );
 
-                if (reaction.message.channel.type !== 'dm') {
+                if (sentMessage.deletable) {
                     // delete message after 24 hours
                     sentMessage.delete({
                         timeout: 60 * 60 * 24 * 1000,
