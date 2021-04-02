@@ -38,7 +38,9 @@ export const startServer = (bot: Bot) => {
 
     app.use(bodyParser());
     app.use(router.routes()).use(router.allowedMethods());
-    app.listen(config.get<number>('server.port'));
 
-    logger.info(`Server running on port ${config.get<number>('server.port')}`);
+    const port = process.env.PORT || config.get<number>('server.port');
+    app.listen(port);
+
+    logger.info(`Server running on port ${port}`);
 };
