@@ -2,7 +2,8 @@ import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
+import { subSeconds } from 'date-fns';
 
 /**
  * This watcher checks for people spamming the same message multiple times.
@@ -37,7 +38,14 @@ class SameMessageSpamWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const count = await database.countMessagesInLast(message.cleanContent, 30);
+            const count = await prisma.message.count({
+                where: {
+                    content: message.cleanContent,
+                    createdAt: {
+                        gte: subSeconds(new Date(), 30),
+                    },
+                },
+            });
 
             if (count >= 3) {
                 const warningMessage = await message.reply('Please do not spam the same message.');

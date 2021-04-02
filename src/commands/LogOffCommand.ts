@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
 import { COLOURS, PERMISSIONS } from '../constants/discord';
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
 
 /**
  * This will turn message deletion logging off.
@@ -30,7 +30,13 @@ class LogOffCommand extends BaseCommand {
      */
     async execute(message: Discord.Message) {
         await message.delete();
-        await database.updateSetting('logMessageDeletions', false);
+        await prisma.setting.upsert({
+            where: { name: 'logMessageDeletions' },
+            create: { name: 'logMessageDeletions', value: false },
+            update: {
+                value: false,
+            },
+        });
 
         const input = message.cleanContent.replace('!logoff', '');
         const timeout = input.length ? parseInt(input, 10) : null;
@@ -51,7 +57,13 @@ class LogOffCommand extends BaseCommand {
 
         if (timeout) {
             setTimeout(async () => {
-                await database.updateSetting('logMessageDeletions', true);
+                await prisma.setting.upsert({
+                    where: { name: 'logMessageDeletions' },
+                    create: { name: 'logMessageDeletions', value: true },
+                    update: {
+                        value: true,
+                    },
+                });
 
                 const embed = new Discord.MessageEmbed()
                     .setTitle('Message deletion logging turned on')

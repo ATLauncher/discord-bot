@@ -3,7 +3,7 @@ import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 import { COLOURS } from '../constants/discord';
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
 
 /**
  * A watcher that listens for message/s being deleted. This can occur from either a user deleting it themselves or a
@@ -48,7 +48,11 @@ class DeleteWatcher extends BaseWatcher {
             return false;
         }
 
-        return await database.getSetting<boolean>('logMessageDeletions', true);
+        const logMessageDeletions = await prisma.setting.findUnique({
+            where: { name: 'logMessageDeletions' },
+        });
+
+        return (logMessageDeletions?.value as boolean) ?? true;
     }
 
     /**

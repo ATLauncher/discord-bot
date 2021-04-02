@@ -19,7 +19,7 @@ RUN /usr/local/bin/npm run build
 
 ENV NODE_ENV=production
 
-VOLUME ["/app/db"]
+EXPOSE 3000
 
 ENTRYPOINT ["/usr/local/bin/npm"]
 CMD ["start"]

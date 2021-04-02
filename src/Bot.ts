@@ -7,9 +7,9 @@ import WatcherBus from './WatcherBus';
 import { startScheduler } from './schedule';
 import { startServer } from './server';
 import logger from './utils/logger';
+import prisma from './utils/prisma';
 import { isProductionEnvironment } from './utils/env';
 import { COLOURS } from './constants/discord';
-import * as database from './utils/db';
 
 class Bot {
     public client: Discord.Client;
@@ -91,7 +91,9 @@ class Bot {
                 { title: string; content: string; description: string; url: string }[]
             >('faqAndHelp');
 
-            const faqAndHelpMessagesSize = await database.getSetting('faqAndHelpMessagesSize', 0);
+            const setting = await prisma.setting.findUnique({ where: { name: 'faqAndHelpMessagesSize' } });
+
+            const faqAndHelpMessagesSize = setting?.value ?? 0;
             const currentSize = JSON.stringify(faqAndHelpMessages).length;
 
             if (faqAndHelpMessagesSize != currentSize) {
@@ -124,7 +126,13 @@ class Bot {
                 );
 
                 // set the database the size of the messages
-                await database.updateSetting('faqAndHelpMessagesSize', currentSize);
+                await prisma.setting.upsert({
+                    where: { name: 'faqAndHelpMessagesSize' },
+                    create: { name: 'faqAndHelpMessagesSize', value: currentSize },
+                    update: {
+                        value: currentSize,
+                    },
+                });
             }
         }
     }

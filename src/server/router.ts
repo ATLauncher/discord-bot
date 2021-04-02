@@ -3,7 +3,7 @@ import type { TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
 
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
 import { getGuild, getMember, getChannel } from './utils';
 
 const router = new Router<ServerState, ServerContext>();
@@ -161,7 +161,7 @@ router.get('/user/:user/messages', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
-    ctx.body = await database.databases.messages.find({ userID: member.user.id }).sort({ createdAt: -1 });
+    ctx.body = await prisma.message.findMany({ where: { userId: member.user.id }, orderBy: { updatedAt: 'desc' } });
 });
 
 router.post('/user/:user/kick', async (ctx: Context) => {
@@ -236,11 +236,11 @@ router.post('/user/:user/send', async (ctx: Context) => {
 });
 
 router.get('/db/users', async (ctx: Context) => {
-    ctx.body = await database.databases.users.find({}).sort({ updatedAt: -1 });
+    ctx.body = await prisma.user.findMany({ orderBy: { updatedAt: 'desc' } });
 });
 
 router.get('/db/messages', async (ctx: Context) => {
-    ctx.body = await database.databases.messages.find({}).sort({ updatedAt: -1 }).limit(100);
+    ctx.body = await prisma.message.findMany({ orderBy: { createdAt: 'desc' }, take: 100 });
 });
 
 export { router };

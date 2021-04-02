@@ -1,12 +1,10 @@
 import config from 'config';
+import { addMinutes } from 'date-fns';
 import * as Discord from 'discord.js';
 
-import * as database from './utils/db';
-import { COLOURS } from './constants/discord';
-
-import type { User as DBUser } from './utils/db';
 import Bot from './Bot';
-import { addMinutes } from 'date-fns';
+import prisma from './utils/prisma';
+import { COLOURS } from './constants/discord';
 
 /**
  * This is the base module class. A module is either a command or a watcher.
@@ -110,21 +108,23 @@ abstract class BaseModule {
      */
     async addWarningToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
         if (message.author) {
-            let user: DBUser = (await database.findUserByID(message.author.id)) || {
-                id: message.author.id,
-                warnings: 0,
-            };
-
-            // in case of no or bad warnings information, set it to 0, ready to be incremented
-            if (typeof user.warnings !== 'number' || Number.isNaN(user.warnings)) {
-                user.warnings = 0;
-            }
-
-            user.warnings++;
-            user.username = message.author.username;
-            user.discriminator = message.author.discriminator;
-
-            database.updateUserByID(message.author.id, user);
+            const user = await prisma.user.upsert({
+                where: {
+                    id: message.author.id,
+                },
+                create: {
+                    id: message.author.id,
+                    username: message.author.username,
+                    discriminator: message.author.discriminator,
+                },
+                update: {
+                    username: message.author.username,
+                    discriminator: message.author.discriminator,
+                    warnings: {
+                        increment: 1,
+                    },
+                },
+            });
 
             this.sendEmbedToModeratorLogsChannel(
                 new Discord.MessageEmbed()
@@ -169,15 +169,19 @@ abstract class BaseModule {
      * This adds a the user to the jail role.
      */
     async addUserToJail(member: Discord.GuildMember): Promise<void> {
-        let user: DBUser = (await database.findUserByID(member.user.id)) || {
-            id: member.user.id,
-        };
-
-        user.jailedUntil = addMinutes(new Date(), 5);
-        user.username = member.user.username;
-        user.discriminator = member.user.discriminator;
-
-        database.updateUserByID(member.user.id, user);
+        await prisma.user.upsert({
+            where: {
+                id: member.user.id,
+            },
+            create: {
+                id: member.user.id,
+                username: member.user.username,
+                discriminator: member.user.discriminator,
+            },
+            update: {
+                jailedUntil: addMinutes(new Date(), 5),
+            },
+        });
 
         member.roles.add(config.get<string>('roles.jailed'));
 
@@ -195,12 +199,13 @@ abstract class BaseModule {
      */
     async hasUserSeenTLauncherMessage(message: Discord.Message | Discord.PartialMessage): Promise<boolean> {
         if (message.author) {
-            let user: DBUser = (await database.findUserByID(message.author.id)) || {
-                id: message.author.id,
-                hasSeenTLauncherMessage: false,
-            };
+            const user = await prisma.user.findUnique({
+                where: {
+                    id: message.author.id,
+                },
+            });
 
-            return user.hasSeenTLauncherMessage;
+            return user?.hasSeenTLauncherMessage ?? false;
         }
 
         return false;
@@ -212,16 +217,21 @@ abstract class BaseModule {
      */
     async addHasSeenTLauncherMessageToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
         if (message.author) {
-            let user = (await database.findUserByID(message.author.id)) || {
-                id: message.author.id,
-                hasSeenTLauncherMessage: false,
-            };
-
-            user.hasSeenTLauncherMessage = true;
-            user.username = message.author.username;
-            user.discriminator = message.author.discriminator;
-
-            database.updateUserByID(message.author.id, user);
+            await prisma.user.upsert({
+                where: {
+                    id: message.author.id,
+                },
+                create: {
+                    id: message.author.id,
+                    username: message.author.username,
+                    discriminator: message.author.discriminator,
+                },
+                update: {
+                    username: message.author.username,
+                    discriminator: message.author.discriminator,
+                    hasSeenTLauncherMessage: true,
+                },
+            });
 
             this.sendEmbedToModeratorLogsChannel(
                 new Discord.MessageEmbed()
@@ -243,16 +253,21 @@ abstract class BaseModule {
      */
     async addHasBeenSentJoinMessage(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<void> {
         if (member.user) {
-            let user = (await database.findUserByID(member.id)) || {
-                id: member.id,
-                hasBeenSentJoinMessage: false,
-            };
-
-            user.hasBeenSentJoinMessage = true;
-            user.username = member.user.username;
-            user.discriminator = member.user.discriminator;
-
-            database.updateUserByID(member.id, user);
+            await prisma.user.upsert({
+                where: {
+                    id: member.user.id,
+                },
+                create: {
+                    id: member.user.id,
+                    username: member.user.username,
+                    discriminator: member.user.discriminator,
+                },
+                update: {
+                    username: member.user.username,
+                    discriminator: member.user.discriminator,
+                    hasBeenSentJoinMessage: true,
+                },
+            });
         }
     }
 
@@ -260,12 +275,13 @@ abstract class BaseModule {
      * Checks to see if the user has sent the join message.
      */
     async hasUserBeenSentJoinMessage(member: Discord.GuildMember | Discord.PartialGuildMember): Promise<boolean> {
-        let user: DBUser = (await database.findUserByID(member.id)) || {
-            id: member.id,
-            hasBeenSentJoinMessage: false,
-        };
+        const user = await prisma.user.findUnique({
+            where: {
+                id: member.id,
+            },
+        });
 
-        return user.hasBeenSentJoinMessage;
+        return user?.hasBeenSentJoinMessage ?? false;
     }
 
     /**

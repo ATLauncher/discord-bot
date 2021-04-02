@@ -2,13 +2,13 @@ import config from 'config';
 import schedule from 'node-schedule';
 
 import type Bot from './Bot';
-import { databases, User } from './utils/db';
+import prisma from './utils/prisma';
 import logger from './utils/logger';
 
 const removeJailedUsers = async (bot: Bot) => {
     logger.debug('Scheduler::removeJailedUsers - running');
 
-    const usersToRelease = await databases.users.find<User>({ jailedUntil: { $lte: new Date(), $ne: null } });
+    const usersToRelease = await prisma.user.findMany({ where: { jailedUntil: { lte: new Date() } } });
 
     if (usersToRelease.length) {
         logger.info(`Scheduler::removeJailedUsers - removing role from ${usersToRelease.length} users`);
@@ -30,7 +30,7 @@ const removeJailedUsers = async (bot: Bot) => {
                 await member.roles.remove(config.get<string>('roles.jailed'));
             }
 
-            await databases.users.update({ id: user.id }, { ...user, jailedUntil: null });
+            await prisma.user.update({ where: { id: user.id }, data: { jailedUntil: null } });
         }
     }
 };

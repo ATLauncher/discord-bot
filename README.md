@@ -63,8 +63,12 @@ This will print out a json string of the generated config
 
 ## Database
 
-This bot uses NEDB to provide a local json filesystem database. It will store all the data locally in the `db/`
-directory.
+This bot uses [Prisma](https://www.prisma.io/) to provide a database connection for storing things.
+
+Prisma supports various different databases, with PostgreSQL being the default out of the box.
+
+This can be configured using the `.env.local` file. If you don't have that file, just copy `.env` to `.env.local`. No
+changes should be made to the `.env` file as it is checked into git.
 
 ## Logging
 

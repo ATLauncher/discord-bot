@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
 import { COLOURS, PERMISSIONS } from '../constants/discord';
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
 
 /**
  * This will turn message deletion logging on.
@@ -29,7 +29,13 @@ class LogOnCommand extends BaseCommand {
      */
     async execute(message: Discord.Message) {
         await message.delete();
-        await database.updateSetting('logMessageDeletions', true);
+        await prisma.setting.upsert({
+            where: { name: 'logMessageDeletions' },
+            create: { name: 'logMessageDeletions', value: true },
+            update: {
+                value: true,
+            },
+        });
 
         let user = 'Unknown';
 

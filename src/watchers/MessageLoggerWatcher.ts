@@ -2,7 +2,7 @@ import * as Discord from 'discord.js';
 
 import BaseWatcher from './BaseWatcher';
 
-import * as database from '../utils/db';
+import prisma from '../utils/prisma';
 
 /**
  * This watcher logs all messages made, updated or deleted in the database.
@@ -32,28 +32,43 @@ class MessageLoggerWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent && message.author && message.channel instanceof Discord.TextChannel) {
-            const messageToLog = {
-                id: message.id,
-                userID: message.author.id,
-                isSystemMessage: message.system ?? false,
-                isBotMessage: message.author.bot,
-                content: message.cleanContent,
-                channel: {
-                    id: message.channel.id,
-                    name: message.channel.name,
+            await prisma.message.upsert({
+                where: { id: message.id },
+                create: {
+                    id: message.id,
+                    isSystemMessage: message.system ?? false,
+                    isBotMessage: message.author.bot,
+                    content: message.cleanContent,
+                    channel: {
+                        connectOrCreate: {
+                            where: { id: message.channel.id },
+                            create: {
+                                id: message.channel.id,
+                                name: message.channel.name,
+                            },
+                        },
+                    },
+                    user: {
+                        connectOrCreate: {
+                            where: { id: message.author.id },
+                            create: {
+                                id: message.author.id,
+                                username: message.author.username,
+                                discriminator: message.author.discriminator,
+                            },
+                        },
+                    },
+                    createdAt: message.createdAt,
+                    updatedAt: new Date(),
+                    deletedAt: method === 'messageDelete' ? new Date() : null,
                 },
-                user: {
-                    id: message.author.id,
-                    username: message.author.username,
-                    discriminator: message.author.discriminator,
+                update: {
+                    content: message.cleanContent,
+                    createdAt: message.createdAt,
+                    updatedAt: new Date(),
+                    deletedAt: method === 'messageDelete' ? new Date() : null,
                 },
-                timestamp: new Date().toISOString(),
-                deletedAt: method === 'messageDelete' ? new Date().toISOString() : null,
-            };
-
-            try {
-                database.updateMessageByID(messageToLog.id, messageToLog);
-            } catch (e) {}
+            });
         }
     }
 }

@@ -1,8 +1,9 @@
 import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
+
+import prisma from '../utils/prisma';
 import { COLOURS, PERMISSIONS } from '../constants/discord';
-import * as database from '../utils/db';
 
 /**
  * This will message the user if logging deleted messages is on or off.
@@ -28,7 +29,11 @@ class LogStatusCommand extends BaseCommand {
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {
-        const logMessageDeletions = await database.getSetting('logMessageDeletions', true);
+        const logMessageDeletionsSetting = await prisma.setting.findUnique({
+            where: { name: 'logMessageDeletions' },
+        });
+
+        const logMessageDeletions = logMessageDeletionsSetting?.value ?? true;
 
         if (message.author) {
             const embed = new Discord.MessageEmbed()

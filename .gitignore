@@ -4,3 +4,8 @@
 /npm-debug.log
 /node_modules
 /db
+
+# local env files
+.env.local
+.env.*.local
+.envrc
