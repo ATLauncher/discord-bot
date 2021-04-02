@@ -41,6 +41,8 @@ Alternatively we have an automated build running on our Docker Hub repo at
 
 This repository is automatically set to deploy to [railway](https://railway.app/).
 
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new?template=https%3A%2F%2Fgithub.com%2FATLauncher%2Fdiscord-bot&plugins=postgresql&envs=NODE_CONFIG%2CPORT&NODE_CONFIGDesc=Configuration+for+the+bot&PORTDesc=Port+the+web+server+listens+on&NODE_CONFIGDefault=%7B%7D)
+
 ## Config
 
 Configuration is handled through a NPM package called `config`. You can see all the ways to change the configuration at
