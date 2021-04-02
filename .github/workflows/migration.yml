@@ -1,0 +1,27 @@
+name: Migration
+
+on:
+  push:
+    branches:
+      - master
+      - railway
+    paths:
+        - 'prisma/migrations/**'
+
+jobs:
+  build:
+    name: Run Migration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Use Node 14
+        uses: actions/setup-node@v1
+        with:
+          node-version: 14.x
+
+      - name: Install Railway
+        run: npm i -g @railway/cli
+
+      - name: Do Migration
+        run: railway run npm run db:migrate:deploy
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
