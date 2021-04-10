@@ -38,9 +38,9 @@ class Bot {
 
             startScheduler(this);
 
-            await this.refreshFaqAndHelpChannel();
-
             if (isProductionEnvironment()) {
+                await this.refreshFaqAndHelpChannel();
+
                 const botTestingChannel = this.client.channels.cache.find(
                     ({ id }) => id === config.get<string>('channels.botTesting'),
                 );
