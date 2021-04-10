@@ -34,7 +34,9 @@ class PasteWatcher extends BaseWatcher {
             return;
         }
 
-        const matches = message.cleanContent.match(/(https:\/\/paste.atlauncher.com\/view\/\w{8})/gm);
+        const matches = message.cleanContent.match(
+            /(https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})/gm,
+        );
 
         if (!matches?.length) {
             return;
