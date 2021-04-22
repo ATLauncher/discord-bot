@@ -161,6 +161,29 @@ class PasteWatcher extends BaseWatcher {
                 });
             }
 
+            if (
+                response.body.match(
+                    /Failed to load dependencies.info from CodeChickenLib-1\.7\.10-1\.1\.3\.134-universal\.jar/,
+                ) ||
+                response.body.match(
+                    /Failed to load dependencies.info from CodeChickenLib-1\.7\.10-1\.1\.3\.138-universal\.jar/,
+                )
+            ) {
+                const file = response.body.match(
+                    /Failed to load dependencies.info from (CodeChickenLib-.*?-universal\.jar)/,
+                );
+
+                if (file) {
+                    errors.push({
+                        name: 'Forge Libraries Issue',
+                        value:
+                            'Due to Forge moving around their Maven server and removing some old files, some packs have issues with downloading dependencies needed to load.\n\nIn order to fix this, follow these steps:\n\n1. Download https://download.nodecdn.net/containers/atl/forge-libs/' +
+                            file[1] +
+                            '\n2. Click `Open Folder` on the instance having the issue\n3. Move the downloaded file to the `mods/1.7.10` folder of the instance.\n\nWith any luck, once you start the instance again, it should work.',
+                    });
+                }
+            }
+
             // only ask about crash report if no other errors found
             if (!errors.length) {
                 if (
