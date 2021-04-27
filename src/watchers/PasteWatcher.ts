@@ -163,14 +163,14 @@ class PasteWatcher extends BaseWatcher {
 
             if (
                 response.body.match(
-                    /Failed to load dependencies.info from CodeChickenLib-1\.7\.10-1\.1\.3\.134-universal\.jar/,
+                    /Failed to load dependencies\.info from CodeChickenLib-1\.7\.10-1\.1\.3\.134-universal\.jar/,
                 ) ||
                 response.body.match(
-                    /Failed to load dependencies.info from CodeChickenLib-1\.7\.10-1\.1\.3\.138-universal\.jar/,
+                    /Failed to load dependencies\.info from CodeChickenLib-1\.7\.10-1\.1\.3\.138-universal\.jar/,
                 )
             ) {
                 const file = response.body.match(
-                    /Failed to load dependencies.info from (CodeChickenLib-.*?-universal\.jar)/,
+                    /Failed to load dependencies\.info from (CodeChickenLib-.*?-universal\.jar)/,
                 );
 
                 if (file) {
@@ -186,11 +186,17 @@ class PasteWatcher extends BaseWatcher {
 
             if (
                 response.body.match(
-                    /Failed to load dependancies.info from CodeChickenLib-universal-1\.6\.4-1\.0\.0\.43\.jar/,
+                    /Failed to load dependancies\.info from CodeChickenLib-universal-1\.6\.4-1\.0\.0\.43\.jar/,
+                ) ||
+                response.body.match(
+                    /Failed to load dependancies\.info from CodeChickenLib-universal-1\.6\.4-1\.0\.0\.62\.jar/,
+                ) ||
+                response.body.match(
+                    /Failed to load dependancies\.info from WorldCore-universal-1\.6\.4-1\.1\.0\.17\.jar/,
                 )
             ) {
                 const file = response.body.match(
-                    /Failed to load dependancies.info from (CodeChickenLib-universal-.*?\.jar)/,
+                    /Failed to load dependancies\.info from ((?:CodeChickenLib|WorldCore)-universal-.*?\.jar)/,
                 );
 
                 if (file) {
