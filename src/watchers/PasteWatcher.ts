@@ -55,7 +55,13 @@ class PasteWatcher extends BaseWatcher {
 
             const errors = [];
 
-            if (
+            if (response.body.match(/Expected a SETTINGS frame but was GOAWAY/)) {
+                errors.push({
+                    name: 'Error downloading files',
+                    value:
+                        "There was an error downloading some files. To fix this, simply go to the `Settings` -> `Network` tab within the launcher and tick the `Don't Use HTTP/2` box. Click save and then you should be able to download correctly again.",
+                });
+            } else if (
                 response.body.match(/Error trying to download/) ||
                 response.body.match(/Failed to connect to files\.minecraftforge\.net/) ||
                 response.body.match(/Error downloading.*?\. Expected hash of/) ||
