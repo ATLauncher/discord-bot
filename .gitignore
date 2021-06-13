@@ -4,6 +4,7 @@
 /npm-debug.log
 /node_modules
 /db
+/newrelic_agent.log
 
 # local env files
 .env.local

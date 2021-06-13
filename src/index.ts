@@ -6,6 +6,10 @@ import Bot from './Bot';
 import logger from './utils/logger';
 import { isDevelopmentEnvironment, isProductionEnvironment } from './utils/env';
 
+if (config.get<boolean>('new_relic.enabled')) {
+    require('newrelic');
+}
+
 if (config.has('sentry.dsn')) {
     logger.debug('Setting up Sentry logging');
     Sentry.init({

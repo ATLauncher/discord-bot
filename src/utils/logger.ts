@@ -3,6 +3,7 @@ import config from 'config';
 import * as winston from 'winston';
 import type Transport from 'winston-transport';
 import LogzioWinstonTransport from 'winston-logzio';
+import newRelicFormatter from '@newrelic/winston-enricher';
 
 import { isProductionEnvironment } from './env';
 
@@ -34,6 +35,7 @@ const logger = winston.createLogger({
                 ),
             }),
     ].filter(Boolean) as Transport[],
+    format: config.get<boolean>('new_relic.enabled') ? newRelicFormatter() : undefined,
     level: config.get<string>('logging.level'),
 });
 

@@ -6,6 +6,10 @@
   "logging": {
     "level": "info"
   },
+  "new_relic": {
+    "enabled": false,
+    "license_key": "changeme"
+  },
   "discord": {
     "clientId": "",
     "clientToken": ""
