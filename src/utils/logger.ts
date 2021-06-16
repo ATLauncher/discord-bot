@@ -1,46 +1,25 @@
-import * as path from 'path';
 import config from 'config';
 import * as winston from 'winston';
 import type Transport from 'winston-transport';
-import LogzioWinstonTransport from 'winston-logzio';
 import newRelicFormatter from '@newrelic/winston-enricher';
+import winstonNewrelicLogsTransport from 'winston-newrelic-logs-transport';
 
 import { isProductionEnvironment } from './env';
 
-const hasLogzIoConfig = config.has('logging.logzIoToken');
+const isNewRelicEnabled = config.get<boolean>('new_relic.enabled') ?? false;
 const isProduction = isProductionEnvironment();
 
 const logger = winston.createLogger({
     transports: [
         !isProduction && new winston.transports.Console(),
-        !hasLogzIoConfig &&
-            isProduction &&
-            new winston.transports.File({ filename: path.resolve(__dirname, '../logs/server.log') }),
-        hasLogzIoConfig &&
-            isProduction &&
-            new LogzioWinstonTransport({
-                level: config.get<string>('logging.level'),
-                token: config.get<string>('logging.logzIoToken'),
-                format: winston.format.combine(
-                    winston.format((info) => ({
-                        ...info,
-
-                        nodejs: {
-                            labels: {
-                                app: 'discord-bot',
-                            },
-                        },
-                    }))(),
-                    winston.format.json(),
-                ),
+        isNewRelicEnabled &&
+            new winstonNewrelicLogsTransport({
+                licenseKey: config.get('new_relic.license_key'),
+                apiUrl: 'https://log-api.newrelic.com/',
             }),
     ].filter(Boolean) as Transport[],
-    format: config.get<boolean>('new_relic.enabled') ? newRelicFormatter() : undefined,
+    format: isNewRelicEnabled ? newRelicFormatter() : undefined,
     level: config.get<string>('logging.level'),
 });
-
-if (hasLogzIoConfig && isProduction) {
-    winston.remove(winston.transports.Console);
-}
 
 export default logger;

@@ -8,6 +8,7 @@ import { isDevelopmentEnvironment, isProductionEnvironment } from './utils/env';
 
 if (config.get<boolean>('new_relic.enabled')) {
     require('newrelic');
+    require('@newrelic/koa');
 }
 
 if (config.has('sentry.dsn')) {

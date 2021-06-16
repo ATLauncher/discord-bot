@@ -27,7 +27,6 @@
     "dev": "cross-env NODE_ENV=development nodemon",
     "generate:prisma": "prisma generate",
     "oauth:url": "ts-node utils/getOAuthUrl.ts",
-    "postinstall": "patch-package",
     "prepare": "husky install",
     "start": "node dist"
   },
@@ -38,6 +37,7 @@
   },
   "dependencies": {
     "@koa/router": "^10.0.0",
+    "@newrelic/koa": "^5.0.0",
     "@newrelic/winston-enricher": "^1.0.0",
     "@prisma/client": "^2.20.1",
     "@sentry/node": "^6.2.5",
@@ -51,7 +51,7 @@
     "node-schedule": "^2.0.0",
     "pluralize": "^8.0.0",
     "winston": "^3.3.3",
-    "winston-logzio": "^5.1.2"
+    "winston-newrelic-logs-transport": "^1.0.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^12.1.0",
@@ -69,7 +69,6 @@
     "husky": "^6.0.0",
     "lint-staged": "^10.5.4",
     "nodemon": "^2.0.7",
-    "patch-package": "^6.4.7",
     "prettier": "^2.2.1",
     "prisma": "^2.20.1",
     "rimraf": "^3.0.2",
