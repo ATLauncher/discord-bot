@@ -28,14 +28,15 @@ class PasteWatcher extends BaseWatcher {
 
         if (
             !message.cleanContent ||
-            !message.cleanContent.includes('https://paste.atlauncher.com/view') ||
+            (!message.cleanContent.includes('https://paste.atlauncher.com/view') &&
+                !message.cleanContent.includes('https://paste.ee/p/')) ||
             !(message.channel instanceof Discord.TextChannel)
         ) {
             return;
         }
 
         const matches = message.cleanContent.match(
-            /(https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})/gm,
+            /(https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})|(https:\/\/paste.ee\/p\/\w+)/gm,
         );
 
         if (!matches?.length) {
@@ -48,7 +49,7 @@ class PasteWatcher extends BaseWatcher {
             return;
         }
 
-        const pasteUrl = matches[0].replace('/view/', '/view/raw/');
+        const pasteUrl = matches[0].replace('/view/', '/view/raw/').replace('paste.ee/p', 'paste.ee/r');
 
         try {
             const response = await got(pasteUrl);
