@@ -6,16 +6,14 @@ import { COLOURS } from '../constants/discord';
 
 interface PacksSearchQuery {
     data: {
-        packsSearchName: {
-            data: [
-                {
-                    name: string;
-                    websiteUrl?: string;
-                    supportUrl?: string;
-                    discordInviteUrl?: string;
-                },
-            ];
-        };
+        searchPacks: [
+            {
+                name: string;
+                websiteUrl?: string;
+                supportUrl?: string;
+                discordInviteUrl?: string;
+            },
+        ];
     };
 }
 
@@ -39,12 +37,12 @@ class SupportCommand extends BaseCommand {
         const searchFor = message.cleanContent.match(this.pattern)?.[1];
         const { body } = await got.post<PacksSearchQuery>('https://api.atlauncher.com/v2/graphql', {
             json: {
-                query: `{\n  packsSearchName(name: "%${searchFor}%", first: 1) {\n    data {\n      name\n      websiteUrl\n      supportUrl\n      discordInviteUrl\n    }\n  }\n}`,
+                query: `{\n  searchPacks(first: 1, query: "${searchFor}", field: NAME) {\n    name\n      websiteUrl\n      supportUrl\n      discordInviteUrl\n    }\n}`,
             },
             responseType: 'json',
         });
 
-        const packInfo = body?.data?.packsSearchName?.data?.[0];
+        const packInfo = body?.data?.searchPacks?.[0];
 
         if (packInfo) {
             const user = message.mentions.users.first();
