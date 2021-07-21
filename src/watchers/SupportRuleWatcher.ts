@@ -49,7 +49,7 @@ class SupportRuleWatcher extends BaseWatcher {
                         `It looks like you're asking for support. Please use ${launcherSupport} for launcher issues and ${minecraftSupport} for issues with Minecraft.`,
                     );
 
-                    this.addWarningToUser(message);
+                    this.addWarningToUser(message, 'Asking for support outside of support channels');
 
                     message.delete({ reason: 'Asking for support outside of support channels' });
                     warningMessage.delete({ timeout: 60000 });

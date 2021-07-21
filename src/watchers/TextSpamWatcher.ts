@@ -59,7 +59,7 @@ class TextSpamWatcher extends BaseWatcher {
                     `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`,
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Matched text spam filter');
 
                 message.delete({ reason: 'Posting spam text' });
                 warningMessage.delete({ timeout: 60000 });

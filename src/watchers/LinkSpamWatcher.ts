@@ -58,7 +58,7 @@ class LinkSpamWatcher extends BaseWatcher {
                     'This link is not allowed to be posted as it is a known hoax/spam/scam.',
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Matched link spam filter');
 
                 message.delete({ reason: 'Posting spam link' });
                 warningMessage.delete({ timeout: 60000 });

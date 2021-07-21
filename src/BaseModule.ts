@@ -106,7 +106,7 @@ abstract class BaseModule {
     /**
      * This adds a warning to a user. 3rd and 4th warning will result in a kick, 5th warning will result in a ban.
      */
-    async addWarningToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
+    async addWarningToUser(message: Discord.Message | Discord.PartialMessage, reason = 'None given'): Promise<void> {
         if (message.author && !message.author.bot) {
             const user = await prisma.user.upsert({
                 where: {
@@ -136,7 +136,8 @@ abstract class BaseModule {
                         `${message.author} (${message.author.username}#${message.author.discriminator})`,
                         true,
                     )
-                    .addField('Warnings', user.warnings, true),
+                    .addField('Warnings', user.warnings, true)
+                    .addField('Reason', reason, false),
             );
 
             if (user.warnings >= 5) {

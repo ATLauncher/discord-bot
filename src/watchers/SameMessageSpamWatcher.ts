@@ -50,7 +50,7 @@ class SameMessageSpamWatcher extends BaseWatcher {
             if (count >= 3) {
                 const warningMessage = await message.reply('Please do not spam the same message.');
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Matched same message spam filter');
 
                 message.delete();
                 warningMessage.delete({ timeout: 60000 });

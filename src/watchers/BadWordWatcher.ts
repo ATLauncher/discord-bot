@@ -31,7 +31,7 @@ class BadWordWatcher extends BaseWatcher {
                     `Please read the ${rulesChannel} channel and don't be vulgar.`,
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Matched bad word filter');
 
                 message.delete({ reason: 'Being vulgar' });
 

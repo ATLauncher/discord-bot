@@ -40,7 +40,7 @@ class TagRuleWatcher extends BaseWatcher {
                     `Please read the ${rulesChannel} channel. Tags such as \`@everyone\` and \`@here\` are not allowed.`,
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Trying to use a broad tag');
 
                 message.delete({ reason: 'Trying to use banned tag' });
                 warningMessage.delete({ timeout: 60000 });

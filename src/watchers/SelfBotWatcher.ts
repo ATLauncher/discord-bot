@@ -35,7 +35,7 @@ class SelfBotWatcher extends BaseWatcher {
                     `Please read the ${rulesChannel} channel. Bots are not allowed without permission.`,
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Using self bot');
 
                 message.delete({ reason: 'Selfbots not allowed' });
                 warningMessage.delete({ timeout: 60000 });

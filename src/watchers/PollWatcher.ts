@@ -38,7 +38,7 @@ class PollWatcher extends BaseWatcher {
                     `Please read the ${rulesChannel}. Polls are not allowed without permission.`,
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Posted a poll');
 
                 message.delete({ reason: 'Posting poll' });
                 warningMessage.delete({ timeout: 60000 });

@@ -39,7 +39,7 @@ class InviteRuleWatcher extends BaseWatcher {
                         'If you must share Discord invite links with someone, please do it privately.',
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Sent Discord invite');
 
                 message.delete({ reason: 'Discord invite links are not allowed' });
                 warningMessage.delete({ timeout: 60000 });

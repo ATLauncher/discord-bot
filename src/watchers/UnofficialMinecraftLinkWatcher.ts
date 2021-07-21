@@ -382,7 +382,7 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
                         'Minecraft Forums or Curse for mod downloads.',
                 );
 
-                this.addWarningToUser(message);
+                this.addWarningToUser(message, 'Matched unofficial Minecraft link watcher');
 
                 message.delete({ reason: 'Posting link to known bad Minecraft site' });
                 warningMessage.delete({ timeout: 60000 });
