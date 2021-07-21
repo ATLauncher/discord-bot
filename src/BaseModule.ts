@@ -107,7 +107,7 @@ abstract class BaseModule {
      * This adds a warning to a user. 3rd and 4th warning will result in a kick, 5th warning will result in a ban.
      */
     async addWarningToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
-        if (message.author) {
+        if (message.author && !message.author.bot) {
             const user = await prisma.user.upsert({
                 where: {
                     id: message.author.id,
@@ -216,7 +216,7 @@ abstract class BaseModule {
      * show it more than once, just incase the bot is not understanding correctly.
      */
     async addHasSeenTLauncherMessageToUser(message: Discord.Message | Discord.PartialMessage): Promise<void> {
-        if (message.author) {
+        if (message.author && !message.author.bot) {
             await prisma.user.upsert({
                 where: {
                     id: message.author.id,
