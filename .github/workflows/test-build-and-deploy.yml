@@ -1,0 +1,101 @@
+name: Test, Build & Deploy
+
+on: [push]
+
+jobs:
+    test:
+        name: Test
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '14'
+                  check-latest: true
+
+            - name: Get NPM cache directory
+              id: node-cache-dir
+              run: echo "::set-output name=dir::$(npm config get cache)"
+
+            - name: Cache NPM dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.node-cache-dir.outputs.dir }}
+                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-14-
+
+            - name: Install NPM dependencies
+              run: npm ci
+
+            - name: Run tests
+              run: npm test
+
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '14'
+                  check-latest: true
+
+            - name: Get NPM cache directory
+              id: node-cache-dir
+              run: echo "::set-output name=dir::$(npm config get cache)"
+
+            - name: Cache NPM dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.node-cache-dir.outputs.dir }}
+                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-14-
+
+            - name: Install NPM dependencies
+              run: npm ci
+
+            - name: Build application
+              run: npm run build
+
+    deploy:
+        name: Deploy
+        runs-on: ubuntu-latest
+        needs: [test, build]
+        if: github.ref == 'refs/heads/master'
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v2
+              with:
+                  node-version: '14'
+                  check-latest: true
+
+            - name: Get NPM cache directory
+              id: node-cache-dir
+              run: echo "::set-output name=dir::$(npm config get cache)"
+
+            - name: Cache NPM dependencies
+              uses: actions/cache@v1
+              with:
+                  path: ${{ steps.node-cache-dir.outputs.dir }}
+                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-14-
+
+            - name: Install Railway
+              run: npm i -g @railway/cli
+
+            - name: Deploy to Railway
+              run: railway up
+              env:
+                RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}

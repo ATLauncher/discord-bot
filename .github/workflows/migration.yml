@@ -9,7 +9,7 @@ on:
         - 'prisma/migrations/**'
 
 jobs:
-  build:
+  migration:
     name: Run Migration
     runs-on: ubuntu-latest
     steps:
