@@ -41,7 +41,7 @@ class LogStatusCommand extends BaseCommand {
                 .setColor(logMessageDeletions ? COLOURS.GREEN : COLOURS.RED)
                 .setTimestamp(new Date());
 
-            await message.author.send({ embed });
+            await message.author.send({ embeds: [embed] });
         }
 
         await message.delete();

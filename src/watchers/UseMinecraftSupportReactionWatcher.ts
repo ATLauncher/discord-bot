@@ -39,9 +39,7 @@ class UseMinecraftSupportReactionWatcher extends BaseWatcher {
 
                 if (sentMessage.deletable) {
                     // delete message after 24 hours
-                    sentMessage.delete({
-                        timeout: 60 * 60 * 24 * 1000,
-                    });
+                    setTimeout(() => sentMessage.delete(), 60 * 60 * 24 * 1000);
                 }
 
                 if (reaction.message.deletable) {

@@ -29,12 +29,12 @@ class SameMessageSpamWatcher extends BaseWatcher {
     /**
      * The methods this watcher should listen on.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageCreate', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
      */
-    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageCreate' | 'messageUpdate']) {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
@@ -53,7 +53,7 @@ class SameMessageSpamWatcher extends BaseWatcher {
                 this.addWarningToUser(message, 'Matched same message spam filter');
 
                 message.delete();
-                warningMessage.delete({ timeout: 60000 });
+                setTimeout(() => warningMessage.delete(), 60000);
             }
         }
     }

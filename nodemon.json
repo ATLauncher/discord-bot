@@ -4,5 +4,5 @@
     "src"
   ],
   "ext": "ts,json",
-  "exec": "ts-node src"
+  "exec": "./node_modules/.bin/ts-node src"
 }

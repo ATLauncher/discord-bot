@@ -17,8 +17,9 @@ class BanWatcher extends BaseWatcher {
      */
     async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['guildBanAdd' | 'guildBanRemove']) {
         const unbanned = method === 'guildBanRemove';
-        const [guild, user] = args;
+        const [ban] = args;
 
+        const user = ban.user;
         let userToLog = 'Unknown';
 
         if (user) {

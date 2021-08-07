@@ -1,22 +1,7 @@
 {
+    "extends": "@tsconfig/node16/tsconfig.json",
     "compilerOptions": {
-        "lib": [
-            "es2020"
-        ],
-        "module": "commonjs",
-        "target": "es2019",
-        "outDir": "dist",
-        "moduleResolution": "node",
-        "noImplicitAny": true,
-        "alwaysStrict": true,
-        "strict": true,
-        "sourceMap": false,
-        "emitDecoratorMetadata": true,
-        "experimentalDecorators": true,
-        "declaration": false,
-        "importHelpers": true,
-        "forceConsistentCasingInFileNames": true,
-        "esModuleInterop": true
+        "outDir": "dist"
     },
     "exclude": [
         "dist",

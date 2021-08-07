@@ -33,18 +33,21 @@ class CommandsCommand extends BaseCommand {
             return;
         }
 
-        await message.channel.send(
-            new Discord.MessageEmbed({
-                title: 'Commands',
-                description: 'This is a list of all the commands the bot understands with a short description of each.',
-                color: COLOURS.PRIMARY,
-                fields: this.bot.commandBus?.commandList.map((command) => ({
-                    name: command.pattern.toString().match(/^.*?(!.*?)\$?\/$/i)?.[1] || command.pattern,
-                    value: command.description,
-                    inline: true,
-                })),
-            }),
-        );
+        await message.channel.send({
+            embeds: [
+                new Discord.MessageEmbed({
+                    title: 'Commands',
+                    description:
+                        'This is a list of all the commands the bot understands with a short description of each.',
+                    color: COLOURS.PRIMARY,
+                    fields: this.bot.commandBus?.commandList.map((command) => ({
+                        name: command.pattern.toString().match(/^.*?(!.*?)\$?\/$/i)?.[1] || String(command.pattern),
+                        value: command.description,
+                        inline: true,
+                    })),
+                }),
+            ],
+        });
 
         message.delete();
     }

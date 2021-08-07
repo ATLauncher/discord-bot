@@ -19,7 +19,7 @@ abstract class BaseCommand extends BaseModule {
     /**
      * The events that this module should react to.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['message'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageCreate'];
 
     /**
      * The action to take when this module is invoked.

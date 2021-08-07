@@ -14,7 +14,7 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
     /**
      * The methods this watcher should listen on.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageCreate', 'messageUpdate'];
 
     /**
      * The links that this watcher should remove.
@@ -370,7 +370,7 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
     /**
      * The function that should be called when the event is fired.
      */
-    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageCreate' | 'messageUpdate']) {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
@@ -384,8 +384,8 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
 
                 this.addWarningToUser(message, 'Matched unofficial Minecraft link watcher');
 
-                message.delete({ reason: 'Posting link to known bad Minecraft site' });
-                warningMessage.delete({ timeout: 60000 });
+                message.delete();
+                setTimeout(() => warningMessage.delete(), 60000);
             }
         }
     }

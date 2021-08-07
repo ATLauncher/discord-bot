@@ -18,7 +18,17 @@ class Bot {
     watcherBus: WatcherBus | undefined;
 
     constructor() {
-        this.client = new Discord.Client();
+        this.client = new Discord.Client({
+            intents: [
+                Discord.Intents.FLAGS.GUILDS,
+                Discord.Intents.FLAGS.GUILD_MEMBERS,
+                Discord.Intents.FLAGS.GUILD_BANS,
+                Discord.Intents.FLAGS.GUILD_MESSAGES,
+                Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
+                Discord.Intents.FLAGS.DIRECT_MESSAGES,
+            ],
+            allowedMentions: { parse: ['users'], repliedUser: true },
+        });
 
         this.setupBot();
         this.setupCommandBus();
@@ -87,9 +97,8 @@ class Bot {
         ) as Discord.TextChannel;
 
         if (faqAndHelpChannel) {
-            const faqAndHelpMessages = config.get<
-                { title: string; content: string; description: string; url: string }[]
-            >('faqAndHelp');
+            const faqAndHelpMessages =
+                config.get<{ title: string; content: string; description: string; url: string }[]>('faqAndHelp');
 
             const setting = await prisma.setting.findUnique({ where: { name: 'faqAndHelpMessagesSize' } });
 
@@ -112,12 +121,14 @@ class Bot {
                             }
 
                             if (m.url) {
-                                return faqAndHelpChannel.send(
-                                    new Discord.MessageEmbed({
-                                        ...m,
-                                        color: COLOURS.PRIMARY,
-                                    }),
-                                );
+                                return faqAndHelpChannel.send({
+                                    embeds: [
+                                        new Discord.MessageEmbed({
+                                            ...m,
+                                            color: COLOURS.PRIMARY,
+                                        }),
+                                    ],
+                                });
                             }
 
                             return null;
@@ -143,7 +154,13 @@ class Bot {
     async start() {
         logger.debug('Starting bot');
 
-        await this.client.login(config.get<string>('discord.clientToken'));
+        try {
+            await this.client.login(config.get<string>('discord.clientToken'));
+        } catch (err) {
+            console.error(err);
+            logger.error(err);
+            process.exit(1);
+        }
     }
 }
 

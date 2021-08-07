@@ -53,8 +53,8 @@ class CleanCommand extends BaseCommand {
                         .setColor(COLOURS.YELLOW)
                         .setTimestamp(new Date())
                         .addField('User', user, true)
-                        .addField('Channel', message.channel, true)
-                        .addField('Lines', linesToClean, true);
+                        .addField('Channel', String(message.channel), true)
+                        .addField('Lines', String(linesToClean), true);
 
                     this.sendEmbedToModeratorLogsChannel(embed);
                 }

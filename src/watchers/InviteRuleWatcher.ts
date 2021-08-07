@@ -24,12 +24,12 @@ class InviteRuleWatcher extends BaseWatcher {
     /**
      * The methods this watcher should listen on.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageCreate', 'messageUpdate'];
 
     /**
      * The function that should be called when the event is fired.
      */
-    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageCreate' | 'messageUpdate']) {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
@@ -41,8 +41,8 @@ class InviteRuleWatcher extends BaseWatcher {
 
                 this.addWarningToUser(message, 'Sent Discord invite');
 
-                message.delete({ reason: 'Discord invite links are not allowed' });
-                warningMessage.delete({ timeout: 60000 });
+                message.delete();
+                setTimeout(() => warningMessage.delete(), 60000);
             }
         }
     }

@@ -37,11 +37,6 @@ class LogsPlzReactionWatcher extends BaseWatcher {
                 );
 
                 if (sentMessage.deletable) {
-                    // delete message after 24 hours
-                    sentMessage.delete({
-                        timeout: 60 * 60 * 24 * 1000,
-                    });
-
                     await sentMessage.react('🇱');
                     await sentMessage.react('🇴');
                     await sentMessage.react('🇬');

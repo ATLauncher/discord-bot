@@ -60,9 +60,9 @@ router.post('/channel/:channel/send', async (ctx: Context) => {
     const { message, embed } = ctx.request.body;
 
     if (message) {
-        await channel.send(message, { embed });
+        await channel.send({ content: message, embeds: [embed] });
     } else {
-        await channel.send({ embed });
+        await channel.send({ embeds: [embed] });
     }
 
     ctx.status = 201;
@@ -227,9 +227,9 @@ router.post('/user/:user/send', async (ctx: Context) => {
     const { message, embed } = ctx.request.body;
 
     if (message) {
-        await member.send(message, { embed });
+        await member.send({ content: message, embeds: [embed] });
     } else {
-        await member.send({ embed });
+        await member.send({ embeds: [embed] });
     }
 
     ctx.status = 201;

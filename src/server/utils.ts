@@ -1,4 +1,4 @@
-import type { Guild, GuildMember, GuildChannel } from 'discord.js';
+import type { Guild, GuildMember, GuildChannel, ThreadChannel } from 'discord.js';
 
 import type { Context } from '.';
 
@@ -32,6 +32,6 @@ export const getMember = (guild: Guild, user: string): GuildMember | undefined =
     return member;
 };
 
-export const getChannel = (guild: Guild, channel: string): GuildChannel | undefined => {
+export const getChannel = (guild: Guild, channel: string): GuildChannel | ThreadChannel | undefined => {
     return guild.channels.cache.find(({ id }) => id === channel);
 };

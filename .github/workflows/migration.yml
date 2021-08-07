@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - railway
     paths:
         - 'prisma/migrations/**'
 
@@ -13,10 +12,11 @@ jobs:
     name: Run Migration
     runs-on: ubuntu-latest
     steps:
-      - name: Use Node 14
-        uses: actions/setup-node@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: 14.x
+            node-version: '16'
+            check-latest: true
 
       - name: Install Railway
         run: npm i -g @railway/cli

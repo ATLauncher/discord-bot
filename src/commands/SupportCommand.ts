@@ -57,9 +57,9 @@ class SupportCommand extends BaseCommand {
             });
 
             if (user) {
-                await message.channel.send(`${user}:`, embed);
+                await message.channel.send({ content: `${user}:`, embeds: [embed] });
             } else {
-                await message.channel.send(embed);
+                await message.channel.send({ embeds: [embed] });
             }
 
             if (packInfo.discordInviteUrl) {

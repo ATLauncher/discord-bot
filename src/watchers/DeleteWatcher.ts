@@ -87,7 +87,7 @@ class DeleteWatcher extends BaseWatcher {
             .setColor(COLOURS.RED)
             .setTimestamp(new Date())
             .addField('User', user, true)
-            .addField('Channel', message.channel, true)
+            .addField('Channel', String(message.channel), true)
             .addField('Message', `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``);
 
         this.sendEmbedToModeratorLogsChannel(embed);

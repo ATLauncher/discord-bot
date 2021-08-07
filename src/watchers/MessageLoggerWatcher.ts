@@ -16,7 +16,7 @@ class MessageLoggerWatcher extends BaseWatcher {
     /**
      * The methods this watcher should listen on.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['message', 'messageDelete', 'messageUpdate'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageCreate', 'messageDelete', 'messageUpdate'];
 
     /**
      * If this watcher should be run or not.
@@ -28,7 +28,7 @@ class MessageLoggerWatcher extends BaseWatcher {
     /**
      * The function that should be called when the event is fired.
      */
-    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['message' | 'messageUpdate']) {
+    async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageCreate' | 'messageUpdate']) {
         const message = args[1] || args[0];
 
         if (message.cleanContent && message.author && message.channel instanceof Discord.TextChannel) {

@@ -14,7 +14,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v2
               with:
-                  node-version: '14'
+                  node-version: '16'
                   check-latest: true
 
             - name: Get NPM cache directory
@@ -25,8 +25,8 @@ jobs:
               uses: actions/cache@v1
               with:
                   path: ${{ steps.node-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: ${{ runner.os }}-node-14-
+                  key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-16-
 
             - name: Install NPM dependencies
               run: npm ci
@@ -45,7 +45,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v2
               with:
-                  node-version: '14'
+                  node-version: '16'
                   check-latest: true
 
             - name: Get NPM cache directory
@@ -56,8 +56,8 @@ jobs:
               uses: actions/cache@v1
               with:
                   path: ${{ steps.node-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: ${{ runner.os }}-node-14-
+                  key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-16-
 
             - name: Install NPM dependencies
               run: npm ci
@@ -78,7 +78,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v2
               with:
-                  node-version: '14'
+                  node-version: '16'
                   check-latest: true
 
             - name: Get NPM cache directory
@@ -89,8 +89,8 @@ jobs:
               uses: actions/cache@v1
               with:
                   path: ${{ steps.node-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-14-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: ${{ runner.os }}-node-14-
+                  key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
+                  restore-keys: ${{ runner.os }}-node-16-
 
             - name: Install Railway
               run: npm i -g @railway/cli

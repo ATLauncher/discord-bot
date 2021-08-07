@@ -34,11 +34,11 @@ class LogsCommand extends BaseCommand {
                 'and give us the link.',
         );
 
-        if (message.channel.type !== 'dm') {
+        if (message.channel.type !== 'DM') {
             message.delete();
 
             // delete message after 24 hours
-            sentMessage.delete({ timeout: 60 * 60 * 24 * 1000 });
+            setTimeout(() => sentMessage.delete(), 60 * 60 * 24 * 1000);
 
             await sentMessage.react('🇱');
             await sentMessage.react('🇴');

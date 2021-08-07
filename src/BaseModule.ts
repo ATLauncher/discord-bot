@@ -89,7 +89,7 @@ abstract class BaseModule {
 
         if (
             this.permissions.length &&
-            !this.permissions.every((perm) => messageToActUpon.member?.hasPermission(perm))
+            !this.permissions.every((perm) => messageToActUpon.member?.permissions?.has(perm))
         ) {
             await messageToActUpon.delete();
 
@@ -136,7 +136,7 @@ abstract class BaseModule {
                         `${message.author} (${message.author.username}#${message.author.discriminator})`,
                         true,
                     )
-                    .addField('Warnings', user.warnings, true)
+                    .addField('Warnings', String(user.warnings), true)
                     .addField('Reason', reason, false),
             );
 
@@ -288,7 +288,7 @@ abstract class BaseModule {
     /**
      * This will send the given message to the moderator logs channel.
      */
-    sendMessageToModeratorLogsChannel(message: Discord.StringResolvable): void {
+    sendMessageToModeratorLogsChannel(message: string): void {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {
@@ -303,7 +303,7 @@ abstract class BaseModule {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {
-            moderatorChannel.send({ embed });
+            moderatorChannel.send({ embeds: [embed] });
         }
     }
 
@@ -319,7 +319,7 @@ abstract class BaseModule {
     /**
      * Checks to see if the given channel is a moderated channel.
      */
-    isAModeratedChannel(channel: Discord.Channel): boolean {
+    isAModeratedChannel(channel: Discord.TextBasedChannels): boolean {
         return config.get<string[]>('moderatedChannels')?.some((id) => id === channel.id);
     }
 
