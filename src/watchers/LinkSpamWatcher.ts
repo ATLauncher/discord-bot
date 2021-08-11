@@ -36,6 +36,7 @@ class LinkSpamWatcher extends BaseWatcher {
         'minecraftgeek.com',
         'free-gg.com',
         'fortnite-vbucks.net',
+        'dlscort.site',
 
         // IP link grabbers
         'grabify.link',
