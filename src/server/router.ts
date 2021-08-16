@@ -1,5 +1,5 @@
 import Router from '@koa/router';
-import type { TextChannel } from 'discord.js';
+import type { MessageEmbed, TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
 
@@ -57,13 +57,19 @@ router.post('/channel/:channel/send', async (ctx: Context) => {
         ctx.throw(404, 'no channel found');
     }
 
-    const { message, embed } = ctx.request.body;
+    const { message, embed }: { message?: string; embed?: MessageEmbed } = ctx.request.body;
+
+    const sendObject: { content?: string; embeds?: [MessageEmbed] } = {};
 
     if (message) {
-        await channel.send({ content: message, embeds: [embed] });
-    } else {
-        await channel.send({ embeds: [embed] });
+        sendObject.content = message;
     }
+
+    if (embed) {
+        sendObject.embeds = [embed];
+    }
+
+    await channel.send(sendObject);
 
     ctx.status = 201;
 });
