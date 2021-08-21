@@ -27,8 +27,8 @@ class BadWordWatcher extends BaseWatcher {
                     (channel) => channel.id === config.get<string>('channels.rules'),
                 );
 
-                const warningMessage = await message.reply(
-                    `Please read the ${rulesChannel} channel and don't be vulgar.`,
+                const warningMessage = await message.channel.send(
+                    `${message.member} Please read the ${rulesChannel} channel and don't be vulgar.`,
                 );
 
                 this.addWarningToUser(message, 'Matched bad word filter');

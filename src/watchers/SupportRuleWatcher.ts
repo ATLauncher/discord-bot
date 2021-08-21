@@ -45,8 +45,8 @@ class SupportRuleWatcher extends BaseWatcher {
 
             if (this.strings.some((string) => cleanMessage.includes(string))) {
                 if (nonSupportChannels.some(({ id }) => id === message.channel.id)) {
-                    const warningMessage = await message.reply(
-                        `It looks like you're asking for support. Please use ${launcherSupport} for launcher issues and ${minecraftSupport} for issues with Minecraft.`,
+                    const warningMessage = await message.channel.send(
+                        `${message.member} It looks like you're asking for support. Please use ${launcherSupport} for launcher issues and ${minecraftSupport} for issues with Minecraft.`,
                     );
 
                     this.addWarningToUser(message, 'Asking for support outside of support channels');

@@ -36,8 +36,8 @@ class TagRuleWatcher extends BaseWatcher {
             const cleanMessage = message.cleanContent.toLowerCase();
 
             if (this.strings.some((string) => cleanMessage.includes(string))) {
-                const warningMessage = await message.reply(
-                    `Please read the ${rulesChannel} channel. Tags such as \`@everyone\` and \`@here\` are not allowed.`,
+                const warningMessage = await message.channel.send(
+                    `${message.member} Please read the ${rulesChannel} channel. Tags such as \`@everyone\` and \`@here\` are not allowed.`,
                 );
 
                 this.addWarningToUser(message, 'Trying to use a broad tag');

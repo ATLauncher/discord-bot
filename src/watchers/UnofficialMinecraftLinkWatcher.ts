@@ -377,9 +377,8 @@ class UnofficialMinecraftLinkWatcher extends BaseWatcher {
             const cleanMessage = message.cleanContent.toLowerCase();
 
             if (this.links.some((string) => cleanMessage.includes(string))) {
-                const warningMessage = await message.reply(
-                    "This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use " +
-                        'Minecraft Forums or Curse for mod downloads.',
+                const warningMessage = await message.channel.send(
+                    `${message.member} This link is not allowed to be posted as it's a mod repost/virus/unofficial site. Please only use Minecraft Forums or Curse for mod downloads.`,
                 );
 
                 this.addWarningToUser(message, 'Matched unofficial Minecraft link watcher');

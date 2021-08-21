@@ -48,7 +48,9 @@ class SameMessageSpamWatcher extends BaseWatcher {
             });
 
             if (count >= 3) {
-                const warningMessage = await message.reply('Please do not spam the same message.');
+                const warningMessage = await message.channel.send(
+                    `${message.member} Please do not spam the same message.`,
+                );
 
                 this.addWarningToUser(message, 'Matched same message spam filter');
 

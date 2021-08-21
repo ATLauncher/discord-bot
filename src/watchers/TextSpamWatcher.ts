@@ -56,8 +56,8 @@ class TextSpamWatcher extends BaseWatcher {
             const cleanMessage = message.cleanContent.toLowerCase();
 
             if (this.strings.some((string) => cleanMessage.includes(string))) {
-                const warningMessage = await message.reply(
-                    `Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`,
+                const warningMessage = await message.channel.send(
+                    `${message.member} Please read the ${rulesChannel} channel. Spamming or encouraging spamming is not allowed.`,
                 );
 
                 this.addWarningToUser(message, 'Matched text spam filter');

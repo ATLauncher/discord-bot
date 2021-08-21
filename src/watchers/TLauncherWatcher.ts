@@ -41,8 +41,8 @@ class TLauncherWatcher extends BaseWatcher {
                     return;
                 }
 
-                const warningMessage = await message.reply(
-                    'This is the Discord for ATLauncher. We only support ATLauncher here and no other launchers or cracked accounts. If you need support with another launcher, please visit their support channels.',
+                const warningMessage = await message.channel.send(
+                    `${message.member} This is the Discord for ATLauncher. We only support ATLauncher here and no other launchers or cracked accounts. If you need support with another launcher, please visit their support channels.`,
                 );
 
                 this.addWarningToUser(message, 'Matched TLauncher filter');

@@ -9,7 +9,7 @@ class LinkSpamWatcher extends BaseWatcher {
     /**
      * If this watcher uses bypass rules.
      */
-    usesBypassRules = true;
+    usesBypassRules = false;
 
     /**
      * The methods this watcher should listen on.
@@ -55,8 +55,8 @@ class LinkSpamWatcher extends BaseWatcher {
             const cleanMessage = message.cleanContent.toLowerCase();
 
             if (this.links.some((string) => cleanMessage.includes(string))) {
-                const warningMessage = await message.reply(
-                    'This link is not allowed to be posted as it is a known hoax/spam/scam.',
+                const warningMessage = await message.channel.send(
+                    `${message.member} This link is not allowed to be posted as it is a known hoax/spam/scam.`,
                 );
 
                 this.addWarningToUser(message, 'Matched link spam filter');
