@@ -40,6 +40,7 @@ class TextSpamWatcher extends BaseWatcher {
         'copy and paste him in every discord server',
         'giving away my skins',
         'Discord Nitro for Free',
+        'giving away free',
     ];
 
     /**
