@@ -38,6 +38,7 @@ class LinkSpamWatcher extends BaseWatcher {
         'fortnite-vbucks.net',
         'dlscort.site',
         'discord-nitro.click',
+        'discorcl.click',
 
         // IP link grabbers
         'grabify.link',

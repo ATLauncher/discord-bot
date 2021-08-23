@@ -41,6 +41,7 @@ class TextSpamWatcher extends BaseWatcher {
         'giving away my skins',
         'Discord Nitro for Free',
         'giving away free',
+        '3 months of free nitro',
     ];
 
     /**
