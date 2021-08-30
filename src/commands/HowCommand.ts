@@ -7,6 +7,7 @@ interface Topic {
     command: string;
     title: string;
     description: string;
+    image?: Discord.MessageEmbedImage;
 }
 
 class HowCommand extends BaseCommand {
@@ -20,7 +21,7 @@ class HowCommand extends BaseCommand {
      * The description of what the command does.
      */
     description =
-        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward`, `!how skins` and `!how debugbat`.';
+        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward`, `!how skins`, `!how debugbat` and `!how java8server`.';
 
     topics: Topic[] = [
         {
@@ -40,6 +41,15 @@ class HowCommand extends BaseCommand {
             title: 'Minecraft skins not showing on older Minecraft versions',
             description:
                 'Mojang removed the servers hosting the skin images for 1.7 and earlier. You need to download [Skin Fixer](https://www.curseforge.com/minecraft/mc-mods/skin-fixer) and add it to your clients (not the server) which will fix it.',
+        },
+        {
+            command: 'java8server',
+            title: 'Java 8 is needed for older Minecraft servers',
+            description:
+                "You need Java 8 to run modded Minecraft servers usually that aren't on Minecraft 1.17.\n\nEasiest solution is to uninstall the newer Java from your machine, then install Java 8 from [this link](https://atl.pw/java8download) (make sure to download the 'Windows Offline (64-bit)' version).\n\nIf you want to keep the newer Java on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 8.",
+            image: {
+                url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
+            },
         },
     ];
 
