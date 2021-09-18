@@ -48,16 +48,14 @@ class Bot {
 
             startScheduler(this);
 
-            if (isProductionEnvironment()) {
-                await this.refreshFaqAndHelpChannel();
+            await this.refreshFaqAndHelpChannel();
 
-                const botTestingChannel = this.client.channels.cache.find(
-                    ({ id }) => id === config.get<string>('channels.botTesting'),
-                );
+            const botTestingChannel = this.client.channels.cache.find(
+                ({ id }) => id === config.get<string>('channels.botTesting'),
+            );
 
-                if (botTestingChannel) {
-                    (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
-                }
+            if (botTestingChannel) {
+                (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
             }
         });
     }
@@ -113,7 +111,7 @@ class Bot {
                 await Promise.all(channelMessages.map((cm) => cm.delete()));
 
                 // add all of the messages
-                await Promise.all(
+                const sentMessages = await Promise.all(
                     faqAndHelpMessages
                         .map((m) => {
                             if (m.content) {
@@ -135,6 +133,23 @@ class Bot {
                         })
                         .filter(Boolean),
                 );
+
+                // add a TOC to the bottom
+                faqAndHelpChannel.send({
+                    embeds: [
+                        new Discord.MessageEmbed({
+                            title: `FAQ & Help Navigation`,
+                            description: sentMessages
+                                .filter(Boolean)
+                                .filter((message) => message?.embeds.length)
+                                .map((message) => {
+                                    return `:question: [${message?.embeds[0].title}](${message?.url})`;
+                                })
+                                .join('\n'),
+                            color: COLOURS.PRIMARY,
+                        }),
+                    ],
+                });
 
                 // set the database the size of the messages
                 await prisma.setting.upsert({
