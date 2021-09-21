@@ -46,7 +46,7 @@ class HowCommand extends BaseCommand {
             command: 'java8server',
             title: 'Java 8 is needed for older Minecraft servers',
             description:
-                "You need Java 8 to run modded Minecraft servers usually that aren't on Minecraft 1.17.\n\nEasiest solution is to uninstall the newer Java from your machine, then install Java 8 from [this link](https://atl.pw/java8download) (make sure to download the 'Windows Offline (64-bit)' version).\n\nIf you want to keep the newer Java on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 8.",
+                "You need Java 8 to run modded Minecraft servers usually that aren't on Minecraft 1.17.\n\nEasiest solution is to uninstall the newer Java from your machine, then install Java 8 from [this link](https://atl.pw/java8download) (if on Windows, make sure to download the 'Windows Offline (64-bit)' version).\n\nIf you want to keep the newer Java on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 8.",
             image: {
                 url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
             },
