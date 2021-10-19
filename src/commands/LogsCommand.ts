@@ -16,7 +16,7 @@ class LogsCommand extends BaseCommand {
      * The description of what the command does.
      */
     description =
-        'This will post a message asking and showing how to provide logs. A user can be mentioned for it to reply back to that person.';
+        'This will post a message asking and showing how to provide logs. A user can be mentioned for it to reply back to that person. Preference is to use the "logsplz" reaction as it will start a thread.';
 
     /**
      * The function that should be called when the event is fired.

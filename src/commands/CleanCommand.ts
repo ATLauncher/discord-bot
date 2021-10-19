@@ -39,7 +39,10 @@ class CleanCommand extends BaseCommand {
             const linesToClean = parseInt(input, 10);
 
             if (linesToClean > 0 && linesToClean <= 100) {
-                if (message.channel instanceof Discord.TextChannel) {
+                if (
+                    message.channel instanceof Discord.TextChannel ||
+                    message.channel instanceof Discord.ThreadChannel
+                ) {
                     await message.channel.bulkDelete(linesToClean);
 
                     let user = 'Unknown';

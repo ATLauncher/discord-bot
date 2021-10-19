@@ -30,7 +30,7 @@ class PasteWatcher extends BaseWatcher {
             !message.cleanContent ||
             (!message.cleanContent.includes('https://paste.atlauncher.com/view') &&
                 !message.cleanContent.includes('https://paste.ee/p/')) ||
-            !(message.channel instanceof Discord.TextChannel)
+            (!(message.channel instanceof Discord.TextChannel) && !(message.channel instanceof Discord.ThreadChannel))
         ) {
             return;
         }
@@ -230,7 +230,7 @@ class PasteWatcher extends BaseWatcher {
             }
 
             if (errors.length) {
-                message.reply({
+                const messageReply = {
                     embeds: [
                         new Discord.MessageEmbed({
                             title: `I've scanned your log, and found ${errors.length} potential ${pluralize(
@@ -244,7 +244,18 @@ class PasteWatcher extends BaseWatcher {
                             fields: errors,
                         }),
                     ],
-                });
+                };
+
+                // if we're not in a thread, then start one
+                if (!message.channel.isThread()) {
+                    const thread = await message.startThread({
+                        name: `${message.author.username}'s Issue`,
+                        autoArchiveDuration: 1440, // 1 day
+                    });
+                    thread.send(messageReply);
+                } else {
+                    message.reply(messageReply);
+                }
             }
 
             await prisma.log.create({

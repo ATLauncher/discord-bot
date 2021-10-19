@@ -31,7 +31,11 @@ class MessageLoggerWatcher extends BaseWatcher {
     async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['messageCreate' | 'messageUpdate']) {
         const message = args[1] || args[0];
 
-        if (message.cleanContent && message.author && message.channel instanceof Discord.TextChannel) {
+        if (
+            message.cleanContent &&
+            message.author &&
+            (message.channel instanceof Discord.TextChannel || message.channel instanceof Discord.ThreadChannel)
+        ) {
             await prisma.message.upsert({
                 where: { id: message.id },
                 create: {

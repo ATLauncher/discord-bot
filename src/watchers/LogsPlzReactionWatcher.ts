@@ -28,15 +28,26 @@ class LogsPlzReactionWatcher extends BaseWatcher {
                 reactingMember?.roles.cache.has(config.get<string>('roles.helpers')) ||
                 reactingMember?.roles.cache.has(config.get<string>('roles.packDeveloper'))
             ) {
-                const sentMessage = await reaction.message.reply(
+                const messageReply =
                     `In order to help you, we need some logs. Please see ` +
-                        'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. Please make sure that you ' +
-                        'press the button after the error/issue occurs.  Once done please paste the link here. If the logs ' +
-                        "don't upload or this is an issue with a server, please upload your logs to https://paste.ee/ " +
-                        'and give us the link.',
-                );
+                    'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. Please make sure that you ' +
+                    'press the button after the error/issue occurs. Once done please paste the link here. If the logs ' +
+                    "don't upload or this is an issue with a server, please upload your logs to https://paste.ee/ " +
+                    'and give us the link.';
+                let sentMessage;
 
-                if (sentMessage.deletable) {
+                // if we're not in a thread, then start one
+                if (!reaction.message.channel.isThread()) {
+                    const thread = await reaction.message.startThread({
+                        name: `${reactingMember.displayName}'s Issue`,
+                        autoArchiveDuration: 1440, // 1 day
+                    });
+                    sentMessage = await thread.send(messageReply);
+                } else {
+                    sentMessage = await reaction.message.reply(messageReply);
+                }
+
+                if (sentMessage && sentMessage.deletable) {
                     await sentMessage.react('🇱');
                     await sentMessage.react('🇴');
                     await sentMessage.react('🇬');
