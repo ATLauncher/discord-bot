@@ -1,5 +1,6 @@
 import config from 'config';
 import * as Discord from 'discord.js';
+import { COLOURS } from '../constants/discord';
 import logger from '../utils/logger';
 
 import BaseWatcher from './BaseWatcher';
@@ -33,14 +34,16 @@ class UseMinecraftSupportReactionWatcher extends BaseWatcher {
                     ({ id }) => id === config.get<string>('channels.minecraftSupport'),
                 ) as Discord.TextChannel;
 
-                const sentMessage = await reaction.message.channel.send(
-                    `${reaction.message.author} Your message has been deleted as it's not in the correct channel. Issues with Minecraft itself, after the Play button is pressed, or with a server should be posted in ${minecraftSupportChannel}. Please repost your message, along with your logs, to that channel.`,
-                );
-
-                if (sentMessage.deletable) {
-                    // delete message after 24 hours
-                    setTimeout(() => sentMessage.delete(), 60 * 60 * 24 * 1000);
-                }
+                await minecraftSupportChannel.send({
+                    content: `${reaction.message.author} Your message in ${reaction.message.channel} was deleted as it wasn't in the correct channel. I'm reposting your message here.`,
+                    embeds: [
+                        new Discord.MessageEmbed({
+                            title: `Message from ${reaction.message.author?.username}`,
+                            description: reaction.message.content || '',
+                            color: COLOURS.PRIMARY,
+                        }),
+                    ],
+                });
 
                 if (reaction.message.deletable) {
                     await reaction.message.delete();
