@@ -39,7 +39,7 @@ class LogsPlzReactionWatcher extends BaseWatcher {
                 // if we're not in a thread, then start one
                 if (!reaction.message.channel.isThread()) {
                     const thread = await reaction.message.startThread({
-                        name: `${reactingMember.displayName}'s Issue`,
+                        name: `${reaction.message.author?.username}'s Issue`,
                         autoArchiveDuration: 1440, // 1 day
                     });
                     sentMessage = await thread.send(messageReply);
