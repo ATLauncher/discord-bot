@@ -35,21 +35,17 @@ class PasteWatcher extends BaseWatcher {
             return;
         }
 
-        const matches = message.cleanContent.match(
-            /(https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})|(https:\/\/paste.ee\/p\/\w+)/gm,
-        );
+        const pasteUrl = await getPasteUrl(message.cleanContent);
 
-        if (!matches?.length) {
+        if (!pasteUrl) {
             return;
         }
 
-        const logScan = await prisma.log.count({ where: { url: matches[0] } });
+        const logScan = await prisma.log.count({ where: { url: pasteUrl } });
 
         if (logScan !== 0) {
             return;
         }
-
-        const pasteUrl = matches[0].replace('/view/', '/view/raw/').replace('paste.ee/p', 'paste.ee/r');
 
         try {
             const response = await got(pasteUrl);
@@ -260,7 +256,7 @@ class PasteWatcher extends BaseWatcher {
 
             await prisma.log.create({
                 data: {
-                    url: matches[0],
+                    url: pasteUrl,
                     channel: {
                         connectOrCreate: {
                             where: { id: message.channel.id },
@@ -287,5 +283,37 @@ class PasteWatcher extends BaseWatcher {
         }
     }
 }
+const getPasteUrl = async (messageContent: string): Promise<string | null> => {
+    const matches = messageContent.match(
+        /(https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12})|(https:\/\/paste.ee\/p\/\w+)/gm,
+    );
+
+    if (!matches?.length) {
+        return null;
+    }
+
+    const pasteUrl = matches[0].replace('/view/', '/view/raw/').replace('paste.ee/p', 'paste.ee/r');
+
+    if (pasteUrl.includes('paste.ee')) {
+        try {
+            const response = await got(pasteUrl);
+
+            const innerMatches = response.body.match(
+                /https:\/\/paste.atlauncher.com\/view\/[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}/gm,
+            );
+
+            if (
+                response.body.length <= 100 && // just incase someone posts the entire log into paste.ee, we only care about putting just the paste.atlauncher.com url in
+                innerMatches?.length
+            ) {
+                return innerMatches[0].replace('/view/', '/view/raw/').replace('paste.ee/p', 'paste.ee/r');
+            }
+        } catch (e) {
+            // ignored
+        }
+    }
+
+    return pasteUrl;
+};
 
 export default PasteWatcher;
