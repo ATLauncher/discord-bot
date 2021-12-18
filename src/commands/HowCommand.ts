@@ -21,7 +21,7 @@ class HowCommand extends BaseCommand {
      * The description of what the command does.
      */
     description =
-        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward`, `!how skins`, `!how debugbat` and `!how java8server`.';
+        'This will post a message with how to do something. You can mention the user for the bot to tag them in the message. Currently only works with `!how portforward`, `!how skins`, `!how debugbat`, `!how java8server` and `!how java17server`.';
 
     topics: Topic[] = [
         {
@@ -46,7 +46,16 @@ class HowCommand extends BaseCommand {
             command: 'java8server',
             title: 'Java 8 is needed for older Minecraft servers',
             description:
-                "You need Java 8 to run modded Minecraft servers usually that aren't on Minecraft 1.17.\n\nEasiest solution is to uninstall the newer Java from your machine, then install Java 8 from [this link](https://atl.pw/java8download) (if on Windows, make sure to download the 'Windows Offline (64-bit)' version).\n\nIf you want to keep the newer Java on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 8.",
+                "You need Java 8 to run modded Minecraft servers usually that are older than Minecraft 1.17.\n\nEasiest solution is to uninstall the newer Java from your machine, then install Java 8 from [this link](https://atl.pw/java8download) (if on Windows, make sure to download the 'Windows Offline (64-bit)' version).\n\nIf you want to keep the newer Java on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 8 (usually somewhere in `C:\\Program Files\\`).",
+            image: {
+                url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
+            },
+        },
+        {
+            command: 'java17server',
+            title: 'Java 17 is needed for Minecraft server 1.17 and later',
+            description:
+                "You need Java 17 to run modded Minecraft servers for Minecraft 1.17 and later.\n\nEasiest solution is to uninstall the other versions of Java from your machine, then install Java 17 from [this link](https://adoptium.net/).\n\nIf you want to keep the other Java versions on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 17 (usually somewhere in `C:\\Program Files\\`).",
             image: {
                 url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
             },
