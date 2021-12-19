@@ -6,6 +6,7 @@ import BaseWatcher from './BaseWatcher';
 
 import { COLOURS } from '../constants/discord';
 import prisma from '../utils/prisma';
+import { isSameQuarter } from 'date-fns';
 
 /**
  * This watcher checks for people saying bad words.
@@ -93,6 +94,13 @@ class PasteWatcher extends BaseWatcher {
                 errors.push({
                     name: 'Instance not installed correctly',
                     value: "The instance you're trying to launch may be corrupted or missing some vital files needed.\n\nReinstall the instance to see if it fixes the issue.",
+                });
+            }
+
+            if (response.body.match(/NoClassDefFoundError: com\/fasterxml\/jackson\/core\/JsonGenerationException/)) {
+                errors.push({
+                    name: 'Instance installation error',
+                    value: "There was an issue with a previous version of the launcher that would cause this crash. Please restart your launcher to make sure that you're on the latest version of the launcher and then reinstall the instance to fix the issue.",
                 });
             }
 
