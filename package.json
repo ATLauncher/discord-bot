@@ -1,6 +1,6 @@
 {
   "name": "@atlauncher/discord-bot",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "This is the code for our Discord bot which runs on our official Discord server at https://atl.pw/discord",
   "main": "dist",
   "repository": {
