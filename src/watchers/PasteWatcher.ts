@@ -52,7 +52,7 @@ class PasteWatcher extends BaseWatcher {
             const response = await got(pasteUrl);
 
             const errors = [];
-            let isPirated = false;
+            let showAutomatedScanMessage = true;
 
             if (response.body.match(/Expected a SETTINGS frame but was GOAWAY/)) {
                 errors.push({
@@ -225,11 +225,20 @@ class PasteWatcher extends BaseWatcher {
 
             // if using a known pirated version, only show this error
             if (response.body.match(/ATLauncher Version: 3\.5\.3\.0/)) {
-                isPirated = true;
+                showAutomatedScanMessage = false;
                 errors.splice(0, errors.length);
                 errors.push({
                     name: 'Using Pirated Version',
                     value: "You're using a known pirated version of ATLauncher. You will not get support here.\n\nPlease only download and use ATLauncher from sources listed at https://atlauncher.com/downloads",
+                });
+            }
+
+            if (response.body.match(/There is not enough space on the disk./)) {
+                showAutomatedScanMessage = false;
+                errors.splice(0, errors.length);
+                errors.push({
+                    name: 'No space on disk',
+                    value: "You don't have enough free disk space for the launcher/Minecraft to run and do what it needs to do. Delete some files/programs on your computer to free up space and try again.",
                 });
             }
 
@@ -241,7 +250,7 @@ class PasteWatcher extends BaseWatcher {
                                 'error',
                                 errors.length,
                             )}:`,
-                            description: isPirated
+                            description: !showAutomatedScanMessage
                                 ? ''
                                 : "**NOTE**: This is an automated scan and may not be 100% accurate. Please attempt the fixes mentioned below and if they don't help, please close and reopen the launcher, try again and provide us with new logs without clearing the console after restarting it.",
                             color: COLOURS.RED,
