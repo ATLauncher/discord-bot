@@ -1,5 +1,5 @@
 import config from 'config';
-import { addMinutes } from 'date-fns';
+import { addMinutes, isAfter, subMinutes } from 'date-fns';
 import * as Discord from 'discord.js';
 
 import Bot from './Bot';
@@ -178,6 +178,7 @@ abstract class BaseModule {
                 id: member.user.id,
                 username: member.user.username,
                 discriminator: member.user.discriminator,
+                jailedUntil: addMinutes(new Date(), 5),
             },
             update: {
                 jailedUntil: addMinutes(new Date(), 5),
@@ -193,6 +194,23 @@ abstract class BaseModule {
                 .setTimestamp(new Date())
                 .addField('User', `${member.user} (${member.user.username}#${member.user.discriminator})`, true),
         );
+    }
+
+    /**
+     * Only allow people to create support threads every 5 minutes.
+     */
+    async canCreateNewSupportThread(member: Discord.User): Promise<boolean> {
+        const user = await prisma.user.findUnique({
+            where: {
+                id: member.id,
+            },
+        });
+
+        if (!user || !user.lastSupportThreadCreation) {
+            return true;
+        }
+
+        return isAfter(new Date(), addMinutes(user.lastSupportThreadCreation, 5));
     }
 
     /**
@@ -226,6 +244,7 @@ abstract class BaseModule {
                     id: message.author.id,
                     username: message.author.username,
                     discriminator: message.author.discriminator,
+                    hasSeenTLauncherMessage: true,
                 },
                 update: {
                     username: message.author.username,

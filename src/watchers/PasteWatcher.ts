@@ -259,16 +259,7 @@ class PasteWatcher extends BaseWatcher {
                     ],
                 };
 
-                // if we're not in a thread, then start one
-                if (!message.channel.isThread()) {
-                    const thread = await message.startThread({
-                        name: `${message.author.username}'s Issue`,
-                        autoArchiveDuration: 1440, // 1 day
-                    });
-                    thread.send(messageReply);
-                } else {
-                    message.reply(messageReply);
-                }
+                message.reply(messageReply);
             }
 
             await prisma.log.create({
