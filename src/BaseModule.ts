@@ -336,6 +336,20 @@ abstract class BaseModule {
     }
 
     /**
+     * This gets the channel object for the minecraft support channel in the config.
+     */
+    getMinecraftSupportChannel(): Discord.TextChannel | undefined {
+        return this.bot.getMinecraftSupportChannel();
+    }
+
+    /**
+     * This gets the channel object for the launcher support channel in the config.
+     */
+    getLauncherSupportChannel(): Discord.TextChannel | undefined {
+        return this.bot.getLauncherSupportChannel();
+    }
+
+    /**
      * Checks to see if the given channel is a moderated channel.
      */
     isAModeratedChannel(channel: Discord.TextBasedChannels): boolean {

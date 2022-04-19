@@ -54,7 +54,11 @@ class NewThreadButtonWatcher extends BaseWatcher {
                     ],
                 });
 
-                await this.bot.addMessageToTopOfSupportChannels();
+                if (channel === this.getMinecraftSupportChannel()) {
+                    await this.bot.addMessageToTopOfSupportChannel('minecraftSupport');
+                } else if (channel === this.getLauncherSupportChannel()) {
+                    await this.bot.addMessageToTopOfSupportChannel('launcherSupport');
+                }
             } else {
                 interaction.reply({
                     content:
