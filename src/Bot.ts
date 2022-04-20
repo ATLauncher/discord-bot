@@ -204,7 +204,7 @@ class Bot {
                         .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
                 );
                 await launcherSupportChannel.send({
-                    content: `Hi there :wave:. If you're having issues with ATLauncher itself, such as issues running the launcher, installing modpacks or something not involving the launching of instances/modpacks/servers, then please click the button below to start a new thread, else visit ${minecraftSupportChannel} for help with Minecraft issues. Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
+                    content: `Hi there :wave:. If you're having issues with ATLauncher itself, such as issues running the launcher, installing modpacks or something not involving the launching of instances/modpacks/servers, then please click the "New Thread" button below to start a new thread, else visit ${minecraftSupportChannel} for help with Minecraft issues. Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
                     components: [newThreadLauncherButton],
                 });
             }
@@ -235,7 +235,7 @@ class Bot {
                         .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
                 );
                 await minecraftSupportChannel.send({
-                    content: `Hi there :wave:. If you're having issues with launching your instance/server, then please click the button below to start a new thread, else visit ${launcherSupportChannel} for help with issues with the launcher (such as installing packs). Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
+                    content: `Hi there :wave:. If you're having issues with launching your instance/server, then please click the "New Thread" button below to start a new thread, else visit ${launcherSupportChannel} for help with issues with the launcher (such as installing packs). Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
                     components: [newThreadMinecraftButton],
                 });
             }
