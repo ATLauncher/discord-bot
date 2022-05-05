@@ -40,7 +40,7 @@ class NewThreadButtonWatcher extends BaseWatcher {
 
                 const thread = await channel.threads.create({
                     name: `${user?.username}'s Thread`,
-                    autoArchiveDuration: 1440, // 1 day
+                    autoArchiveDuration: 10080, // 1 week
                 });
 
                 await thread.send({
