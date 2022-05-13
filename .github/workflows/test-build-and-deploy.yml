@@ -75,25 +75,8 @@ jobs:
             - name: Checkout code
               uses: actions/checkout@v2
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v2
-              with:
-                  node-version: '16'
-                  check-latest: true
-
-            - name: Get NPM cache directory
-              id: node-cache-dir
-              run: echo "::set-output name=dir::$(npm config get cache)"
-
-            - name: Cache NPM dependencies
-              uses: actions/cache@v1
-              with:
-                  path: ${{ steps.node-cache-dir.outputs.dir }}
-                  key: ${{ runner.os }}-node-16-${{ hashFiles('**/package-lock.json') }}
-                  restore-keys: ${{ runner.os }}-node-16-
-
             - name: Install Railway
-              run: npm i -g @railway/cli
+              run: curl -fsSL https://railway.app/install.sh | sh
 
             - name: Deploy to Railway
               run: railway up --detach
