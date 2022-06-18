@@ -10,8 +10,8 @@ This is the code for our Discord bot which runs on our official Discord server a
 
 To get setup you will need to make sure you have the following installed on your machine:
 
--   [NodeJS 16](https://nodejs.org/en/download/)
-    -   check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
+- [NodeJS 16](https://nodejs.org/en/download/)
+  - check out [nvm](https://github.com/creationix/nvm) or [nvm-windows](https://github.com/coreybutler/nvm-windows)
 
 We'll assume you're a capable developer, so we won't tell you how to go about installing those on your machine :)
 
@@ -78,9 +78,9 @@ production.
 
 By default the logging level is set to `error` level, but can be set to:
 
--   error
--   info
--   debug
+- error
+- info
+- debug
 
 ## New Relic
 
@@ -95,11 +95,11 @@ If you wish to enable sentry error reporting, simply add your DSN as config valu
 This bot was made specifically for the [ATLauncher Discord server](https://atl.pw/discord) and as such if it's used for
 any other purpose outside of that Discord server, there are some caveats to note:
 
--   Some things are hard coded to expect the layout and setup of the server in the same way as the ATLauncher one
-    -   This includes the notion of having a `rules` channel, a `moderation-logs` channel as well as the concept of support
-        and non support channels
--   The `JoinWatcher` is again very specific to ATLauncher's needs
--   The bot was made to be run only on one server, so if it's connected to multiple servers, it may not act correctly
+- Some things are hard coded to expect the layout and setup of the server in the same way as the ATLauncher one
+  - This includes the notion of having a `rules` channel, a `moderation-logs` channel as well as the concept of support
+    and non support channels
+- The `JoinWatcher` is again very specific to ATLauncher's needs
+- The bot was made to be run only on one server, so if it's connected to multiple servers, it may not act correctly
 
 ## Contributing
 
