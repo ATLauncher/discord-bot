@@ -12,6 +12,10 @@ router.get('/', (ctx: Context) => {
     ctx.body = { ok: true };
 });
 
+router.get('/health', (ctx: Context) => {
+    ctx.body = { ok: true };
+});
+
 router.get('/stats', async (ctx: Context) => {
     const guild = await getGuild(ctx);
 

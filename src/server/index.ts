@@ -19,6 +19,10 @@ export const startServer = (bot: Bot) => {
     app.context.bot = bot;
 
     app.use((ctx: ServerContext, next) => {
+        if (ctx.req.url === '/health' && ctx.req.method === 'GET') {
+            return next();
+        }
+
         if (!ctx.request.header.authorization) {
             ctx.throw(400, 'token_invalid', {
                 message: `api key must be provided`,
