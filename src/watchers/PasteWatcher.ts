@@ -224,12 +224,15 @@ class PasteWatcher extends BaseWatcher {
             }
 
             // if using a known pirated version, only show this error
-            if (response.body.match(/ATLauncher Version: 3\.5\.3\.0/)) {
+            if (
+                response.body.match(/ATLauncher Version: 3\.5\.3\.0/) ||
+                response.body.match(/ATLauncher Version: 3\.4\.21\.1/)
+            ) {
                 showAutomatedScanMessage = false;
                 errors.splice(0, errors.length);
                 errors.push({
-                    name: 'Using Pirated Version',
-                    value: "You're using a known pirated version of ATLauncher. You will not get support here.\n\nPlease only download and use ATLauncher from sources listed at https://atlauncher.com/downloads",
+                    name: 'Using Pirated/Unofficial Version',
+                    value: "You're using a known pirated/unofficial version of ATLauncher. You will not get support here.\n\nPlease only download and use ATLauncher from sources listed at https://atlauncher.com/downloads",
                 });
             }
 
