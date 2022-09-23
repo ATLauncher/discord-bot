@@ -30,9 +30,7 @@ class PollWatcher extends BaseWatcher {
                 cleanMessage.toLowerCase().includes('strawpoll.me') ||
                 cleanMessage.toLowerCase().includes('strawpoll.com')
             ) {
-                const rulesChannel = this.bot.client.channels.cache.find(
-                    (channel) => channel.id === config.get('channels.rules'),
-                );
+                const rulesChannel = this.bot.client.channels.cache.get(config.get('channels.rules'));
 
                 const warningMessage = await message.reply(
                     `Please read the ${rulesChannel}. Polls are not allowed without permission.`,

@@ -51,13 +51,15 @@ class CleanCommand extends BaseCommand {
                         user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
                     }
 
-                    const embed = new Discord.MessageEmbed()
+                    const embed = new Discord.EmbedBuilder()
                         .setTitle('Clean command run')
                         .setColor(COLOURS.YELLOW)
                         .setTimestamp(new Date())
-                        .addField('User', user, true)
-                        .addField('Channel', String(message.channel), true)
-                        .addField('Lines', String(linesToClean), true);
+                        .addFields([
+                            { name: 'User', value: user, inline: true },
+                            { name: 'Channel', value: String(message.channel), inline: true },
+                            { name: 'Lines', value: String(linesToClean), inline: true },
+                        ]);
 
                     this.sendEmbedToModeratorLogsChannel(embed);
                 }

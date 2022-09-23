@@ -47,11 +47,11 @@ class LogOffCommand extends BaseCommand {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle('Message deletion logging turned off')
             .setColor(COLOURS.RED)
             .setTimestamp(new Date())
-            .addField('User', user, true);
+            .addFields([{ name: 'User', value: user, inline: true }]);
 
         this.sendEmbedToModeratorLogsChannel(embed);
 
@@ -65,11 +65,11 @@ class LogOffCommand extends BaseCommand {
                     },
                 });
 
-                const embed = new Discord.MessageEmbed()
+                const embed = new Discord.EmbedBuilder()
                     .setTitle('Message deletion logging turned on')
                     .setColor(COLOURS.GREEN)
                     .setTimestamp(new Date())
-                    .addField('User', user, true);
+                    .addFields([{ name: 'User', value: user, inline: true }]);
 
                 this.sendEmbedToModeratorLogsChannel(embed);
             }, timeout * 1000);

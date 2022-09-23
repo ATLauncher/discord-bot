@@ -46,7 +46,7 @@ class SupportCommand extends BaseCommand {
 
         if (packInfo) {
             const user = message.mentions.users.first();
-            const embed = new Discord.MessageEmbed({
+            const embed = new Discord.EmbedBuilder({
                 title: `Where to get support for ${packInfo.name}`,
                 description: `For support for ${packInfo.name} please visit their website at ${
                     packInfo.websiteUrl

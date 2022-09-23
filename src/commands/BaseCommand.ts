@@ -1,6 +1,7 @@
 import * as Discord from 'discord.js';
 
 import BaseModule from '../BaseModule';
+import logger from '../utils/logger';
 
 /**
  * This is the base command class which all other commands are based on.

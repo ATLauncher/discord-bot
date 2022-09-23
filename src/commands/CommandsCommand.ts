@@ -35,7 +35,7 @@ class CommandsCommand extends BaseCommand {
 
         await message.channel.send({
             embeds: [
-                new Discord.MessageEmbed({
+                new Discord.EmbedBuilder({
                     title: 'Commands',
                     description:
                         'This is a list of all the commands the bot understands with a short description of each.',

@@ -2,6 +2,7 @@ import * as Discord from 'discord.js';
 
 import BaseCommand from './BaseCommand';
 import { PERMISSIONS } from '../constants/discord';
+import { secondsInDay } from 'date-fns';
 
 /**
  * This will ban the given user/s by their Discord user id.
@@ -40,7 +41,7 @@ class IDBanCommand extends BaseCommand {
         const splitIDs = ids.split(' ');
 
         splitIDs.forEach((id) => {
-            message.guild?.members.ban(id, { days: 1 });
+            message.guild?.members.ban(id, { deleteMessageSeconds: 1 * secondsInDay });
 
             message.channel.send(`User with ID of '${id}' has been banned.`);
         });

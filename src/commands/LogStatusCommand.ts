@@ -36,7 +36,7 @@ class LogStatusCommand extends BaseCommand {
         const logMessageDeletions = logMessageDeletionsSetting?.value ?? true;
 
         if (message.author) {
-            const embed = new Discord.MessageEmbed()
+            const embed = new Discord.EmbedBuilder()
                 .setTitle(`Message deletion logging is turned ${logMessageDeletions ? 'on' : 'off'}`)
                 .setColor(logMessageDeletions ? COLOURS.GREEN : COLOURS.RED)
                 .setTimestamp(new Date());

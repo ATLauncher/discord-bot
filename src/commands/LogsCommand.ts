@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js';
+import { ChannelType } from 'discord.js';
 
 import BaseCommand from './BaseCommand';
 
@@ -34,7 +35,7 @@ class LogsCommand extends BaseCommand {
                 'and give us the link.',
         );
 
-        if (message.channel.type !== 'DM') {
+        if (message.channel.type !== ChannelType.DM) {
             message.delete();
 
             // delete message after 24 hours

@@ -29,7 +29,7 @@ class FreeSupportCommand extends BaseCommand {
     async execute(message: Discord.Message) {
         await message.channel.send({
             embeds: [
-                new Discord.MessageEmbed({
+                new Discord.EmbedBuilder({
                     description:
                         "Everyone in here are volunteers who take time out of their day to help you.\n\nThey do not have to help you; it's their choice. Respect this, and please be patient when awaiting help, or they may decide not to help you.\n\nIf you don't feel like waiting, you're perfectly welcome to Google your problem and attempt to fix it yourself.",
                 }),

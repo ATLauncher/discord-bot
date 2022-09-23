@@ -1,4 +1,12 @@
-import type { Guild, GuildMember, GuildChannel, ThreadChannel, TextBasedChannels, TextChannel } from 'discord.js';
+import {
+    Guild,
+    GuildMember,
+    GuildChannel,
+    ThreadChannel,
+    TextChannel,
+    ChannelType,
+    TextBasedChannel,
+} from 'discord.js';
 
 import type { Context } from '.';
 
@@ -33,9 +41,9 @@ export const getMember = (guild: Guild, user: string): GuildMember | undefined =
 };
 
 export const getChannel = (guild: Guild, channel: string): GuildChannel | ThreadChannel | undefined => {
-    return guild.channels.cache.find(({ id }) => id === channel);
+    return guild.channels.cache.get(channel);
 };
 
-export const isTextChannel = (channel: TextBasedChannels | null): channel is TextChannel => {
-    return channel?.type === 'GUILD_TEXT';
+export const isTextChannel = (channel: TextBasedChannel | null): channel is TextChannel => {
+    return channel?.type === ChannelType.GuildText;
 };

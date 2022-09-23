@@ -1,5 +1,5 @@
 import config from 'config';
-import { addMinutes, isAfter, subMinutes } from 'date-fns';
+import { addMinutes, isAfter, secondsInDay, subMinutes } from 'date-fns';
 import * as Discord from 'discord.js';
 
 import Bot from './Bot';
@@ -127,36 +127,48 @@ abstract class BaseModule {
             });
 
             this.sendEmbedToModeratorLogsChannel(
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle('Warning added')
                     .setColor(COLOURS.YELLOW)
                     .setTimestamp(new Date())
-                    .addField(
-                        'User',
-                        `${message.author} (${message.author.username}#${message.author.discriminator})`,
-                        true,
-                    )
-                    .addField('Warnings', String(user.warnings), true)
-                    .addField('Reason', reason, false),
+                    .addFields([
+                        {
+                            name: 'User',
+                            value: `${message.author} (${message.author.username}#${message.author.discriminator})`,
+                            inline: true,
+                        },
+                        {
+                            name: 'Warnings',
+                            value: String(user.warnings),
+                            inline: true,
+                        },
+                        {
+                            name: 'Reason',
+                            value: reason,
+                            inline: false,
+                        },
+                    ]),
             );
 
             if (user.warnings >= 5) {
                 message.member?.ban({
-                    days: 1,
+                    deleteMessageSeconds: 1 * secondsInDay,
                     reason: 'Not following the rules and accumulating 5 warnings',
                 });
             } else if (user.warnings >= 3) {
                 message.member?.kick('Not following the rules and accumulating 3 warnings.');
 
                 this.sendEmbedToModeratorLogsChannel(
-                    new Discord.MessageEmbed()
+                    new Discord.EmbedBuilder()
                         .setTitle('User kicked')
                         .setColor(COLOURS.RED)
                         .setTimestamp(new Date())
-                        .addField(
-                            'User',
-                            `${message.author} (${message.author.username}#${message.author.discriminator})`,
-                        ),
+                        .addFields([
+                            {
+                                name: 'User',
+                                value: `${message.author} (${message.author.username}#${message.author.discriminator})`,
+                            },
+                        ]),
                 );
             } else if (user.warnings >= 2) {
                 if (message.member) {
@@ -188,11 +200,17 @@ abstract class BaseModule {
         member.roles.add(config.get<string>('roles.jailed'));
 
         this.sendEmbedToModeratorLogsChannel(
-            new Discord.MessageEmbed()
+            new Discord.EmbedBuilder()
                 .setTitle('User jailed')
                 .setColor(COLOURS.YELLOW)
                 .setTimestamp(new Date())
-                .addField('User', `${member.user} (${member.user.username}#${member.user.discriminator})`, true),
+                .addFields([
+                    {
+                        name: 'User',
+                        value: `${member.user} (${member.user.username}#${member.user.discriminator})`,
+                        inline: true,
+                    },
+                ]),
         );
     }
 
@@ -254,16 +272,21 @@ abstract class BaseModule {
             });
 
             this.sendEmbedToModeratorLogsChannel(
-                new Discord.MessageEmbed()
+                new Discord.EmbedBuilder()
                     .setTitle('TLauncher warning shown to user')
                     .setColor(COLOURS.YELLOW)
                     .setTimestamp(new Date())
-                    .addField(
-                        'User',
-                        `${message.author} (${message.author.username}#${message.author.discriminator})`,
-                        true,
-                    )
-                    .addField('Message', `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``),
+                    .addFields([
+                        {
+                            name: 'User',
+                            value: `${message.author} (${message.author.username}#${message.author.discriminator})`,
+                            inline: true,
+                        },
+                        {
+                            name: 'Message',
+                            value: `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``,
+                        },
+                    ]),
             );
         }
     }
@@ -318,7 +341,7 @@ abstract class BaseModule {
     /**
      * This will send the given embed message to the moderator logs channel.
      */
-    sendEmbedToModeratorLogsChannel(embed: Discord.MessageEmbed): void {
+    sendEmbedToModeratorLogsChannel(embed: Discord.EmbedBuilder): void {
         const moderatorChannel = this.getModerationLogsChannel();
 
         if (moderatorChannel) {
@@ -330,9 +353,7 @@ abstract class BaseModule {
      * This gets the channel object for the moderator channel in the config.
      */
     getModerationLogsChannel(): Discord.TextChannel | undefined {
-        return this.bot.client.channels.cache.find(
-            ({ id }) => id === config.get<string>('channels.moderationLogs'),
-        ) as Discord.TextChannel;
+        return this.bot.client.channels.cache.get(config.get<string>('channels.moderationLogs')) as Discord.TextChannel;
     }
 
     /**
@@ -352,7 +373,7 @@ abstract class BaseModule {
     /**
      * Checks to see if the given channel is a moderated channel.
      */
-    isAModeratedChannel(channel: Discord.TextBasedChannels): boolean {
+    isAModeratedChannel(channel: Discord.TextBasedChannel): boolean {
         return config.get<string[]>('moderatedChannels')?.some((id) => id === channel.id);
     }
 

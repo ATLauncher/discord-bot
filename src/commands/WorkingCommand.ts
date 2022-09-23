@@ -1,4 +1,5 @@
 import * as Discord from 'discord.js';
+import { PERMISSIONS } from '../constants/discord';
 
 import BaseCommand from './BaseCommand';
 
@@ -18,12 +19,15 @@ class WorkingCommand extends BaseCommand {
     description = 'This will post a message to test if the bot is working.';
 
     /**
+     * The permissions the user requires in order to use this command.
+     */
+    permissions = [PERMISSIONS.MANAGE_MESSAGES];
+
+    /**
      * The function that should be called when the event is fired.
      */
     async execute(message: Discord.Message) {
-        if (this.hasBypassRole(message)) {
-            await message.reply('Yes I\'m "working"!');
-        }
+        await message.reply('Yes I\'m "working"!');
 
         message.delete();
     }

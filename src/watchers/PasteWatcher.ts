@@ -248,7 +248,7 @@ class PasteWatcher extends BaseWatcher {
             if (errors.length) {
                 const messageReply = {
                     embeds: [
-                        new Discord.MessageEmbed({
+                        new Discord.EmbedBuilder({
                             title: `I've scanned your log, and found ${errors.length} potential ${pluralize(
                                 'error',
                                 errors.length,

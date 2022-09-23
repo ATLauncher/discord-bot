@@ -29,13 +29,7 @@ class SupportRuleWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const launcherSupport = this.bot.client.channels.cache.find(
-                ({ id }) => id === config.get('channels.launcherSupport'),
-            );
-
-            const minecraftSupport = this.bot.client.channels.cache.find(
-                ({ id }) => id === config.get('channels.minecraftSupport'),
-            );
+            const supportChannel = this.bot.client.channels.cache.get(config.get('channels.support'));
 
             const nonSupportChannels = this.bot.client.channels.cache.filter(({ id }) =>
                 config.get<string[]>('noSupportChannels').includes(id),
@@ -46,7 +40,7 @@ class SupportRuleWatcher extends BaseWatcher {
             if (this.strings.some((string) => cleanMessage.includes(string))) {
                 if (nonSupportChannels.some(({ id }) => id === message.channel.id)) {
                     const warningMessage = await message.channel.send(
-                        `${message.member} It looks like you're asking for support. Please use ${launcherSupport} for launcher issues and ${minecraftSupport} for issues with Minecraft.`,
+                        `${message.member} It looks like you're asking for support. Please use the ${supportChannel} channel.`,
                     );
 
                     this.addWarningToUser(message, 'Asking for support outside of support channels');

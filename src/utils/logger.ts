@@ -8,6 +8,7 @@ import { isProductionEnvironment } from './env';
 
 const isNewRelicEnabled = config.get<boolean>('new_relic.enabled') ?? false;
 const isProduction = isProductionEnvironment();
+const newrelicWinstonFormatter = newRelicFormatter(winston);
 
 const logger = winston.createLogger({
     transports: [
@@ -18,7 +19,7 @@ const logger = winston.createLogger({
                 apiUrl: 'https://log-api.newrelic.com/',
             }),
     ].filter(Boolean) as Transport[],
-    format: isNewRelicEnabled ? newRelicFormatter() : undefined,
+    format: isNewRelicEnabled ? newrelicWinstonFormatter() : undefined,
     level: config.get<string>('logging.level'),
 });
 

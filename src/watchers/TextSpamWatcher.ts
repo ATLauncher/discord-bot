@@ -51,9 +51,7 @@ class TextSpamWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const rulesChannel = this.bot.client.channels.cache.find(
-                (channel) => channel.id === config.get('channels.rules'),
-            );
+            const rulesChannel = this.bot.client.channels.cache.get(config.get('channels.rules'));
 
             const cleanMessage = message.cleanContent.toLowerCase();
 

@@ -7,7 +7,7 @@ interface Topic {
     command: string;
     title: string;
     description: string;
-    image?: Discord.MessageEmbedImage;
+    image?: Discord.EmbedImageData;
 }
 
 class HowCommand extends BaseCommand {
@@ -71,7 +71,7 @@ class HowCommand extends BaseCommand {
 
         if (replyWith) {
             const user = message.mentions.users.first();
-            const embed = new Discord.MessageEmbed({
+            const embed = new Discord.EmbedBuilder({
                 ...replyWith,
                 color: COLOURS.PRIMARY,
             });

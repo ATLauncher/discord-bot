@@ -26,11 +26,11 @@ class BanWatcher extends BaseWatcher {
             userToLog = `${user} (${user.username}#${user.discriminator})`;
         }
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle(`User ${unbanned ? 'unbanned' : 'banned'}`)
             .setColor(unbanned ? COLOURS.GREEN : COLOURS.RED)
             .setTimestamp(new Date())
-            .addField('User', userToLog);
+            .addFields({ name: 'User', value: userToLog });
 
         this.sendEmbedToModeratorLogsChannel(embed);
     }

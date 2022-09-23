@@ -46,7 +46,7 @@ class NewThreadButtonWatcher extends BaseWatcher {
                 await thread.send({
                     content: `A thread has been spun up for you ${user}. Please keep all messages in here to keep things organised and tidy.\n\nPlease provide a brief description of the issue you're facing as well as providing logs as shown below:`,
                     embeds: [
-                        new Discord.MessageEmbed({
+                        new Discord.EmbedBuilder({
                             image: {
                                 url: 'https://cdn.atlcdn.net/UploadLogs.gif',
                             },

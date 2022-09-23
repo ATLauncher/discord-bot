@@ -82,13 +82,15 @@ class DeleteWatcher extends BaseWatcher {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
         }
 
-        const embed = new Discord.MessageEmbed()
+        const embed = new Discord.EmbedBuilder()
             .setTitle('Message deleted')
             .setColor(COLOURS.RED)
             .setTimestamp(new Date())
-            .addField('User', user, true)
-            .addField('Channel', String(message.channel), true)
-            .addField('Message', `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\``);
+            .addFields([
+                { name: 'User', value: user, inline: true },
+                { name: 'Channel', value: String(message.channel), inline: true },
+                { name: 'Message', value: `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\`` },
+            ]);
 
         this.sendEmbedToModeratorLogsChannel(embed);
     }

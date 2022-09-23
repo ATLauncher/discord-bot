@@ -10,6 +10,7 @@ import logger from './utils/logger';
 import prisma from './utils/prisma';
 import { isProductionEnvironment } from './utils/env';
 import { COLOURS } from './constants/discord';
+import { ButtonStyle } from 'discord.js';
 
 class Bot {
     public client: Discord.Client;
@@ -20,12 +21,13 @@ class Bot {
     constructor() {
         this.client = new Discord.Client({
             intents: [
-                Discord.Intents.FLAGS.GUILDS,
-                Discord.Intents.FLAGS.GUILD_MEMBERS,
-                Discord.Intents.FLAGS.GUILD_BANS,
-                Discord.Intents.FLAGS.GUILD_MESSAGES,
-                Discord.Intents.FLAGS.GUILD_MESSAGE_REACTIONS,
-                Discord.Intents.FLAGS.DIRECT_MESSAGES,
+                Discord.GatewayIntentBits.Guilds,
+                Discord.GatewayIntentBits.GuildMembers,
+                Discord.GatewayIntentBits.GuildBans,
+                Discord.GatewayIntentBits.GuildMessages,
+                Discord.GatewayIntentBits.DirectMessages,
+                Discord.GatewayIntentBits.MessageContent,
+                Discord.GatewayIntentBits.GuildMessageReactions,
             ],
             allowedMentions: { parse: ['users'], repliedUser: true },
         });
@@ -53,9 +55,7 @@ class Bot {
             // await this.addMessageToTopOfSupportChannel('minecraftSupport');
             // await this.addMessageToTopOfSupportChannel('launcherSupport');
 
-            const botTestingChannel = this.client.channels.cache.find(
-                ({ id }) => id === config.get<string>('channels.botTesting'),
-            );
+            const botTestingChannel = this.client.channels.cache.get(config.get<string>('channels.botTesting'));
 
             if (botTestingChannel) {
                 (botTestingChannel as Discord.TextChannel).send("I've restarted, just FYI");
@@ -93,8 +93,8 @@ class Bot {
      * This will refresh all the items in FAQ and Help channel to be in line with what's defined in the config.
      */
     async refreshFaqAndHelpChannel() {
-        const faqAndHelpChannel = this.client.channels.cache.find(
-            ({ id }) => id === config.get<string>('channels.faqAndHelp'),
+        const faqAndHelpChannel = this.client.channels.cache.get(
+            config.get<string>('channels.faqAndHelp'),
         ) as Discord.TextChannel;
 
         if (faqAndHelpChannel) {
@@ -124,7 +124,7 @@ class Bot {
                             if (m.url) {
                                 return faqAndHelpChannel.send({
                                     embeds: [
-                                        new Discord.MessageEmbed({
+                                        new Discord.EmbedBuilder({
                                             ...m,
                                             color: COLOURS.PRIMARY,
                                         }),
@@ -140,7 +140,7 @@ class Bot {
                 // add a TOC to the bottom
                 faqAndHelpChannel.send({
                     embeds: [
-                        new Discord.MessageEmbed({
+                        new Discord.EmbedBuilder({
                             title: `FAQ & Help Navigation`,
                             description: sentMessages
                                 .filter(Boolean)
@@ -168,8 +168,8 @@ class Bot {
 
     async addMessageToTopOfSupportChannel(channel: 'minecraftSupport' | 'launcherSupport') {
         logger.debug('Making sure bot thread message is at top of support channels');
-        const faqAndHelpChannel = this.client.channels.cache.find(
-            ({ id }) => id === config.get<string>('channels.faqAndHelp'),
+        const faqAndHelpChannel = this.client.channels.cache.get(
+            config.get<string>('channels.faqAndHelp'),
         ) as Discord.TextChannel;
 
         const launcherSupportChannel = this.getLauncherSupportChannel();
@@ -190,17 +190,20 @@ class Bot {
                 );
 
                 // now make new thread starting messages
-                const newThreadLauncherButton = new Discord.MessageActionRow().addComponents(
-                    new Discord.MessageButton().setCustomId('createThread').setLabel('Get Help').setStyle('PRIMARY'),
-                    new Discord.MessageButton()
+                const newThreadLauncherButton = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('createThread')
+                        .setLabel('Get Help')
+                        .setStyle(ButtonStyle.Primary),
+                    new Discord.ButtonBuilder()
                         .setLabel('Minecraft Support')
-                        .setStyle('LINK')
+                        .setStyle(ButtonStyle.Link)
                         .setURL(
                             `https://discord.com/channels/${minecraftSupportChannel.guildId}/${minecraftSupportChannel.id}`,
                         ),
-                    new Discord.MessageButton()
+                    new Discord.ButtonBuilder()
                         .setLabel('View FAQs')
-                        .setStyle('LINK')
+                        .setStyle(ButtonStyle.Link)
                         .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
                 );
                 await launcherSupportChannel.send({
@@ -221,17 +224,20 @@ class Bot {
                 );
 
                 // now make new thread starting messages
-                const newThreadMinecraftButton = new Discord.MessageActionRow().addComponents(
-                    new Discord.MessageButton().setCustomId('createThread').setLabel('Get Help').setStyle('PRIMARY'),
-                    new Discord.MessageButton()
+                const newThreadMinecraftButton = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().addComponents(
+                    new Discord.ButtonBuilder()
+                        .setCustomId('createThread')
+                        .setLabel('Get Help')
+                        .setStyle(ButtonStyle.Primary),
+                    new Discord.ButtonBuilder()
                         .setLabel('Launcher Support')
-                        .setStyle('LINK')
+                        .setStyle(ButtonStyle.Link)
                         .setURL(
                             `https://discord.com/channels/${launcherSupportChannel.guildId}/${launcherSupportChannel.id}`,
                         ),
-                    new Discord.MessageButton()
+                    new Discord.ButtonBuilder()
                         .setLabel('View FAQs')
-                        .setStyle('LINK')
+                        .setStyle(ButtonStyle.Link)
                         .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
                 );
                 await minecraftSupportChannel.send({
@@ -246,18 +252,14 @@ class Bot {
      * This gets the channel object for the minecraft support channel in the config.
      */
     getMinecraftSupportChannel(): Discord.TextChannel | undefined {
-        return this.client.channels.cache.find(
-            ({ id }) => id === config.get<string>('channels.minecraftSupport'),
-        ) as Discord.TextChannel;
+        return this.client.channels.cache.get(config.get<string>('channels.minecraftSupport')) as Discord.TextChannel;
     }
 
     /**
      * This gets the channel object for the launcher support channel in the config.
      */
     getLauncherSupportChannel(): Discord.TextChannel | undefined {
-        return this.client.channels.cache.find(
-            ({ id }) => id === config.get<string>('channels.launcherSupport'),
-        ) as Discord.TextChannel;
+        return this.client.channels.cache.get(config.get<string>('channels.launcherSupport')) as Discord.TextChannel;
     }
 
     /**

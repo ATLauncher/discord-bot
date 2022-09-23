@@ -1,10 +1,13 @@
 import Router from '@koa/router';
-import type { MessageEmbed, TextChannel } from 'discord.js';
+import type { APIEmbed, JSONEncodable, MessageCreateOptions, TextChannel } from 'discord.js';
 
 import type { Context, ServerState, ServerContext } from './';
 
+type MessageEmbed = JSONEncodable<APIEmbed> | APIEmbed;
+
 import prisma from '../utils/prisma';
 import { getGuild, getMember, getChannel } from './utils';
+import { secondsInDay } from 'date-fns';
 
 const router = new Router<ServerState, ServerContext>();
 
@@ -61,9 +64,9 @@ router.post('/channel/:channel/send', async (ctx: Context) => {
         ctx.throw(404, 'no channel found');
     }
 
-    const { message, embed }: { message?: string; embed?: MessageEmbed } = ctx.request.body;
+    const { message, embed } = <{ message?: string; embed?: MessageEmbed }>ctx.request.body;
 
-    const sendObject: { content?: string; embeds?: [MessageEmbed] } = {};
+    const sendObject: MessageCreateOptions = {};
 
     if (message) {
         sendObject.content = message;
@@ -123,7 +126,7 @@ router.post('/user/:user/roles', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
-    const { role } = ctx.request.body;
+    const { role } = <{ role: string }>ctx.request.body;
 
     if (member.roles.cache.has(role)) {
         ctx.status = 204;
@@ -191,7 +194,9 @@ router.post('/user/:user/kick', async (ctx: Context) => {
         ctx.throw(406, 'user is not kickable');
     }
 
-    await member.kick(ctx.request.body.reason);
+    const { reason } = <{ reason: string }>ctx.request.body;
+
+    await member.kick(reason);
 
     ctx.status = 204;
 });
@@ -213,9 +218,11 @@ router.post('/user/:user/ban', async (ctx: Context) => {
         ctx.throw(406, 'user is not bannable');
     }
 
+    const { days, reason } = <{ days: number; reason: string }>ctx.request.body;
+
     await member.ban({
-        days: ctx.request.body.days || 1,
-        reason: ctx.request.body.reason,
+        deleteMessageSeconds: days * secondsInDay,
+        reason,
     });
 
     ctx.status = 204;
@@ -234,7 +241,7 @@ router.post('/user/:user/send', async (ctx: Context) => {
         ctx.throw(404, 'no user found');
     }
 
-    const { message, embed } = ctx.request.body;
+    const { message, embed } = <{ message?: string; embed: MessageEmbed }>ctx.request.body;
 
     if (message) {
         await member.send({ content: message, embeds: [embed] });
