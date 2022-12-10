@@ -226,7 +226,8 @@ class PasteWatcher extends BaseWatcher {
             // if using a known pirated version, only show this error
             if (
                 response.body.match(/ATLauncher Version: 3\.5\.3\.0/) ||
-                response.body.match(/ATLauncher Version: 3\.4\.21\.1/)
+                response.body.match(/ATLauncher Version: 3\.4\.21\.1/) ||
+                response.body.match(/ATLauncher Version: 3\.4\.25\.1/)
             ) {
                 showAutomatedScanMessage = false;
                 errors.splice(0, errors.length);
