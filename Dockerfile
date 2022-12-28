@@ -1,4 +1,4 @@
-FROM node:16-alpine
+FROM node:16-alpine3.16
 
 LABEL author="Ryan Dowling" maintainer="ryan.dowling@atlauncher.com"
 
