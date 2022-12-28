@@ -18,20 +18,25 @@ class NewForumPostWatcher extends BaseWatcher {
     async action(method: keyof Discord.ClientEvents, ...args: Discord.ClientEvents['threadCreate']) {
         const thread = args[0];
 
+        if ((thread.parent?.type as ChannelType) !== ChannelType.GuildForum) {
+            return;
+        }
+
+        const originalMessage = (await thread.messages.fetch()).first();
+
         if (
-            (thread.parent?.type as ChannelType) === ChannelType.GuildForum &&
-            !(await thread.messages.fetch()).first()?.cleanContent.includes('paste.atlauncher.com') &&
-            !(await thread.messages.fetch()).first()?.cleanContent.includes('paste.ee')
+            !originalMessage?.cleanContent.includes('paste.atlauncher.com') &&
+            !originalMessage?.cleanContent.includes('paste.ee')
         ) {
             const messageReply =
-                `In order to help you, we need some logs. Please see ` +
-                'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. Please make sure that you ' +
-                'press the button after the error/issue occurs. Once done please paste the link here. If the logs ' +
+                `In order to help you ${originalMessage?.author}, we need some logs. Please see ` +
+                'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. **Please make sure that you ' +
+                'press the button after the error/issue occurs**. Once done please paste the link here. If the logs ' +
                 "don't upload or this is an issue with a server, please upload your logs to https://paste.ee/ " +
                 'and give us the link.';
             let sentMessage;
 
-            sentMessage = await thread.send(messageReply);
+            sentMessage = await originalMessage?.reply(messageReply);
 
             if (sentMessage && sentMessage.deletable) {
                 await sentMessage.react('🇱');
