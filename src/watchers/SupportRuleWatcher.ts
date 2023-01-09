@@ -8,6 +8,11 @@ import BaseWatcher from './BaseWatcher';
  */
 class SupportRuleWatcher extends BaseWatcher {
     /**
+     * Disabled since there's no real chat channels anymore and this just hurts.
+     */
+    enabled = false;
+
+    /**
      * If this watcher uses bypass rules.
      */
     usesBypassRules = true;
