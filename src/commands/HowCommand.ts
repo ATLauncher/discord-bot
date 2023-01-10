@@ -52,13 +52,34 @@ class HowCommand extends BaseCommand {
             },
         },
         {
-            command: 'java17server',
-            title: 'Java 17 is needed for Minecraft server 1.17 and later',
+            command: 'java16server',
+            title: 'Java 16 is needed for Minecraft server 1.17',
             description:
-                "You need Java 17 to run modded Minecraft servers for Minecraft 1.17 and later.\n\nEasiest solution is to uninstall the other versions of Java from your machine, then install Java 17 from [this link](https://adoptium.net/).\n\nIf you want to keep the other Java versions on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 17 (usually somewhere in `C:\\Program Files\\`).",
+                "You need Java 16 to run modded Minecraft servers for Minecraft 1.17.\n\nEasiest solution is to uninstall the other versions of Java from your machine, then install Java 16 from [this link](https://adoptium.net/).\n\nIf you want to keep the other Java versions on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 16 (usually somewhere in `C:\\Program Files\\`).",
             image: {
                 url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
             },
+        },
+        {
+            command: 'java17server',
+            title: 'Java 17 is needed for Minecraft server 1.18 and later',
+            description:
+                "You need Java 17 to run modded Minecraft servers for Minecraft 1.18 and later.\n\nEasiest solution is to uninstall the other versions of Java from your machine, then install Java 17 from [this link](https://adoptium.net/).\n\nIf you want to keep the other Java versions on your computer, you can alternatively edit the `LaunchServer.bat` file for the server as per the below image to point to the path you've installed Java 17 (usually somewhere in `C:\\Program Files\\`).",
+            image: {
+                url: 'https://cdn.atlcdn.net/ChangeServerJavaPath.png',
+            },
+        },
+        {
+            command: 'findcrashingmod',
+            title: 'How to find a crashing mod',
+            description:
+                "When your custom modpack is crashing and you don't know why, the best thing you can do is remove/disable mods in batches (if you have a lot of mods you can do 5-10 at a time, if you don't have many, do 1-2 at a time) until it starts working again, then you know the last set of mods you removed were the issue and can then add back the mods 1 at a time until it stops working again to find the crashing mod.\n\nWhen making custom modpacks, this process is one you need to get used to. Best thing to do is to constantly start up the game while adding mods, and not leave it until you've finished adding mods to try starting the game.",
+        },
+        {
+            command: 'failtodownload',
+            title: 'Failed to download files, and how to fix',
+            description:
+                "So something between your PC and the place the launcher is trying to download files from is having issues. You can try restart your PC and your modem/router.\n\nIf that doesn't work, you can try increasing the timeout in the launchers network settings and decreasing the concurrent connections and save that which sometimes helps.\n\nIf that doesn't work, try a VPN Or tether your mobile.\n\nLastly if you're technical, you can try changing your DNS servers to something else such as 1.1.1.1 and then restart your computer.\n\nIf none of that helps, then time is likely the answer, as something may be routing incorrectly, too busy or just broken and will resolve later.",
         },
     ];
 
