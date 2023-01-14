@@ -7,6 +7,7 @@ import BaseWatcher from './BaseWatcher';
 import { COLOURS } from '../constants/discord';
 import prisma from '../utils/prisma';
 import { isSameQuarter } from 'date-fns';
+import HowCommand, { topics } from '../commands/HowCommand';
 
 /**
  * This watcher checks for people saying bad words.
@@ -42,11 +43,11 @@ class PasteWatcher extends BaseWatcher {
             return;
         }
 
-        const logScan = await prisma.log.count({ where: { url: pasteUrl } });
+        // const logScan = await prisma.log.count({ where: { url: pasteUrl } });
 
-        if (logScan !== 0) {
-            return;
-        }
+        // if (logScan !== 0) {
+        //     return;
+        // }
 
         try {
             const response = await got(pasteUrl);
@@ -159,6 +160,21 @@ class PasteWatcher extends BaseWatcher {
                     name: 'Login issue',
                     value: 'There was an issue logging into your account. To fix, go to the accounts tab within the launcher, delete the account, then add it in again.',
                 });
+            }
+
+            if (
+                response.body.match(
+                    /myrathi\.flatsigns\.FlatSigns failed validation\. Halting runtime for security reasons\./,
+                )
+            ) {
+                const topic = topics.find((t) => t.command === 'java7instance');
+
+                if (!!topic) {
+                    errors.push({
+                        name: topic.title,
+                        value: topic.description,
+                    });
+                }
             }
 
             if (
