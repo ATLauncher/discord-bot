@@ -6,7 +6,6 @@ import BaseWatcher from './BaseWatcher';
 
 import { COLOURS } from '../constants/discord';
 import prisma from '../utils/prisma';
-import { isSameQuarter } from 'date-fns';
 import HowCommand, { topics } from '../commands/HowCommand';
 
 /**
@@ -55,7 +54,16 @@ class PasteWatcher extends BaseWatcher {
             const errors = [];
             let showAutomatedScanMessage = true;
 
-            if (response.body.match(/Expected a SETTINGS frame but was GOAWAY/)) {
+            if (response.body.match(/java\.net\.SocketTimeoutException: timeout/)) {
+                const topic = topics.find((t) => t.command === 'failtodownload');
+
+                if (!!topic) {
+                    errors.push({
+                        name: 'Timeout downloading files',
+                        value: topic.command,
+                    });
+                }
+            } else if (response.body.match(/Expected a SETTINGS frame but was GOAWAY/)) {
                 errors.push({
                     name: 'Error downloading files',
                     value: "There was an error downloading some files. To fix this, simply go to the `Settings` -> `Network` tab within the launcher and tick the `Don't Use HTTP/2` box. Click save and then you should be able to download correctly again.",
@@ -243,7 +251,8 @@ class PasteWatcher extends BaseWatcher {
             if (
                 response.body.match(/ATLauncher Version: 3\.5\.3\.0/) ||
                 response.body.match(/ATLauncher Version: 3\.4\.21\.1/) ||
-                response.body.match(/ATLauncher Version: 3\.4\.25\.1/)
+                response.body.match(/ATLauncher Version: 3\.4\.25\.1/) ||
+                response.body.match(/code=403, message=, url=https:\/\/api\.atlauncher\.com/)
             ) {
                 showAutomatedScanMessage = false;
                 errors.splice(0, errors.length);

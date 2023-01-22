@@ -66,7 +66,7 @@ export const topics: Topic[] = [
         command: 'failtodownload',
         title: 'Failed to download files, and how to fix',
         description:
-            "So something between your PC and the place the launcher is trying to download files from is having issues. You can try restart your PC and your modem/router.\n\nIf that doesn't work, you can try increasing the timeout in the launchers network settings and decreasing the concurrent connections and save that which sometimes helps.\n\nIf that doesn't work, try a VPN Or tether your mobile.\n\nLastly if you're technical, you can try changing your DNS servers to something else such as 1.1.1.1 and then restart your computer.\n\nIf none of that helps, then time is likely the answer, as something may be routing incorrectly, too busy or just broken and will resolve later.",
+            "Something between your PC and the place the launcher is trying to download files from is having issues. You can try restart your PC and your modem/router.\n\nIf that doesn't work, you can try increasing the timeout in the launchers network settings and decreasing the concurrent connections and save that which sometimes helps.\n\nIf that doesn't work, try a VPN Or tether your mobile.\n\nLastly if you're technical, you can try changing your DNS servers to something else such as 1.1.1.1 and then restart your computer.\n\nIf none of that helps, then time is likely the answer, as something may be routing incorrectly, too busy or just broken and will resolve later.",
     },
     {
         command: 'java7instance',
