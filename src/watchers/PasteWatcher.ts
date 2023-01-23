@@ -68,6 +68,11 @@ class PasteWatcher extends BaseWatcher {
                     name: 'Error downloading files',
                     value: "There was an error downloading some files. To fix this, simply go to the `Settings` -> `Network` tab within the launcher and tick the `Don't Use HTTP/2` box. Click save and then you should be able to download correctly again.",
                 });
+            } else if (response.body.match(/java\.net\.UnknownHostException/)) {
+                errors.push({
+                    name: 'DNS resolution issue',
+                    value: "There was an error downloading files due to DNS resolution.\n\nFirst please restart both your modem/router and your computer. That can fix it usually.\n\nIf that doesn't work you will need to either use a different internet connection (such as tethering a mobile phone), use a VPN or change your DNS server on your computer (Google how to do this for your operating system) to something like `1.1.1.1`.",
+                });
             } else if (
                 response.body.match(/Error trying to download/) ||
                 response.body.match(/Failed to connect to files\.minecraftforge\.net/) ||
