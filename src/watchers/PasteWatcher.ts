@@ -59,8 +59,8 @@ class PasteWatcher extends BaseWatcher {
 
                 if (!!topic) {
                     errors.push({
-                        name: 'Timeout downloading files',
-                        value: topic.command,
+                        name: topic.title,
+                        value: topic.description,
                     });
                 }
             } else if (response.body.match(/Expected a SETTINGS frame but was GOAWAY/)) {
