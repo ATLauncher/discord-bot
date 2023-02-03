@@ -22,6 +22,16 @@ class NewForumPostWatcher extends BaseWatcher {
             return;
         }
 
+        // Only run on Support forum
+        if (thread.parent !== this.getSupportChannel()) {
+            return;
+        }
+
+        // Don't run when the only tag is Question
+        if (thread.appliedTags.length === 1 && thread.appliedTags[0] === 'Question') {
+            return;
+        }
+
         const originalMessage = (await thread.messages.fetch()).first();
 
         if (

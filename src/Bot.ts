@@ -263,6 +263,15 @@ class Bot {
     }
 
     /**
+     * This gets the channel object for the  support channel in the config.
+     */
+    getSupportChannel(): Discord.TextChannel | undefined {
+        return this.client.channels.cache.get(
+            config.get<string>('channels.supportAndQuestions'),
+        ) as Discord.TextChannel;
+    }
+
+    /**
      * Starts the bot.
      */
     async start() {
