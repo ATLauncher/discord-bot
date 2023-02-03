@@ -34,7 +34,7 @@ class SupportRuleWatcher extends BaseWatcher {
         const message = args[1] || args[0];
 
         if (message.cleanContent) {
-            const supportChannel = this.bot.client.channels.cache.get(config.get('channels.support'));
+            const supportChannel = this.bot.client.channels.cache.get(config.get('channels.supportAndQuestions'));
 
             const nonSupportChannels = this.bot.client.channels.cache.filter(({ id }) =>
                 config.get<string[]>('noSupportChannels').includes(id),

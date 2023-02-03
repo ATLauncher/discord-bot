@@ -52,9 +52,6 @@ class Bot {
 
             await this.refreshFaqAndHelpChannel();
 
-            // await this.addMessageToTopOfSupportChannel('minecraftSupport');
-            // await this.addMessageToTopOfSupportChannel('launcherSupport');
-
             const botTestingChannel = this.client.channels.cache.get(config.get<string>('channels.botTesting'));
 
             if (botTestingChannel) {
@@ -164,102 +161,6 @@ class Bot {
                 });
             }
         }
-    }
-
-    async addMessageToTopOfSupportChannel(channel: 'minecraftSupport' | 'launcherSupport') {
-        logger.debug('Making sure bot thread message is at top of support channels');
-        const faqAndHelpChannel = this.client.channels.cache.get(
-            config.get<string>('channels.faqAndHelp'),
-        ) as Discord.TextChannel;
-
-        const launcherSupportChannel = this.getLauncherSupportChannel();
-        const minecraftSupportChannel = this.getMinecraftSupportChannel();
-
-        if (!launcherSupportChannel || !minecraftSupportChannel) {
-            return;
-        }
-
-        if (channel === 'launcherSupport') {
-            // first we want to clear any messages from the bot
-            const launcherSupportMessages = await launcherSupportChannel.messages.fetch({ limit: 10 });
-
-            const latestMessage = launcherSupportMessages.first();
-            if (!latestMessage || !latestMessage.author.bot || latestMessage.components.length === 0) {
-                await launcherSupportChannel.bulkDelete(
-                    launcherSupportMessages.filter((m) => m.author.bot && m.components.length !== 0),
-                );
-
-                // now make new thread starting messages
-                const newThreadLauncherButton = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId('createThread')
-                        .setLabel('Get Help')
-                        .setStyle(ButtonStyle.Primary),
-                    new Discord.ButtonBuilder()
-                        .setLabel('Minecraft Support')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(
-                            `https://discord.com/channels/${minecraftSupportChannel.guildId}/${minecraftSupportChannel.id}`,
-                        ),
-                    new Discord.ButtonBuilder()
-                        .setLabel('View FAQs')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
-                );
-                await launcherSupportChannel.send({
-                    content: `Hi there :wave:. If you're having issues with ATLauncher itself, such as issues running the launcher, installing modpacks or something not involving the launching of instances/modpacks/servers, then please click the "Get Help" button below to start a new thread, else visit ${minecraftSupportChannel} for help with Minecraft issues. Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
-                    components: [newThreadLauncherButton],
-                });
-            }
-        }
-
-        if (channel === 'minecraftSupport') {
-            // first we want to clear any messages from the bot
-            const minecraftSupportMessages = await minecraftSupportChannel.messages.fetch({ limit: 10 });
-
-            const latestMessage = minecraftSupportMessages.first();
-            if (!latestMessage || !latestMessage.author.bot || latestMessage.components.length === 0) {
-                await minecraftSupportChannel.bulkDelete(
-                    minecraftSupportMessages.filter((m) => m.author.bot && m.components.length !== 0),
-                );
-
-                // now make new thread starting messages
-                const newThreadMinecraftButton = new Discord.ActionRowBuilder<Discord.ButtonBuilder>().addComponents(
-                    new Discord.ButtonBuilder()
-                        .setCustomId('createThread')
-                        .setLabel('Get Help')
-                        .setStyle(ButtonStyle.Primary),
-                    new Discord.ButtonBuilder()
-                        .setLabel('Launcher Support')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(
-                            `https://discord.com/channels/${launcherSupportChannel.guildId}/${launcherSupportChannel.id}`,
-                        ),
-                    new Discord.ButtonBuilder()
-                        .setLabel('View FAQs')
-                        .setStyle(ButtonStyle.Link)
-                        .setURL(`https://discord.com/channels/${faqAndHelpChannel.guildId}/${faqAndHelpChannel.id}`),
-                );
-                await minecraftSupportChannel.send({
-                    content: `Hi there :wave:. If you're having issues with launching your instance/server, then please click the "Get Help" button below to start a new thread, else visit ${launcherSupportChannel} for help with issues with the launcher (such as installing packs). Also visit the ${faqAndHelpChannel} for solutions to common problems.`,
-                    components: [newThreadMinecraftButton],
-                });
-            }
-        }
-    }
-
-    /**
-     * This gets the channel object for the minecraft support channel in the config.
-     */
-    getMinecraftSupportChannel(): Discord.TextChannel | undefined {
-        return this.client.channels.cache.get(config.get<string>('channels.minecraftSupport')) as Discord.TextChannel;
-    }
-
-    /**
-     * This gets the channel object for the launcher support channel in the config.
-     */
-    getLauncherSupportChannel(): Discord.TextChannel | undefined {
-        return this.client.channels.cache.get(config.get<string>('channels.launcherSupport')) as Discord.TextChannel;
     }
 
     /**

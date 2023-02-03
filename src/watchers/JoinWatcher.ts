@@ -31,7 +31,7 @@ class JoinWatcher extends BaseWatcher {
 
             const rulesChannel = this.bot.client.channels.cache.get(config.get('channels.rules'));
             const announcementsChannel = this.bot.client.channels.cache.get(config.get('channels.announcements'));
-            const supportChannel = this.bot.client.channels.cache.get(config.get('channels.support'));
+            const supportChannel = this.bot.client.channels.cache.get(config.get('channels.supportAndQuestions'));
 
             await member.send({
                 content: `Thanks for joining the ATLauncher Discord server. I'm ${this.bot.client.user?.username}, I'm here to help run the server.

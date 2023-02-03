@@ -357,20 +357,6 @@ abstract class BaseModule {
     }
 
     /**
-     * This gets the channel object for the minecraft support channel in the config.
-     */
-    getMinecraftSupportChannel(): Discord.TextChannel | undefined {
-        return this.bot.getMinecraftSupportChannel();
-    }
-
-    /**
-     * This gets the channel object for the launcher support channel in the config.
-     */
-    getLauncherSupportChannel(): Discord.TextChannel | undefined {
-        return this.bot.getLauncherSupportChannel();
-    }
-
-    /**
      * This gets the channel object for the support channel in the config.
      */
     getSupportChannel(): Discord.TextChannel | undefined {
