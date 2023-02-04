@@ -112,26 +112,20 @@ class Bot {
 
                 // add all of the messages
                 const sentMessages = await Promise.all(
-                    faqAndHelpMessages
-                        .map((m) => {
-                            if (m.content) {
-                                return faqAndHelpChannel.send(m.content);
-                            }
+                    faqAndHelpMessages.map((m) => {
+                        if (m.content) {
+                            return faqAndHelpChannel.send(m.content);
+                        }
 
-                            if (m.url) {
-                                return faqAndHelpChannel.send({
-                                    embeds: [
-                                        new Discord.EmbedBuilder({
-                                            ...m,
-                                            color: COLOURS.PRIMARY,
-                                        }),
-                                    ],
-                                });
-                            }
-
-                            return null;
-                        })
-                        .filter(Boolean),
+                        return faqAndHelpChannel.send({
+                            embeds: [
+                                new Discord.EmbedBuilder({
+                                    ...m,
+                                    color: COLOURS.PRIMARY,
+                                }),
+                            ],
+                        });
+                    }),
                 );
 
                 // add a TOC to the bottom
