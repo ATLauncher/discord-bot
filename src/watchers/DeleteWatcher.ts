@@ -13,12 +13,24 @@ class DeleteWatcher extends BaseWatcher {
     /**
      * The methods this watcher should listen on.
      */
-    methods: Array<keyof Discord.ClientEvents> = ['messageDelete', 'messageDeleteBulk'];
+    methods: Array<keyof Discord.ClientEvents> = ['messageDelete', 'messageDeleteBulk', 'threadDelete'];
 
     /**
      * If this watcher should run on the given method and message.
      */
-    async shouldRun(method: keyof Discord.ClientEvents, message: Discord.Message) {
+    async shouldRun(method: keyof Discord.ClientEvents, firstArg: Discord.Message | Discord.ThreadChannel) {
+        let message: Discord.Message;
+
+        if (method === 'threadDelete') {
+            return true;
+        } else {
+            message = firstArg as Discord.Message;
+        }
+
+        if (!message) {
+            return false;
+        }
+
         if (!(await super.shouldRun(method, message))) {
             return false;
         }
@@ -60,13 +72,22 @@ class DeleteWatcher extends BaseWatcher {
      */
     async action(
         method: keyof Discord.ClientEvents,
-        ...args: Discord.ClientEvents['messageDelete' | 'messageDeleteBulk']
+        ...args: Discord.ClientEvents['messageDelete' | 'messageDeleteBulk' | 'threadDelete']
     ) {
         // check if we're getting a collection of messages or not
         if (method === 'messageDeleteBulk') {
             (args as Discord.ClientEvents['messageDeleteBulk'])[0].forEach((value) => {
                 this.logMessage(value);
             });
+        } else if (method === 'threadDelete') {
+            const thread = (args as Discord.ClientEvents['threadDelete'])[0];
+            let message = null;
+
+            try {
+                message = await thread.fetchStarterMessage();
+            } catch (ignored) {}
+
+            this.logMessage(message, thread);
         } else {
             this.logMessage((args as Discord.ClientEvents['messageDelete'])[0]);
         }
@@ -75,21 +96,33 @@ class DeleteWatcher extends BaseWatcher {
     /**
      * Logs the given message to the moderator logs channel.
      */
-    logMessage(message: Discord.Message | Discord.PartialMessage) {
+    async logMessage(message: Discord.Message | Discord.PartialMessage | null, thread?: Discord.ThreadChannel) {
         let user = 'Unknown';
 
-        if (message.author) {
+        if (message?.author) {
             user = `${message.author} (${message.author.username}#${message.author.discriminator})`;
+        } else if (thread) {
+            try {
+                const owner = await thread.fetchOwner();
+
+                if (owner) {
+                    user = `${owner.user} (${owner.user?.username}#${owner.user?.discriminator})`;
+                }
+            } catch (ignored) {}
         }
 
         const embed = new Discord.EmbedBuilder()
-            .setTitle('Message deleted')
+            .setTitle(`${thread ? 'Thread' : 'Message'} deleted`)
             .setColor(COLOURS.RED)
             .setTimestamp(new Date())
             .addFields([
                 { name: 'User', value: user, inline: true },
-                { name: 'Channel', value: String(message.channel), inline: true },
-                { name: 'Message', value: `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`')}\`\`\`` },
+                {
+                    name: thread ? 'Thread' : 'Channel',
+                    value: thread ? thread.name : String(message?.channel) ?? 'Unknown',
+                    inline: true,
+                },
+                { name: 'Message', value: `\`\`\`${message?.cleanContent?.replace(/`/g, '\\`') ?? 'Unknown'}\`\`\`` },
             ]);
 
         this.sendEmbedToModeratorLogsChannel(embed);
