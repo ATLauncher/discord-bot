@@ -1,8 +1,6 @@
+import config from 'config';
 import * as Discord from 'discord.js';
 import { ChannelType } from 'discord.js';
-import { isTextChannel } from '../server/utils';
-import logger from '../utils/logger';
-import prisma from '../utils/prisma';
 
 import BaseWatcher from './BaseWatcher';
 
@@ -28,7 +26,7 @@ class NewForumPostWatcher extends BaseWatcher {
         }
 
         // Don't run when the only tag is Question
-        if (thread.appliedTags.length === 1 && thread.appliedTags[0] === 'Question') {
+        if (thread.appliedTags.length === 1 && thread.appliedTags[0] === config.get<string>('forumTags.question')) {
             return;
         }
 
