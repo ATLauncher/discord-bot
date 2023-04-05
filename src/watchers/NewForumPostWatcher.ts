@@ -39,7 +39,9 @@ class NewForumPostWatcher extends BaseWatcher {
             const messageReply =
                 `In order to help you ${originalMessage?.author}, we need some logs. Please see ` +
                 'https://cdn.atlcdn.net/UploadLogs.gif on how to generate the link. **Please make sure that you ' +
-                'press the button after the error/issue occurs**. Once done please paste the link here.';
+                'press the button after the error/issue occurs**. Even if you do not think providing logs are ' +
+                'relevant or will be helpful, **ALWAYS POST LOGS**, no matter what the situation. Once done please ' +
+                'paste the link here and then someone will help you once there are logs provided.';
             let sentMessage;
 
             sentMessage = await originalMessage?.reply(messageReply);
