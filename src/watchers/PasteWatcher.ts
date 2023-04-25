@@ -177,7 +177,7 @@ class PasteWatcher extends BaseWatcher {
 
             if (
                 response.body.match(
-                    /myrathi\.flatsigns\.FlatSigns failed validation\. Halting runtime for security reasons\./,
+                    /failed validation\. Halting runtime for security reasons\./,
                 )
             ) {
                 const topic = topics.find((t) => t.command === 'java7instance');
