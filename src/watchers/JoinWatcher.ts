@@ -65,12 +65,12 @@ Below are some helpful links that you should look over to become familiar with t
                     new Discord.EmbedBuilder({
                         title: 'Where To Get Help',
                         description:
-                            "It's important to use the right channel when asking for help or chatting with others. **Whenever you post an issue, make sure you provide logs**. By not providing logs or describing your issue in detail, you may not get help.\n\nAlso be aware that this server is run by people who volunteer their time to help others with issues. You may not get a response straight away, it may take 5 minutes, an hour, 4 hours or even a day for your message to get a response, so please have patient. Also please don't message people or ping people asking for help, as your message will be deleted and you may get banned.",
+                            "It's important to use the right channel when asking for help or chatting with others. **Whenever you post an issue, make sure you provide logs**. By not providing logs or describing your issue in detail, you may not get help.\n\nAlso be aware that this server is run by people who volunteer their time to help others with issues. You may not get a response straight away, it may take 5 minutes, an hour, 4 hours or even a day for your message to get a response, so please have patience. Also please don't message people directly or ping people asking for help, as your message will be deleted and you may get banned.",
                         color: 255,
                         fields: [
                             {
-                                name: 'To Get Help, Use the #support channel',
-                                value: `[#support](https://discord.com/channels/${member.guild.id}/${supportChannel?.id})`,
+                                name: 'To Get Help, Use the #support-and-questions channel',
+                                value: `[#support-and-questions](https://discord.com/channels/${member.guild.id}/${supportChannel?.id})`,
                                 inline: true,
                             },
                         ],
